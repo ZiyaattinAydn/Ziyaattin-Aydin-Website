@@ -3,7 +3,7 @@
 - Tarih: 2026-07-01
 - Sohbet / çalışma hattı: Başlangıç iskeleti
 - Branch: `main`
-- Son commit: commit sonrasında doldurulacak
+- Son commit: dd8ff0b
 
 ## Yapılan İşler
 - Next.js 16.2.9, React 19.2.4 ve TypeScript projesi oluşturuldu.
