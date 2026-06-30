@@ -24,7 +24,8 @@ Son güncelleme: 2026-07-01
 - [x] Canlı proje takip belgeleri oluşturuldu
 - [x] Onaylı tasarım referansları repository'ye eklendi
 - [!] `npm audit` güncel Next.js bağımlılığında iki orta seviye PostCSS uyarısı gösteriyor; resmi patch takip edilecek
-- [ ] GitHub repository oluşturulacak
+- [x] Yerel bootstrap commit oluşturuldu (`dd8ff0b`)
+- [ ] GitHub repository oluşturulacak ve yerel `main` gönderilecek
 - [ ] Bootstrap commit `main` branch'ine gönderilecek
 - [ ] Üç feature branch güncel `main` üzerinden açılacak
 - [ ] Vercel preview bağlantısı kurulacak
