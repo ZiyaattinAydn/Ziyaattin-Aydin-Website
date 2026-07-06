@@ -23,26 +23,31 @@ Son güncelleme: 2026-07-07
 - [x] Login ve Studio kabuk rotaları oluşturuldu
 - [x] Canlı proje takip belgeleri oluşturuldu
 - [x] Onaylı tasarım referansları repository'ye eklendi
-- [!] `npm audit` güncel Next.js bağımlılığında iki orta seviye PostCSS uyarısı gösteriyor; resmi patch takip edilecek
-- [x] Yerel bootstrap commit oluşturuldu (`dd8ff0b`)
-- [!] GitHub repository ve remote doğrulaması bu snapshot ortamında yapılamadı; zip içinde `.git` metadata bulunmadığı için gerçek worktree'de `git remote -v` ile doğrulanmalı
-- [!] `main` ve `origin/main` senkron durumu bu snapshot ortamında doğrulanamadı; gerçek worktree'de `git fetch origin` ve `git status` ile kontrol edilmeli
-- [!] Başlangıç commit bilgisi `git rev-parse --short HEAD` ile bu ortamda güncellenemedi; zip içinde `.git` metadata yok
-- [ ] Üç feature branch güncel `main` üzerinden açılacak
-- [ ] Vercel preview bağlantısı kurulacak
+- [m] GitHub repository oluşturuldu ve yerel `main`, `origin/main` ile senkron doğrulandı
+- [m] Bootstrap commit `main` branch'ine gönderildi
+- [m] Sprint 01 `feat/core-foundation` branch'i entegrasyon sürecine alındı
+- [m] Sprint 01 `feat/public-site` branch'i entegrasyon sürecine alındı
+- [m] Sprint 01 `feat/studio-shell` branch'i entegrasyon sürecine alındı
+- [m] Sprint 01 Core foundation çalışması `main`e merge edildi
+- [m] Sprint 01 Public site çalışması `main`e merge edildi
+- [m] Sprint 01 Studio shell çalışması `main`e merge edildi
+- [m] Sprint 01 entegrasyonunda `npm run lint`, `npm run typecheck` ve `npm run build` kontrolleri başarılı tamamlandı
+- [!] `npm audit` güncel Next.js/PostCSS bağımlılıklarında orta seviye uyarılar gösterebilir; `npm audit fix --force` çalıştırılmayacak, resmi patch takip edilecek
+- [!] Core branch içinde yanlışlıkla gelen `dasdasd` dosyası ve encoding bozuk `planlama/g#...` kopyaları entegrasyon aşamasında temizlenmiş olmalı
+- [ ] Vercel preview / production deployment doğrulaması henüz tamamlanmadı
 
-## Sprint 01 — Core Foundation
+## Sprint 01 Entegrasyon Özeti
 
-- [x] Palet 1, Palet 2 ve Palet 3 token'ları daha düzenli semantik değişkenlerle toparlandı
-- [x] Global CSS temel erişilebilirlik, seçim, focus ve responsive overflow kuralları güçlendirildi
-- [x] Ortak UI primitive seti genişletildi: `Button`, `LinkButton`, `SectionWrapper`, `EmptyState`, `StatCard`, `StatusBadge`
-- [x] Mevcut `Panel`, `Tag` ve `PageIntro` uyumluluğu korunarak küçük geliştirmeler yapıldı
-- [x] Public header mobil menü davranışı sade ve erişilebilir şekilde güçlendirildi
-- [x] Public footer gerçekliği doğrulanmamış e-posta/GitHub/LinkedIn bilgilerini link olarak uydurmayacak şekilde düzenlendi
-- [x] `package-lock.json` içinde özel/internal registry izi aranıp bulunmadı
-- [!] `npm config get registry` bu ortamda `registry option is protected` hatası verdi; gerçek yerel makinede tekrar doğrulanmalı
-- [!] `npm run check` bu ortamda build aşamasında zaman aşımına uğradı; `npm run lint`, `npm run typecheck` ve `npm run build` ayrı ayrı başarıyla tamamlandı
+- Entegrasyon branch'i: `integration/sprint-01`
+- Main başlangıç commit'i: `b7255e3`
+- Merge sırası:
+  1. `feat/core-foundation` (`c27a25d`)
+  2. `feat/public-site` (`0c8acac`)
+  3. `feat/studio-shell` (`80ef1a1`)
+- Public ana menüde Studio görünmemeli; footer'daki küçük yönetici girişi kabul edilebilir.
+- Hakkımda portresi doğrulanmış final portre gibi sunulmamalı; aday/doğrulama bekleyen görsel olarak kalmalı.
+- Studio hâlâ mock/private çalışma alanı kabuğudur; gerçek Supabase Auth, MFA, PostgreSQL ve Storage sonraki fazlara bırakıldı.
 
 ## Sonraki Kilometre Taşı
 
-Core branch entegrasyonundan sonra Public Site ve Studio Shell çalışma hatları güncel `main` üzerinden başlatılacak.
+Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `docs/WORKSTREAMS.md`, `CHANGELOG.md` ve son handoff kayıtlarını okuyarak yeni iş paketlerini dağıtacak.
