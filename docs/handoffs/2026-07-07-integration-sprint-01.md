@@ -57,3 +57,8 @@
 
 ## Main'e Push Sonrası Doğrulama
 - TODO
+
+## Düzeltme Notu — Studio Fix
+- İlk `integration/sprint-01` merge doğrulamasında `origin/feat/studio-shell` branch'inin `main` atası olmadığı tespit edildi.
+- History rewrite veya force push yapılmadan `integration/sprint-01-studio-fix` üzerinden Studio branch'i ileri düzeltme commit'iyle eklendi.
+- Düzeltme sonrası `git merge-base --is-ancestor origin/feat/studio-shell main` ile tekrar doğrulanmalıdır.
