@@ -10,4 +10,9 @@ export const siteConfig = {
     { href: "/journey", label: "Yolculuğum" },
     { href: "/about", label: "Hakkımda" },
   ],
+  links: {
+    email: null,
+    github: null,
+    linkedin: null,
+  },
 } as const;
