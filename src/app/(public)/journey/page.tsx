@@ -1,7 +1,42 @@
 import { PageIntro } from "@/components/ui/page-intro";
 import { Panel } from "@/components/ui/panel";
+import { TimelineItem } from "@/components/public/timeline-item";
 import { journeyItems } from "@/data/mock-content";
 
 export default function JourneyPage() {
-  return <div className="space-y-8"><PageIntro eyebrow="Yolculuğum" title="Merakla başlayan bir yolculuk, üretimle devam ediyor." description="Yapay zekâ ve modern web teknolojilerine olan ilgim, beni sürekli öğrenmeye, üretmeye ve paylaşmaya yönlendiriyor."/><Panel className="p-6"><h2 className="font-semibold">Yolculuğumda Öne Çıkanlar</h2><div className="mt-7 grid gap-6 lg:grid-cols-5">{journeyItems.map((item) => <div key={item.year} className="border-t border-[var(--accent)] pt-4"><p className="text-xl font-semibold text-[var(--accent)]">{item.year}</p><h3 className="mt-3 font-semibold">{item.title}</h3><p className="mt-2 text-sm leading-6 text-[var(--muted)]">{item.detail}</p></div>)}</div></Panel><div className="grid gap-5 lg:grid-cols-3"><Panel className="p-6"><h2 className="font-semibold">Dönüm Noktaları</h2><ul className="mt-4 space-y-4 text-sm text-[var(--muted)]"><li>İlk projeler</li><li>Ürün yayını</li><li>Sistem kurma</li><li>AI ve otomasyon</li></ul></Panel><Panel className="p-6"><h2 className="font-semibold">Neler Öğrendim</h2><ul className="mt-4 space-y-4 text-sm text-[var(--muted)]"><li>● Problemi doğru tanımlamak</li><li>● Kullanıcı odaklı düşünmek</li><li>● Sürdürülebilir kod yazmak</li><li>● Sabırlı ve dayanıklı kalmak</li></ul></Panel><Panel className="p-6"><h2 className="font-semibold">İlgili Projeler & Yazılar</h2><p className="mt-4 text-sm leading-6 text-[var(--muted)]">Yolculuktaki her dönüm noktası ileride gerçek proje ve yazı kayıtlarıyla ilişkilendirilecek.</p></Panel></div></div>;
+  return (
+    <div className="space-y-8 overflow-hidden">
+      <PageIntro
+        eyebrow="Yolculuğum"
+        title="Üretim sürecini görünür kılan public zaman çizelgesi."
+        description="Gerçek kişisel tarihçe ve dönüm noktaları kullanıcı tarafından netleşene kadar bu sayfa mock aşamalarla public deneyimi test eder."
+        meta={`${journeyItems.length} mock aşama`}
+      />
+
+      <section className="grid gap-6 lg:grid-cols-[1fr_.75fr] lg:items-start">
+        <div className="space-y-5">
+          {journeyItems.map((item) => (
+            <TimelineItem key={item.marker} item={item} />
+          ))}
+        </div>
+
+        <div className="space-y-5 lg:sticky lg:top-24">
+          <Panel className="p-5 sm:p-6">
+            <h2 className="text-2xl font-semibold">Bu sayfanın amacı</h2>
+            <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+              Yolculuk sayfası, ileride gerçek öğrenme notlarını, proje kırılımlarını ve yazılarla bağlantılı dönüm noktalarını gösterecek.
+            </p>
+          </Panel>
+          <Panel className="p-5 sm:p-6">
+            <h2 className="text-2xl font-semibold">Kapsam notu</h2>
+            <ul className="mt-4 space-y-3 text-sm leading-6 text-[var(--muted)]">
+              <li>• Yaş, okul, iş veya kişisel başarı gibi doğrulanmamış yeni bilgi eklenmedi.</li>
+              <li>• Aşamalar gerçek kronoloji değil, public layout için geçici içeriktir.</li>
+              <li>• İlgili proje/yazı bağlantıları yalnız mevcut mock sluglara gider.</li>
+            </ul>
+          </Panel>
+        </div>
+      </section>
+    </div>
+  );
 }

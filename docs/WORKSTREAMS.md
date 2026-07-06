@@ -7,7 +7,7 @@
 
 ## Pencere 2 — Public Site
 - Branch: `feat/public-site`
-- Durum: `[ ]`
+- Durum: `[x]`
 - Sahiplik: public rotalar, sayfa blokları, responsive public deneyim
 
 ## Pencere 3 — Studio Kabuğu
