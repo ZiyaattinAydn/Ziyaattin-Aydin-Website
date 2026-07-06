@@ -1,0 +1,21 @@
+warning: in the working copy of 'CHANGELOG.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/PROJECT_STATUS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/WORKSTREAMS.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/app/layout.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/layout/site-footer.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/layout/site-header.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/ui/panel.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/ui/tag.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/lib/site-config.ts', LF will be replaced by CRLF the next time Git touches it
+ CHANGELOG.md                          |  18 [32m++++[m
+ docs/PROJECT_STATUS.md                |  21 [32m++++[m[31m-[m
+ docs/WORKSTREAMS.md                   |   2 [32m+[m[31m-[m
+ src/app/globals.css                   | 160 [32m+++++++++++++++++++++++++++++++[m[31m---[m
+ src/app/layout.tsx                    |  16 [32m+++[m[31m-[m
+ src/components/layout/site-footer.tsx |  36 [32m++++++[m[31m--[m
+ src/components/layout/site-header.tsx |  99 [32m+++++++++++++++++[m[31m----[m
+ src/components/ui/panel.tsx           |  10 [32m++[m[31m-[m
+ src/components/ui/tag.tsx             |  17 [32m++[m[31m--[m
+ src/lib/site-config.ts                |   5 [32m++[m
+ 10 files changed, 330 insertions(+), 54 deletions(-)

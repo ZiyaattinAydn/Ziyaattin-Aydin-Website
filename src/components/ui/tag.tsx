@@ -1,9 +1,14 @@
 import type { PropsWithChildren } from "react";
 
-export function Tag({ children }: PropsWithChildren) {
-  return (
-    <span className="inline-flex items-center rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--muted)]">
-      {children}
-    </span>
-  );
+type TagProps = PropsWithChildren<{
+  tone?: "neutral" | "accent";
+}>;
+
+export function Tag({ children, tone = "neutral" }: TagProps) {
+  const toneClass =
+    tone === "accent"
+      ? "border-[var(--accent-dim)] bg-[var(--accent-soft)] text-[var(--accent)]"
+      : "border-[var(--border)] bg-[var(--surface-strong)] text-[var(--muted)]";
+
+  return <span className={`inline-flex items-center rounded-full border px-3 py-1 text-xs ${toneClass}`}>{children}</span>;
 }
