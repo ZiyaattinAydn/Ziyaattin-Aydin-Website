@@ -1,9 +1,15 @@
 import type { ComponentPropsWithoutRef } from "react";
 
-export function Panel({ className = "", ...props }: ComponentPropsWithoutRef<"section">) {
+type PanelProps = ComponentPropsWithoutRef<"section"> & {
+  elevated?: boolean;
+};
+
+export function Panel({ className = "", elevated = false, ...props }: PanelProps) {
   return (
     <section
-      className={`rounded-2xl border border-[var(--border)] bg-[var(--surface)] shadow-[0_20px_80px_rgba(0,0,0,.18)] ${className}`}
+      className={`rounded-2xl border border-[var(--border)] ${
+        elevated ? "bg-[var(--surface-elevated)] shadow-[var(--shadow-card)]" : "bg-[var(--surface)] shadow-[var(--shadow-soft)]"
+      } ${className}`}
       {...props}
     />
   );

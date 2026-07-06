@@ -2,7 +2,7 @@
 
 ## Pencere 1 — Teknik Temel
 - Branch: `feat/core-foundation`
-- Durum: `[ ]`
+- Durum: `[x]`
 - Sahiplik: ortak UI, tema, config, kalite araçları, PWA başlangıcı
 
 ## Pencere 2 — Public Site
