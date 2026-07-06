@@ -48,6 +48,14 @@ Son güncelleme: 2026-07-07
 - Hakkımda portresi doğrulanmış final portre gibi sunulmamalı; aday/doğrulama bekleyen görsel olarak kalmalı.
 - Studio hâlâ mock/private çalışma alanı kabuğudur; gerçek Supabase Auth, MFA, PostgreSQL ve Storage sonraki fazlara bırakıldı.
 
+## Studio Sprint 01 — Private Studio Shell
+
+- [x] `/login` placeholder deneyimi Auth + MFA sınırını daha açık anlatacak şekilde iyileştirildi
+- [x] `/studio` dashboard mock durum kartları, odak listeleri ve modül kartlarıyla netleştirildi
+- [x] `/studio/projects`, `/studio/tasks`, `/studio/notes`, `/studio/files` sayfaları modül amacı, V1 kapsamı, empty state ve sonraki faz aksiyonlarıyla ayrıştırıldı
+- [x] Studio shell için masaüstü sidebar korunurken mobil navigasyon görünür hâle getirildi
+- [!] Supabase Auth, MFA, database, storage, RLS ve gerçek korumalı route akışı bilinçli olarak uygulanmadı
+
 ## Sonraki Kilometre Taşı
 
 Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `docs/WORKSTREAMS.md`, `CHANGELOG.md` ve son handoff kayıtlarını okuyarak yeni iş paketlerini dağıtacak.
