@@ -12,7 +12,7 @@
 
 ## Pencere 3 — Studio Kabuğu
 - Branch: `feat/studio-shell`
-- Durum: `[ ]`
+- Durum: `[x]`
 - Sahiplik: login, Studio layout, dashboard ve modül kabukları
 
 ## Pencere 4 — Entegrasyon
