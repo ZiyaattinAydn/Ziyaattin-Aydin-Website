@@ -2,11 +2,17 @@
 
 - [m] Faz 0 — Fonksiyonel planlama
 - [x] Faz 1 — Görsel yön ve tasarım referansları
-- [~] Faz 2 — Teknik temel ve proje iskeleti
+- [~] Faz 2 — Teknik temel, proje iskeleti ve deployment hazırlığı
   - [m] Sprint 01 Core/Public/Studio iskelet entegrasyonu
-  - [x] Sprint 02 Core workspace root, metadata ve UI primitive düzeni branch içinde tamamlandı
-  - [!] Vercel preview bağlantısı henüz kurulmadığı için Faz 2 tamamen kapanmadı
+  - [m] Sprint 02 Core/Public/Studio geliştirmeleri ve entegrasyonu
+  - [x] Sprint 03 Core deployment checklist ve environment sözleşmesi branch içinde hazırlandı
+  - [!] Vercel preview / production gerçek URL doğrulaması tamamlanmadığı için Faz 2 tamamen kapanmadı
 - [ ] Faz 3 — Auth ve güvenlik temeli
+  - [ ] Supabase Auth provider kararı
+  - [ ] MFA yöntemi kararı
+  - [ ] Studio route guard stratejisi
+  - [ ] Storage bucket ve RLS yaklaşımı
+  - [ ] Public publish workflow kararı
 - [ ] Faz 4 — Studio proje çekirdeği
 - [ ] Faz 5 — Not ve Bilgi Kütüphanesi
 - [ ] Faz 6 — Dosya ve depolama sistemi
