@@ -59,3 +59,10 @@ Son güncelleme: 2026-07-07
 ## Sonraki Kilometre Taşı
 
 Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `docs/WORKSTREAMS.md`, `CHANGELOG.md` ve son handoff kayıtlarını okuyarak yeni iş paketlerini dağıtacak.
+
+## Studio Sprint 02 — Mock Workflow Shell
+
+- [x] Studio mock workflow veri katmanı branch içinde hazırlandı.
+- [x] Studio dashboard mock özetler ve son aktivitelerle geliştirildi.
+- [x] Projects, Tasks, Notes ve Files modülleri statik liste/workflow seviyesine getirildi.
+- [x] Auth, MFA, Supabase, PostgreSQL, Storage, gerçek CRUD, gerçek upload veya login akışı bilinçli olarak eklenmedi.

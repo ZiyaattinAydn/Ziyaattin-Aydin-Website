@@ -47,3 +47,7 @@ Aşağıdaki dosyalara aynı anda birden fazla geliştirme branch'i dokunmamalı
 - Core değişiklikleri ortak UI primitive, tema token'ları, layout ve config sınırında kalmalı.
 - Supabase/Auth/MFA/PostgreSQL/Storage gerçek implementasyonu ayrı sprint kararı olmadan başlatılmamalı.
 - Hakkımda portresi kullanıcı tarafından doğrulanmadan final kabul edilmemeli.
+
+## Studio Sprint 02
+
+- [x] `feat/studio-shell-s02` — Studio modülleri mock workflow seviyesine getirildi.

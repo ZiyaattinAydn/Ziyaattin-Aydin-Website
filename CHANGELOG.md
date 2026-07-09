@@ -43,3 +43,14 @@
 - Özel/internal npm registry kalıntısı aranıp bulunmadı
 - `.env.example` dışında gizli environment dosyası tespit edilmedi
 - Sprint 01 entegrasyonunda `npm run lint`, `npm run typecheck` ve `npm run build` başarılı tamamlandı
+
+## Studio Sprint 02 - Mock Workflow Shell
+
+### Added
+- Studio Sprint 02 için projeler, görevler, notlar, dosyalar ve aktiviteleri ayıran mock workflow veri katmanı eklendi.
+- Studio dashboard aktif proje, açık görev, son not, dosya alanı ve son aktiviteler için daha anlamlı mock özetlerle geliştirildi.
+- Studio projeler, görevler, notlar ve dosyalar sayfaları backend bağlantısı olmadan kullanılabilir statik workflow seviyesine getirildi.
+- Studio'ya özel `studio-list-card` ve `studio-status-pill` bileşenleri eklendi.
+
+### Notes
+- Auth, MFA, Supabase, PostgreSQL, Storage, gerçek CRUD, gerçek upload veya login akışı eklenmedi.
