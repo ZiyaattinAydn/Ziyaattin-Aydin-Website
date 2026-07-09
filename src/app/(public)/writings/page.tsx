@@ -17,7 +17,7 @@ export default function WritingsPage() {
           </p>
           <h1 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">Yazılarım</h1>
           <p className="mt-5 text-base leading-8 text-[var(--muted)] sm:text-lg">
-            Yazılım, yapay zekâ, ürün ve öğrenme notları için okunabilir public makale alanı. Bu sprintteki metinler gerçek yayın değil, sayfa deneyimini test eden geçici içeriktir.
+            Yazılım, yapay zekâ, ürün ve öğrenme notları için okunabilir public makale alanı. Bu sprintteki metinler gerçek yayın değil, sayfa deneyimini test eden geçici taslak içeriktir.
           </p>
           <div className="mt-6 flex flex-wrap gap-3 text-sm text-[var(--muted)]">
             <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1">
@@ -52,10 +52,19 @@ export default function WritingsPage() {
             <p className="text-sm text-[var(--accent)]">{featured.category}</p>
             <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">{featured.title}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)] sm:text-base">{featured.excerpt}</p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {featured.tags.map((tag) => (
+                <span key={tag} className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1 text-xs text-[var(--muted)]">
+                  {tag}
+                </span>
+              ))}
+            </div>
             <div className="mt-5 flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
               <span>{featured.date}</span>
               <span>·</span>
               <span>{featured.readingTime}</span>
+              <span>·</span>
+              <span>{featured.isDraft ? "Taslak" : "Public"}</span>
               <Link href={`/writings/${featured.slug}`} className="font-semibold text-[var(--accent)]">
                 Oku →
               </Link>

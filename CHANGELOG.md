@@ -1,3 +1,8 @@
+## [Unreleased]
+
+### Changed
+- Public Sprint 02: mock içerik modeli genişletildi, proje/yazı detayları mock section verilerinden beslendi ve sahte demo/GitHub linkleri pasif/yakında durumuna alındı.
+
 # Changelog
 
 ## Unreleased

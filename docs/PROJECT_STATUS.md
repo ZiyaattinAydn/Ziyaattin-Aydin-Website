@@ -59,3 +59,10 @@ Son güncelleme: 2026-07-07
 ## Sonraki Kilometre Taşı
 
 Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `docs/WORKSTREAMS.md`, `CHANGELOG.md` ve son handoff kayıtlarını okuyarak yeni iş paketlerini dağıtacak.
+
+## Public Sprint 02 — 2026-07-07
+
+- [x] Public içerik modeli daha genişletilebilir mock alanlarla düzenlendi.
+- [x] Proje ve yazı detay sayfaları mock içerikten beslenen okunabilir bölümlere ayrıldı.
+- [x] Gerçek olmayan demo/GitHub/contact linkleri aktif gerçek link gibi sunulmadı.
+- [x] Public liste ve detay sayfalarında responsive okunabilirlik iyileştirildi.
