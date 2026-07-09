@@ -2,8 +2,9 @@ export type ProjectStatus = "Devam Ediyor" | "Tamamlandı" | "Planlandı";
 
 export type ProjectLink = {
   label: string;
-  href?: string;
+  href: string | null;
   note: string;
+  disabledLabel: string;
 };
 
 export type ProjectMilestone = {
@@ -16,14 +17,18 @@ export type ProjectSummary = {
   title: string;
   description: string;
   status: ProjectStatus;
+  statusLabel: string;
   progress: number;
   category: string;
   timeframe: string;
+  contentState: string;
+  visibilityNote: string;
   technologies: string[];
   summary: string;
   problem: string;
   approach: string;
-  technicalDecisions: string[];
+  highlights: string[];
+  technicalNotes: string[];
   milestones: ProjectMilestone[];
   learnings: string[];
   nextSteps: string[];
@@ -37,6 +42,7 @@ export type WritingSection = {
   paragraphs: string[];
   quote?: string;
   code?: string;
+  codeLanguage?: string;
 };
 
 export type WritingSummary = {
@@ -44,10 +50,14 @@ export type WritingSummary = {
   title: string;
   excerpt: string;
   category: string;
+  tags: string[];
   date: string;
+  updatedLabel: string;
   readingTime: string;
   sortOrder: number;
   coverLabel: string;
+  isDraft: boolean;
+  placeholderNote: string;
   sections: WritingSection[];
   relatedSlugs: string[];
 };
@@ -57,6 +67,7 @@ export type JourneyItem = {
   title: string;
   detail: string;
   lesson: string;
+  statusNote: string;
   relatedProjectSlug?: string;
   relatedWritingSlug?: string;
 };
@@ -67,9 +78,12 @@ export const projects: ProjectSummary[] = [
     title: "Next AI Dashboard",
     description: "Yapay zekâ destekli veri analizi ve görselleştirme fikri için geçici public proje kaydı.",
     status: "Devam Ediyor",
+    statusLabel: "Mock geliştirme akışı",
     progress: 68,
     category: "Yapay Zekâ",
-    timeframe: "Mock sprint kaydı",
+    timeframe: "Sprint mock kaydı",
+    contentState: "Public taslak",
+    visibilityNote: "Gerçek demo, GitHub veya ürün bağlantısı kullanıcı onayından sonra aktifleşecek.",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
     summary:
       "Bu kayıt, ileride Studio içinden public siteye yayımlanacak gerçek proje içeriğinin nasıl görüneceğini test etmek için tutuluyor.",
@@ -77,10 +91,15 @@ export const projects: ProjectSummary[] = [
       "Karmaşık verileri tek bakışta anlaşılır hâle getiren, sade ve güvenilir bir dashboard deneyimi kurgulamak gerekiyor.",
     approach:
       "Önce küçük bir mock veri modeliyle sayfa mimarisi, kart düzeni ve detay anlatımı netleştiriliyor; gerçek entegrasyon sonraki fazlara bırakılıyor.",
-    technicalDecisions: [
-      "Detay sayfasında gerçek link uydurmadan yalnız public bilgiler gösterilecek.",
-      "Progress değeri şimdilik mock içerikten okunacak.",
+    highlights: [
+      "Liste ve detay sayfası aynı mock modelden beslenir.",
+      "Public bağlantılar doğrulanmadan aktif link gibi gösterilmez.",
+      "Progress değeri gerçek ürün metriği değil, arayüz davranışını test eden örnek veridir.",
+    ],
+    technicalNotes: [
+      "Detay sayfasında gerçek link uydurmadan yalnız public-safe bilgiler gösterilecek.",
       "Kartlar mobilde tek sütuna düşecek ve yatay taşma üretmeyecek.",
+      "Studio publish modeli netleşince bu yapı gerçek veri alanlarıyla eşlenecek.",
     ],
     milestones: [
       { label: "İskelet", detail: "Liste ve detay sayfası okunabilir hâle getirildi." },
@@ -98,11 +117,21 @@ export const projects: ProjectSummary[] = [
     ],
     publicNotes: [
       "Bu proje kaydı gerçek link veya canlı ürün iddiası içermez.",
-      "Metinler Sprint 01 için geçici örnek içeriktir.",
+      "Metinler Sprint 02 için geçici örnek içeriktir.",
     ],
     links: [
-      { label: "Canlı Önizleme", note: "Henüz public/demo bağlantısı tanımlanmadı." },
-      { label: "GitHub", note: "Repository bağlantısı kullanıcı onayından sonra eklenecek." },
+      {
+        label: "Canlı Önizleme",
+        href: null,
+        note: "Henüz public/demo bağlantısı tanımlanmadı.",
+        disabledLabel: "Yakında",
+      },
+      {
+        label: "GitHub",
+        href: null,
+        note: "Repository bağlantısı kullanıcı onayından sonra eklenecek.",
+        disabledLabel: "Doğrulama bekliyor",
+      },
     ],
   },
   {
@@ -110,9 +139,12 @@ export const projects: ProjectSummary[] = [
     title: "Flowfit",
     description: "Akıllı planlama ve takip deneyimi için tasarlanan mobil ürün fikri.",
     status: "Planlandı",
+    statusLabel: "Keşif ve kapsam aşaması",
     progress: 32,
     category: "Mobil Ürün",
     timeframe: "Mock keşif aşaması",
+    contentState: "Fikir taslağı",
+    visibilityNote: "Mağaza, demo veya kaynak kod bağlantısı gerçek ürün olmadan eklenmeyecek.",
     technologies: ["React Native", "Supabase", "TypeScript"],
     summary:
       "Flowfit, kişisel planlama ve alışkanlık takibi akışını daha sade bir mobil deneyime dönüştürme fikrini temsil eden placeholder projedir.",
@@ -120,14 +152,19 @@ export const projects: ProjectSummary[] = [
       "Planlama uygulamaları çoğu zaman fazla karmaşık kalıyor; kullanıcı hızlıca ne yapacağını ve nerede kaldığını görmek istiyor.",
     approach:
       "Önce çekirdek ekranlar ve bilgi mimarisi üzerinden ilerleyen, sonra gerçek kullanıcı senaryolarıyla genişleyen bir yapı planlanıyor.",
-    technicalDecisions: [
+    highlights: [
+      "Mobil öncelikli public anlatım test ediliyor.",
+      "Özellik listesi tamamlanmış ürün gibi değil, plan notu gibi sunuluyor.",
+      "Gerçek ekran görüntüsü olmadan galeri veya mağaza linki gösterilmiyor.",
+    ],
+    technicalNotes: [
       "Mobil öncelikli tasarım dili korunacak.",
       "Kimlik doğrulama ve veri saklama sonraki fazlarda değerlendirilecek.",
       "Public sayfada yalnız ürün fikri ve geliştirme notları gösterilecek.",
     ],
     milestones: [
       { label: "Keşif", detail: "Problem alanı ve hedef akışlar mock olarak yazıldı." },
-      { label: "MVP", detail: "Ekran öncelikleri ve veri modeli sonraki sprintte netleşecek." },
+      { label: "MVP", detail: "Ekran öncelikleri ve veri modeli sonraki sprintlerde netleşecek." },
       { label: "Yayın", detail: "Canlı mağaza linkleri gerçek ürün olmadan eklenmeyecek." },
     ],
     learnings: [
@@ -140,8 +177,18 @@ export const projects: ProjectSummary[] = [
     ],
     publicNotes: ["Bu kayıt planlama aşamasını göstermek için mock seviyesinde tutuluyor."],
     links: [
-      { label: "Ürün Linki", note: "Henüz yayınlanmış public ürün bağlantısı yok." },
-      { label: "Kaynak Kod", note: "Public repository bilgisi tanımlanmadı." },
+      {
+        label: "Ürün Linki",
+        href: null,
+        note: "Henüz yayınlanmış public ürün bağlantısı yok.",
+        disabledLabel: "Yayınlanmadı",
+      },
+      {
+        label: "Kaynak Kod",
+        href: null,
+        note: "Public repository bilgisi tanımlanmadı.",
+        disabledLabel: "Beklemede",
+      },
     ],
   },
   {
@@ -149,9 +196,12 @@ export const projects: ProjectSummary[] = [
     title: "Trace Analytics",
     description: "Log analizi ve sistem izleme ekranları için public arayüz denemesi.",
     status: "Devam Ediyor",
+    statusLabel: "Arayüz prototipi",
     progress: 54,
     category: "Sistem Tasarımı",
     timeframe: "Mock prototip",
+    contentState: "Public-safe anlatım",
+    visibilityNote: "Gerçek sistem metrikleri, loglar veya private veri public sayfaya taşınmayacak.",
     technologies: ["Next.js", "PostgreSQL", "WebSocket"],
     summary:
       "Trace Analytics, sistem olaylarını okunabilir kartlara ve zaman çizelgelerine dönüştüren bir arayüz fikrini anlatmak için kullanılıyor.",
@@ -159,7 +209,12 @@ export const projects: ProjectSummary[] = [
       "Teknik log kayıtları geliştirici dışındaki kişiler için hızlıca anlaşılabilir değildir.",
     approach:
       "Kritik olayları sade kartlar, filtrelenebilir durumlar ve özet panellerle anlatan bir deneyim tasarlanıyor.",
-    technicalDecisions: [
+    highlights: [
+      "Gerçek veri bağlantısı kurulmadan yalnız arayüz dili test edilir.",
+      "Private log içeriği yerine temsili açıklama alanları kullanılır.",
+      "Detay sayfası teknik notları kısa listelerle görünür kılar.",
+    ],
+    technicalNotes: [
       "Gerçek zamanlı veri akışı bu sprintte kurulmadı.",
       "Mock veriler public sayfa davranışını test etmek için yeterli tutuldu.",
       "Filtre ve sıralama deneyimi public component içinde izole edildi.",
@@ -179,8 +234,18 @@ export const projects: ProjectSummary[] = [
     ],
     publicNotes: ["Ekrandaki metrikler gerçek sistem verisi değildir."],
     links: [
-      { label: "Demo", note: "Demo URL henüz paylaşılmadı." },
-      { label: "GitHub", note: "Public kaynak bağlantısı henüz yok." },
+      {
+        label: "Demo",
+        href: null,
+        note: "Demo URL henüz paylaşılmadı.",
+        disabledLabel: "Yakında",
+      },
+      {
+        label: "GitHub",
+        href: null,
+        note: "Public kaynak bağlantısı henüz yok.",
+        disabledLabel: "Doğrulama bekliyor",
+      },
     ],
   },
   {
@@ -188,9 +253,12 @@ export const projects: ProjectSummary[] = [
     title: "Orbit Dashboard",
     description: "Yönetim paneli bileşenlerini ve analiz kartlarını deneyen tamamlanmış mock çalışma.",
     status: "Tamamlandı",
+    statusLabel: "Mock kapanış kaydı",
     progress: 100,
     category: "Web",
     timeframe: "Mock tamamlandı",
+    contentState: "Örnek sunum",
+    visibilityNote: "Tamamlandı etiketi gerçek müşteri işi veya canlı ürün iddiası değildir.",
     technologies: ["React", "Tailwind CSS", "Chart.js"],
     summary:
       "Orbit Dashboard, public proje kartlarının tamamlanmış iş durumunu nasıl göstereceğini test etmek için kullanılan örnek kayıttır.",
@@ -198,7 +266,12 @@ export const projects: ProjectSummary[] = [
       "Admin panellerinde yoğun bilgiyi düzenli ve hızlı taranabilir bir yapıya taşımak gerekir.",
     approach:
       "Kart tabanlı grid, kısa metrikler ve sade etiketlerle bilgi yoğunluğu kontrol altında tutuldu.",
-    technicalDecisions: [
+    highlights: [
+      "Tamamlandı durumu progress değeriyle tutarlı görünür.",
+      "Gerçek grafik bağımlılığı eklenmeden layout davranışı test edilir.",
+      "Link alanları doğrulanmış bilgi yoksa pasif kalır.",
+    ],
+    technicalNotes: [
       "Tamamlandı durumu progress değeriyle birlikte gösteriliyor.",
       "Gerçek grafik bağımlılığı eklenmedi; görsel anlatım CSS bloklarıyla sınırlı.",
       "Public detay sayfası mock içerik notunu koruyor.",
@@ -218,8 +291,18 @@ export const projects: ProjectSummary[] = [
     ],
     publicNotes: ["Bu tamamlandı durumu gerçek müşteri işi iddiası değildir; mock sunum verisidir."],
     links: [
-      { label: "Canlı Önizleme", note: "Doğrulanmış link bulunmuyor." },
-      { label: "Kaynak", note: "Public kaynak kod bağlantısı eklenmedi." },
+      {
+        label: "Canlı Önizleme",
+        href: null,
+        note: "Doğrulanmış link bulunmuyor.",
+        disabledLabel: "Pasif",
+      },
+      {
+        label: "Kaynak",
+        href: null,
+        note: "Public kaynak kod bağlantısı eklenmedi.",
+        disabledLabel: "Beklemede",
+      },
     ],
   },
 ];
@@ -230,10 +313,14 @@ export const writings: WritingSummary[] = [
     title: "Yapay Zekâ Çağında Yazılım Geliştirici Olmak",
     excerpt: "Araçlar değişirken geliştiricinin değer üretme biçimini yeniden düşünmek için geçici makale taslağı.",
     category: "Yapay Zekâ",
+    tags: ["AI", "Yazılım", "Ürün düşüncesi"],
     date: "Mock tarih",
+    updatedLabel: "Sprint 02 taslak güncellemesi",
     readingTime: "6 dk",
     sortOrder: 3,
     coverLabel: "AI / DEV",
+    isDraft: true,
+    placeholderNote: "Bu yazı gerçek yayınlanmış blog içeriği değil; makale düzenini test eden mock taslaktır.",
     sections: [
       {
         id: "donusum",
@@ -251,6 +338,7 @@ export const writings: WritingSummary[] = [
           "Bir fikri değere dönüştürmek; problemi parçalara ayırmayı, doğru kısıtları seçmeyi ve kullanıcıya net bir akış sunmayı gerektirir.",
           "Bu yüzden public yazı şablonu uzun satırları sınırlayan, kod bloklarını taşırmayan ve mobilde okunabilir kalan bir makale düzeniyle hazırlanır.",
         ],
+        codeLanguage: "TypeScript",
         code: "const value = understand(problem)\n  .designSmall()\n  .shipSafely()\n  .learnAgain();",
       },
       {
@@ -268,10 +356,14 @@ export const writings: WritingSummary[] = [
     title: "Modern Web Uygulamalarında Performans İpuçları",
     excerpt: "Ölçüm, sadeleştirme ve kullanıcı deneyimi odağında hazırlanmış geçici performans notları.",
     category: "Yazılım",
+    tags: ["Web", "Performans", "UX"],
     date: "Mock tarih",
+    updatedLabel: "Sprint 02 taslak güncellemesi",
     readingTime: "8 dk",
     sortOrder: 2,
     coverLabel: "WEB / PERF",
+    isDraft: true,
+    placeholderNote: "Performans örnekleri gerçek ölçüm sonucu değil, yazı detay sayfasının yapısını test eden geçici içeriktir.",
     sections: [
       {
         id: "olcum",
@@ -287,14 +379,13 @@ export const writings: WritingSummary[] = [
         paragraphs: [
           "Gereksiz hareket, ağır görsel ve karmaşık grid kararları özellikle mobil deneyimde hissedilir. Bu public sprintte kontrollü hover ve sade kart yapısı tercih edildi.",
         ],
+        codeLanguage: "TypeScript",
         code: "const page = keepLayoutSimple({\n  content: 'readable',\n  motion: 'controlled',\n});",
       },
       {
         id: "sonuc",
         title: "Sonuç",
-        paragraphs: [
-          "Gerçek performans notları eklendiğinde bu alan ölçüm sonuçları ve örneklerle genişletilebilir.",
-        ],
+        paragraphs: ["Gerçek performans notları eklendiğinde bu alan ölçüm sonuçları ve örneklerle genişletilebilir."],
       },
     ],
     relatedSlugs: ["yapay-zeka-caginda-yazilim-gelistirici-olmak", "minimal-tasarimin-gucu"],
@@ -304,10 +395,14 @@ export const writings: WritingSummary[] = [
     title: "Minimal Tasarımın Gücü",
     excerpt: "Daha az arayüzle daha anlaşılır ürün deneyimleri tasarlamaya dair mock ürün yazısı.",
     category: "Ürün",
+    tags: ["Tasarım", "Okunabilirlik", "Ürün"],
     date: "Mock tarih",
+    updatedLabel: "Sprint 02 taslak güncellemesi",
     readingTime: "5 dk",
     sortOrder: 1,
     coverLabel: "UX / MIN",
+    isDraft: true,
+    placeholderNote: "Bu içerik gerçek kişisel deneyim iddiası taşımaz; ürün yazısı düzenini test eden mock metindir.",
     sections: [
       {
         id: "odak",
@@ -320,17 +415,13 @@ export const writings: WritingSummary[] = [
       {
         id: "hiyerarsi",
         title: "Hiyerarşi kurmak",
-        paragraphs: [
-          "Başlık, açıklama, meta bilgi ve aksiyonlar arasındaki mesafe doğru kurulduğunda sayfa daha sakin ve güvenilir hissettirir.",
-        ],
+        paragraphs: ["Başlık, açıklama, meta bilgi ve aksiyonlar arasındaki mesafe doğru kurulduğunda sayfa daha sakin ve güvenilir hissettirir."],
         quote: "Az öğe kullanmak değil, doğru öğeyi doğru yerde kullanmak önemlidir.",
       },
       {
         id: "sonuc",
         title: "Sonuç",
-        paragraphs: [
-          "Public site gerçek içerikle büyüdükçe bu sade yapı korunduğu sürece sayfalar okunabilir kalır.",
-        ],
+        paragraphs: ["Public site gerçek içerikle büyüdükçe bu sade yapı korunduğu sürece sayfalar okunabilir kalır."],
       },
     ],
     relatedSlugs: ["modern-web-performans-ipuclari", "yapay-zeka-caginda-yazilim-gelistirici-olmak"],
@@ -343,6 +434,7 @@ export const journeyItems: JourneyItem[] = [
     title: "Merak ve keşif",
     detail: "Gerçek zaman çizelgesi kullanıcı tarafından netleşene kadar bu alan mock yolculuk verisi olarak tutulur.",
     lesson: "Öğrenme yolculuğunu küçük ve takip edilebilir parçalara bölmek.",
+    statusNote: "Gerçek tarih bekliyor",
     relatedWritingSlug: "minimal-tasarimin-gucu",
   },
   {
@@ -350,6 +442,7 @@ export const journeyItems: JourneyItem[] = [
     title: "İlk ürün iskeletleri",
     detail: "Public site; proje, yazı ve yolculuk kayıtlarını düzenli gösterecek temel yüzeyi hazırlar.",
     lesson: "İskelet doğru kurulursa gerçek içerik eklemek daha güvenli olur.",
+    statusNote: "Mock kayıt",
     relatedProjectSlug: "orbit-dashboard",
   },
   {
@@ -357,6 +450,7 @@ export const journeyItems: JourneyItem[] = [
     title: "Sistemli çalışma",
     detail: "Studio ve public site ayrımı, hangi içeriğin dışarı açılacağını kontrollü yönetmek için planlanır.",
     lesson: "Public görünen bilgi ile private çalışma notlarını ayırmak gerekir.",
+    statusNote: "Yayın akışı planı",
     relatedProjectSlug: "next-ai-dashboard",
   },
   {
@@ -364,6 +458,7 @@ export const journeyItems: JourneyItem[] = [
     title: "Yayınlanabilir anlatım",
     detail: "Projeler ve yazılar, gerçek link uydurmadan, yalnız onaylı bilgilerle public sayfaya taşınacak.",
     lesson: "Eksik bilgiyi gizlemek yerine placeholder olduğunu açıkça söylemek güven verir.",
+    statusNote: "Doğrulama bekliyor",
     relatedWritingSlug: "yapay-zeka-caginda-yazilim-gelistirici-olmak",
   },
 ];

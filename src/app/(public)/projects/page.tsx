@@ -11,7 +11,7 @@ export default function ProjectsPage() {
       <PageIntro
         eyebrow="Public projeler"
         title="Projelerim"
-        description="Fikirden ürüne uzanan çalışmalar için ilk kullanılabilir public liste deneyimi. İçerikler kullanıcı tarafından netleşene kadar mock seviyesinde tutulur."
+        description="Fikirden ürüne uzanan çalışmalar için public liste deneyimi. İçerikler kullanıcı tarafından netleşene kadar mock/placeholder seviyesinde tutulur."
         meta={`${projects.length} mock kayıt · ${activeProjects} devam eden · ${completedProjects} tamamlandı`}
       />
       <ProjectExplorer projects={projects} />

@@ -24,7 +24,7 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
       .filter((writing) => {
         const matchesCategory = category === "Tümü" || writing.category === category;
         const matchesQuery = normalizedQuery
-          ? [writing.title, writing.excerpt, writing.category]
+          ? [writing.title, writing.excerpt, writing.category, ...writing.tags]
               .join(" ")
               .toLocaleLowerCase("tr-TR")
               .includes(normalizedQuery)
@@ -91,7 +91,7 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
           Tüm public yazı taslakları
         </h2>
         <p className="mt-1 text-sm text-[var(--muted)]">
-          {filteredWritings.length} sonuç gösteriliyor. Tarihler ve içerikler geçici mock veridir.
+          {filteredWritings.length} sonuç gösteriliyor. Tarihler ve içerikler geçici mock/taslak veridir.
         </p>
       </div>
 

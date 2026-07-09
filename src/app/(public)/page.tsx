@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Panel } from "@/components/ui/panel";
 import { ProjectCard } from "@/components/public/project-card";
 import { PublicSection } from "@/components/public/public-section";
+import { PublicStatCard } from "@/components/public/public-stat-card";
+import { TimelineCard } from "@/components/public/timeline-card";
 import { WritingCard } from "@/components/public/writing-card";
 import { journeyItems, projects, writings } from "@/data/mock-content";
 
@@ -19,7 +21,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(18,217,120,.12),transparent_28rem)]" />
         <div className="relative z-10 max-w-2xl space-y-6">
           <div className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-            Public site · Sprint 01 mock içerik
+            Public site · Sprint 02 mock içerik
           </div>
           <div>
             <p className="text-base text-[var(--accent)] sm:text-lg">Merhaba, ben</p>
@@ -31,7 +33,7 @@ export default function HomePage() {
             Öğrenme, üretme ve dijital sistem kurma yolculuğunu sade bir public yüzeyde topluyorum.
           </h2>
           <p className="max-w-xl text-base leading-7 text-[var(--muted)] sm:text-lg">
-            Bu ilk public sürüm; proje, yazı ve yolculuk alanlarının responsive iskeletini gösterir. Gerçek bağlantılar ve kişisel detaylar kullanıcı onayından sonra eklenecek.
+            Bu public sürüm; proje, yazı ve yolculuk alanlarının responsive iskeletini gösterir. Gerçek bağlantılar ve kişisel detaylar kullanıcı onayından sonra eklenecek.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
@@ -65,16 +67,16 @@ export default function HomePage() {
       </section>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <Metric value={String(projects.length)} label="Mock public proje" />
-        <Metric value={String(activeProjectCount)} label="Devam eden kayıt" />
-        <Metric value={String(completedProjectCount)} label="Tamamlanan mock" />
-        <Metric value={String(writings.length)} label="Mock yazı taslağı" />
+        <PublicStatCard value={String(projects.length)} label="Mock public proje" note="Gerçek proje sayısı iddiası değildir." />
+        <PublicStatCard value={String(activeProjectCount)} label="Devam eden kayıt" note="Mock status alanından hesaplanır." />
+        <PublicStatCard value={String(completedProjectCount)} label="Tamamlanan mock" note="Gerçek müşteri işi iddiası taşımaz." />
+        <PublicStatCard value={String(writings.length)} label="Mock yazı taslağı" note="Yayın içeriği netleşmeyi bekler." />
       </div>
 
       <PublicSection
         eyebrow="Projeler"
         title="Öne çıkan public proje kayıtları"
-        description="Kartlar; durum, ilerleme, kategori ve teknoloji etiketlerini gerçek link uydurmadan gösterir."
+        description="Kartlar; durum, ilerleme, kategori ve teknoloji etiketlerini gerçek link uydurmadan gösterir. Link yoksa detay sayfasında pasif bilgi görünür."
         href="/projects"
         linkLabel="Tüm projeler"
       >
@@ -126,24 +128,11 @@ export default function HomePage() {
       >
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {journeyItems.map((item) => (
-            <Panel key={item.marker} className="p-5">
-              <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent)]">{item.marker}</p>
-              <h3 className="mt-3 font-semibold">{item.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{item.detail}</p>
-            </Panel>
+            <TimelineCard key={item.marker} item={item} compact />
           ))}
         </div>
       </PublicSection>
     </div>
-  );
-}
-
-function Metric({ value, label }: { value: string; label: string }) {
-  return (
-    <Panel className="p-5">
-      <p className="font-mono text-3xl font-semibold text-[var(--accent)]">{value}</p>
-      <p className="mt-2 text-sm text-[var(--muted)]">{label}</p>
-    </Panel>
   );
 }
 
