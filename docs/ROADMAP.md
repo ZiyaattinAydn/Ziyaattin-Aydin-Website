@@ -15,3 +15,9 @@
 - [ ] Faz 9 — Export, backup ve operasyon
 - [ ] Faz 10 — Test ve güvenlik sertleştirmesi
 - [ ] Faz 11 — Production v1.0
+
+## Sprint 02 Sonrası Durum Notu
+
+- Faz 2: `[~]` — Teknik temel ve public/studio mock kabukları ilerledi; Vercel doğrulaması yapılmadıysa faz tamamen kapanmış sayılmamalı.
+- Faz 3: `[ ]` — Supabase Auth, MFA, PostgreSQL, Storage, RLS ve route guard kararları henüz başlatılmadı.
+- Workspace root uyarısı: `[m]` — `turbopack.root: process.cwd()` sonrası integration build çıktısında multiple lockfile uyarısı görünmedi.

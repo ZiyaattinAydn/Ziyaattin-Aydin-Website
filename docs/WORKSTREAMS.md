@@ -96,3 +96,17 @@ Aşağıdaki dosyalara aynı anda birden fazla geliştirme branch'i dokunmamalı
 - Supabase/Auth/MFA/PostgreSQL/Storage gerçek implementasyonu ayrı sprint kararı olmadan başlatılmamalı.
 - Hakkımda portresi kullanıcı tarafından doğrulanmadan final kabul edilmemeli.
 >>>>>>> origin/feat/public-site-s02
+
+## Sprint 02 Entegrasyon Sonucu
+
+- Core Sprint 02 — `feat/core-foundation-s02`: `[m]`
+- Public Sprint 02 — `feat/public-site-s02`: `[m]`
+- Studio Sprint 02 — `feat/studio-shell-s02`: `[m]`
+- Entegrasyon Sprint 02 — `integration/sprint-02`: `[m]`
+- Orkestrasyon: `[~]`
+
+Notlar:
+- Core ortak config, site config ve UI primitive güncellemeleri main'e alınmaya hazırlandı.
+- Public mock content modeli ve detay sayfası render akışı main'e alınmaya hazırlandı.
+- Studio mock workflow veri katmanı ve modül sayfaları main'e alınmaya hazırlandı.
+- Gerçek Auth/Supabase/Storage/CRUD kapsamı Sprint 02'de bilinçli olarak başlatılmadı.

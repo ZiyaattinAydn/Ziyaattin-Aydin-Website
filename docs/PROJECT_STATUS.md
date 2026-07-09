@@ -134,3 +134,13 @@ Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `
 - [x] Gerçek olmayan demo/GitHub/contact linkleri aktif gerçek link gibi sunulmadı.
 - [x] Public liste ve detay sayfalarında responsive okunabilirlik iyileştirildi.
 >>>>>>> origin/feat/public-site-s02
+
+## Sprint 02 Entegrasyon Özeti
+
+- [m] Sprint 02 Core foundation çalışması `integration/sprint-02` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 02 Public site çalışması `integration/sprint-02` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 02 Studio shell çalışması `integration/sprint-02` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 02 entegrasyonunda `npm run lint`, `npm run typecheck` ve `npm run build` kontrolleri başarılı tamamlandı.
+- [m] Next.js workspace root / multiple lockfile uyarısı Core Sprint 02 sonrası integration build çıktısında görünmedi.
+- [!] Vercel preview / production deployment doğrulaması henüz tamamlanmadı.
+- [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage gerçek implementasyonu henüz başlamadı.

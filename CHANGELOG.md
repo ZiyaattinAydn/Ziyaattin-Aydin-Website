@@ -1,3 +1,25 @@
+## Sprint 02 Integration — 2026-07-07
+
+### Added
+- Core Sprint 02: `ProgressBar` ve `SectionShell` ortak UI primitive'leri eklendi.
+- Studio Sprint 02: mock workflow için `StudioListCard` ve `StudioStatusPill` bileşenleri eklendi.
+- Sprint 02 entegrasyon handoff kaydı eklendi: `docs/handoffs/2026-07-07-integration-sprint-02.md`.
+
+### Changed
+- Core Sprint 02: `next.config.ts` içinde Turbopack root ayarı proje köküne sabitlendi ve build worker sayısı `experimental.cpus: 4` ile sınırlandı.
+- Core Sprint 02: `siteConfig`, layout metadata ve footer doğrulanmamış linkleri aktif göstermeyecek şekilde düzenlendi.
+- Public Sprint 02: mock içerik modeli genişletildi; proje ve yazı detay sayfaları mock section verilerinden beslenecek şekilde iyileştirildi.
+- Studio Sprint 02: dashboard, proje, görev, not ve dosya modülleri mock workflow verileriyle geliştirildi.
+
+### Fixed
+- Workspace root / multiple lockfile build uyarısı integration build çıktısında görünmeyecek şekilde düzeltildi.
+- Public branch'teki tracking dosyası whitespace / line-ending uyarıları integration branch üzerinde temizlendi.
+
+### Verified
+- `npm run lint`, `npm run typecheck` ve `npm run build` Sprint 02 integration branch üzerinde başarılı tamamlandı.
+- Yeni bağımlılık ve yeni environment değişkeni eklenmedi.
+- Secret/internal registry kontrolünde `.env.example` dışında gizli dosya ve özel registry kalıntısı bulunmadı.
+
 <<<<<<< HEAD
 # Changelog
 
