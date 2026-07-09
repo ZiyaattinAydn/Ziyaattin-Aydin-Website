@@ -1,17 +1,24 @@
 # Çalışma Hatları
 
+## Sprint 01 Entegrasyon Geçmişi
+- Core Foundation: `[m]` — `feat/core-foundation`
+- Public Site: `[m]` — `feat/public-site`
+- Studio Shell: `[m]` — `feat/studio-shell`
+- Integration Sprint 01 + Studio Fix: `[m]` — `integration/sprint-01-studio-fix`
+
 ## Pencere 1 — Teknik Temel
-- Branch: `feat/core-foundation`
+- Branch: `feat/core-foundation-s02`
 - Durum: `[x]`
 - Sahiplik: ortak UI, tema, config, kalite araçları, PWA başlangıcı
+- Sprint 02 notu: workspace root uyarısı incelendi, metadata/site config düzenlendi, `ProgressBar` ve `SectionShell` eklendi
 
 ## Pencere 2 — Public Site
-- Branch: `feat/public-site`
+- Branch: `feat/public-site-s02`
 - Durum: `[ ]`
 - Sahiplik: public rotalar, sayfa blokları, responsive public deneyim
 
 ## Pencere 3 — Studio Kabuğu
-- Branch: `feat/studio-shell`
+- Branch: `feat/studio-shell-s02`
 - Durum: `[ ]`
 - Sahiplik: login, Studio layout, dashboard ve modül kabukları
 
@@ -34,3 +41,6 @@ Aşağıdaki dosyalara aynı anda birden fazla geliştirme branch'i dokunmamalı
 - `src/app/globals.css`
 - `next.config.*`
 - `eslint.config.*`
+- `src/components/ui/**`
+- `src/components/layout/**`
+- `src/lib/site-config.ts`

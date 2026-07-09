@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { siteConfig } from "@/lib/site-config";
+import { siteConfig, type SiteExternalLink } from "@/lib/site-config";
+
+const footerLinks = [...siteConfig.contactLinks, ...siteConfig.socialLinks];
 
 export function SiteFooter() {
   return (
@@ -12,14 +14,14 @@ export function SiteFooter() {
           </div>
 
           <div className="flex flex-wrap gap-3 sm:justify-end">
-            <FooterPlaceholder label="E-posta" />
-            <FooterPlaceholder label="GitHub" />
-            <FooterPlaceholder label="LinkedIn" />
+            {footerLinks.map((item) => (
+              <FooterExternalLink key={item.label} item={item} />
+            ))}
             <Link
-              href="/login"
+              href={siteConfig.adminEntry.href}
               className="rounded-full border border-[var(--border)] px-3 py-1.5 transition hover:border-[var(--border-strong)] hover:text-[var(--foreground)]"
             >
-              Yönetici Girişi
+              {siteConfig.adminEntry.label}
             </Link>
           </div>
         </div>
@@ -28,10 +30,21 @@ export function SiteFooter() {
   );
 }
 
-function FooterPlaceholder({ label }: { label: string }) {
+function FooterExternalLink({ item }: { item: SiteExternalLink }) {
+  if (item.status === "verified" && item.href) {
+    return (
+      <Link
+        href={item.href}
+        className="rounded-full border border-[var(--border)] px-3 py-1.5 transition hover:border-[var(--border-strong)] hover:text-[var(--foreground)]"
+      >
+        {item.label}
+      </Link>
+    );
+  }
+
   return (
-    <span className="rounded-full border border-[var(--border)] px-3 py-1.5 text-[var(--muted)]" title="Gerçek bağlantı doğrulandıktan sonra eklenecek">
-      {label} yakında
+    <span className="rounded-full border border-[var(--border)] px-3 py-1.5 text-[var(--muted)]" title={item.note} aria-label={`${item.label}: doğrulanmış bağlantı yok`}>
+      {item.label} yakında
     </span>
   );
 }
