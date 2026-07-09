@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Panel } from "@/components/ui/panel";
+import { Tag } from "@/components/ui/tag";
+import { DetailSection } from "@/components/public/detail-section";
 import { WritingCard } from "@/components/public/writing-card";
 import { writings } from "@/data/mock-content";
 
@@ -21,8 +23,8 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
         ← Yazılara dön
       </Link>
 
-      <header className="grid gap-6 border-b border-[var(--border)] pb-8 lg:grid-cols-[1fr_280px] lg:items-end">
-        <div>
+      <header className="grid gap-6 border-b border-[var(--border)] pb-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:items-end">
+        <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--muted)]">
             <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-[var(--accent)]">
               {writing.category}
@@ -31,16 +33,21 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
             <span>·</span>
             <span>{writing.readingTime}</span>
             <span>·</span>
-            <span>Mock içerik</span>
+            <span>{writing.isDraft ? "Taslak/mock içerik" : "Public içerik"}</span>
           </div>
-          <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight tracking-tight break-words sm:text-5xl lg:text-6xl">
             {writing.title}
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--muted)] sm:text-lg">{writing.excerpt}</p>
+          <div className="mt-5 flex flex-wrap gap-2">
+            {writing.tags.map((tag) => (
+              <Tag key={tag}>{tag}</Tag>
+            ))}
+          </div>
         </div>
         <Panel className="p-4">
           <div className="flex items-center gap-4">
-            <div className="relative h-12 w-12 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)]">
+            <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)]">
               <Image
                 src="/images/portraits/home-hero.png"
                 alt="Onaylı ana portreden küçük yazar avatarı"
@@ -49,7 +56,7 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
                 className="object-cover object-top"
               />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="font-semibold">Ziyaattin Aydın</p>
               <p className="text-xs leading-5 text-[var(--muted)]">Yazar bilgileri gerçek yayın aşamasında netleşecek.</p>
             </div>
@@ -57,7 +64,7 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
         </Panel>
       </header>
 
-      <div className="grid gap-8 lg:grid-cols-[240px_1fr]">
+      <div className="grid gap-8 lg:grid-cols-[240px_minmax(0,1fr)]">
         <aside className="lg:order-none">
           <Panel className="p-5 lg:sticky lg:top-24">
             <h2 className="font-semibold">İçindekiler</h2>
@@ -78,6 +85,10 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
             <p className="font-mono text-sm font-semibold text-[var(--accent)]">{writing.coverLabel}</p>
           </div>
 
+          <DetailSection eyebrow="Taslak notu" title="Bu içerik henüz gerçek yayın değildir" description={writing.placeholderNote}>
+            <p className="text-sm leading-6 text-[var(--muted)]">Son güncelleme etiketi: {writing.updatedLabel}</p>
+          </DetailSection>
+
           <Panel className="p-5 sm:p-8">
             <div className="prose-dark space-y-8">
               {writing.sections.map((section, index) => (
@@ -90,9 +101,14 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
                   ))}
                   {section.quote ? <blockquote>{section.quote}</blockquote> : null}
                   {section.code ? (
-                    <pre>
-                      <code>{section.code}</code>
-                    </pre>
+                    <div className="overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--surface-strong)]">
+                      <div className="border-b border-[var(--border)] px-4 py-2 font-mono text-xs text-[var(--muted)]">
+                        {section.codeLanguage ?? "Kod"}
+                      </div>
+                      <pre className="overflow-x-auto p-4">
+                        <code>{section.code}</code>
+                      </pre>
+                    </div>
                   ) : null}
                 </section>
               ))}

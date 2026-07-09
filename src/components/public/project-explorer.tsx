@@ -25,7 +25,7 @@ export function ProjectExplorer({ projects }: { projects: ProjectSummary[] }) {
     return projects
       .filter((project) => {
         const matchesQuery = normalizedQuery
-          ? [project.title, project.description, project.category, ...project.technologies]
+          ? [project.title, project.description, project.category, project.statusLabel, project.summary, ...project.technologies]
               .join(" ")
               .toLocaleLowerCase("tr-TR")
               .includes(normalizedQuery)
@@ -111,7 +111,7 @@ export function ProjectExplorer({ projects }: { projects: ProjectSummary[] }) {
             Public proje kayıtları
           </h2>
           <p className="mt-1 text-sm text-[var(--muted)]">
-            {filteredProjects.length} sonuç gösteriliyor. İçerikler Sprint 01 için mock seviyesindedir.
+            {filteredProjects.length} sonuç gösteriliyor. İçerikler Sprint 02 için mock/placeholder seviyesindedir.
           </p>
         </div>
       </div>

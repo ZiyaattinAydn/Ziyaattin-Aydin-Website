@@ -1,6 +1,6 @@
 import { PageIntro } from "@/components/ui/page-intro";
 import { Panel } from "@/components/ui/panel";
-import { TimelineItem } from "@/components/public/timeline-item";
+import { TimelineCard } from "@/components/public/timeline-card";
 import { journeyItems } from "@/data/mock-content";
 
 export default function JourneyPage() {
@@ -13,10 +13,16 @@ export default function JourneyPage() {
         meta={`${journeyItems.length} mock aşama`}
       />
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_.75fr] lg:items-start">
+      <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_.75fr] lg:items-start">
         <div className="space-y-5">
           {journeyItems.map((item) => (
-            <TimelineItem key={item.marker} item={item} />
+            <div
+              key={item.marker}
+              className="relative pl-6 before:absolute before:left-2 before:top-6 before:h-full before:w-px before:bg-[var(--border)] last:before:hidden sm:pl-8"
+            >
+              <span className="absolute left-0 top-6 h-4 w-4 rounded-full border border-[var(--accent)] bg-[var(--background)]" />
+              <TimelineCard item={item} />
+            </div>
           ))}
         </div>
 
