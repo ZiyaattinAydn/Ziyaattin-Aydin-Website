@@ -1,5 +1,5 @@
-import type { PublicVisibility, PublishFlowState } from "@/data/mock-content";
-import { publishFlowStateLabels, visibilityLabels } from "@/data/mock-content";
+import type { PublicVisibility, PublishFlowState } from "@/features/public/content/model";
+import { publishFlowStateLabels, visibilityLabels } from "@/features/public/content/model";
 
 type PublishStatusNoteProps = {
   publishFlowState: PublishFlowState;

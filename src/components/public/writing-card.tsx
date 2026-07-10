@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { WritingSummary } from "@/data/mock-content";
-import { publishStateLabels } from "@/data/mock-content";
+import type { WritingSummary } from "@/features/public/content/model";
+import { publishStateLabels } from "@/features/public/content/model";
 import { Panel } from "@/components/ui/panel";
 import { PublishStatusNote } from "@/components/public/publish-status-note";
 

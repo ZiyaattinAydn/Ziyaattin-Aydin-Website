@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { ProjectSummary } from "@/data/mock-content";
-import { publishStateLabels } from "@/data/mock-content";
+import type { ProjectSummary } from "@/features/public/content/model";
+import { publishStateLabels } from "@/features/public/content/model";
 import { Panel } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/tag";
 import { StatusPill } from "@/components/public/status-pill";

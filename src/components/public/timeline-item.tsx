@@ -1,5 +1,5 @@
 import Link from "next/link";
-import type { JourneyItem } from "@/data/mock-content";
+import type { JourneyItem } from "@/features/public/content/model";
 import { Panel } from "@/components/ui/panel";
 
 export function TimelineItem({ item }: { item: JourneyItem }) {

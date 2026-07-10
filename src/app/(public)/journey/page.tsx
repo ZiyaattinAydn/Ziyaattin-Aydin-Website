@@ -1,9 +1,11 @@
 import { PageIntro } from "@/components/ui/page-intro";
 import { Panel } from "@/components/ui/panel";
 import { TimelineCard } from "@/components/public/timeline-card";
-import { journeyItems } from "@/data/mock-content";
+import { getPublicContentRepository } from "@/features/public/content/source-selection";
 
-export default function JourneyPage() {
+export default async function JourneyPage() {
+  const repository = getPublicContentRepository();
+  const journeyItems = await repository.listJourneyItems();
   return (
     <div className="space-y-8 overflow-hidden">
       <PageIntro
@@ -15,15 +17,24 @@ export default function JourneyPage() {
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_.75fr] lg:items-start">
         <div className="space-y-5">
-          {journeyItems.map((item) => (
-            <div
-              key={item.marker}
-              className="relative pl-6 before:absolute before:left-2 before:top-6 before:h-full before:w-px before:bg-[var(--border)] last:before:hidden sm:pl-8"
-            >
-              <span className="absolute left-0 top-6 h-4 w-4 rounded-full border border-[var(--accent)] bg-[var(--background)]" />
-              <TimelineCard item={item} />
-            </div>
-          ))}
+          {journeyItems.length > 0 ? (
+            journeyItems.map((item) => (
+              <div
+                key={item.marker}
+                className="relative pl-6 before:absolute before:left-2 before:top-6 before:h-full before:w-px before:bg-[var(--border)] last:before:hidden sm:pl-8"
+              >
+                <span className="absolute left-0 top-6 h-4 w-4 rounded-full border border-[var(--accent)] bg-[var(--background)]" />
+                <TimelineCard item={item} />
+              </div>
+            ))
+          ) : (
+            <Panel className="p-8 text-center">
+              <h2 className="text-lg font-semibold">Henüz yayınlanmış yolculuk kaydı yok</h2>
+              <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
+                Yeni public kayıtlar yayınlandığında burada görünecek.
+              </p>
+            </Panel>
+          )}
         </div>
 
         <div className="space-y-5 lg:sticky lg:top-24">

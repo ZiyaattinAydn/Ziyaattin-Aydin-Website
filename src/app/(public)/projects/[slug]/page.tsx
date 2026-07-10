@@ -5,11 +5,18 @@ import { Tag } from "@/components/ui/tag";
 import { DetailSection } from "@/components/public/detail-section";
 import { StatusPill } from "@/components/public/status-pill";
 import { PublishStatusNote } from "@/components/public/publish-status-note";
-import { getProjectActions, linkApprovalLabels, projects, publishFlowStateLabels, publishStateLabels } from "@/data/mock-content";
+import {
+  getProjectActions,
+  linkApprovalLabels,
+  publishFlowStateLabels,
+  publishStateLabels,
+} from "@/features/public/content/model";
+import { getPublicContentRepository } from "@/features/public/content/source-selection";
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = projects.find((item) => item.slug === slug);
+  const repository = getPublicContentRepository();
+  const project = await repository.getProjectBySlug(slug);
 
   if (!project) notFound();
 

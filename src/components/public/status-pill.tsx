@@ -1,4 +1,4 @@
-import type { ProjectStatus } from "@/data/mock-content";
+import type { ProjectStatus } from "@/features/public/content/model";
 
 const statusText: Record<ProjectStatus, string> = {
   "Devam Ediyor": "text-[var(--accent)]",

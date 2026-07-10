@@ -65,3 +65,15 @@ Faz 3 yalnız mimari hazırlık düzeyinde `[~]` kabul edilmelidir; gerçek Auth
 - Storage bucket oluşturma: `[ ]`
 - Studio route guard ve CRUD: `[ ]`
 - Sprint 06 başlangıcı: `[!] USER_APPROVAL_REQUIRED`
+
+## Sprint 06 — Public Data Access Hazırlığı
+
+- [x] Public repository interface ve canonical DTO sınırı
+- [x] Mock repository adapter ve mevcut production mock davranışının korunması
+- [x] Dependency-free Supabase query-reader ve explicit query mapping
+- [x] Visibility/notFound/approval policy testleri
+- [x] Production source'un mock'a kilitlenmesi
+- [ ] Core Supabase reader ile Integration wiring
+- [ ] Public profile/contact/social/portrait için kesin database şeması
+- [ ] Gerçek Public database cutover
+- [ ] Cache/revalidation ve slug history/redirect implementasyonu

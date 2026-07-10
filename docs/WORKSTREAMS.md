@@ -114,3 +114,16 @@ Notlar:
 - Auth, MFA, middleware, route guard, CRUD, Storage upload ve gerçek publish implementasyonu başlamadı.
 - Anonymous erişim yalnız published/public project, writing ve journey kayıtlarıyla sınırlandı.
 - Sprint 06, `SPRINT_05_FINAL_DECISION_GATE.md` cevaplanmadan başlatılmamalıdır.
+
+## Sprint 06 — Public Site
+
+### Pencere 2 — Public Supabase Adapter
+
+- Branch: `feat/public-supabase-adapter-s06`
+- Başlangıç: `main@0c9d1bb`
+- Durum: `[x]` — implementasyon, policy testleri, lint, typecheck, build ve audit incelemesi tamamlandı; commit, push ve Preview doğrulaması bekleniyor
+- Sahiplik: `src/app/(public)/**`, `src/components/public/**`, `src/features/public/**`, `docs/content/**`, Public tracking ve handoff
+- Production source: `mock`
+- Supabase durumu: dependency-free adapter/query-reader sınırı hazır; Core reader entegrasyonu yapılmadı
+- Yeni environment ihtiyacı: gelecekte server-only `PUBLIC_CONTENT_SOURCE=mock|supabase`; `.env.example` değiştirilmedi
+- Gerçek database cutover: bu sprint kapsamında değil
