@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { WritingSummary } from "@/data/mock-content";
+import { publishStateLabels, visibilityLabels } from "@/data/mock-content";
 import { Panel } from "@/components/ui/panel";
 
 export function WritingCard({ writing }: { writing: WritingSummary }) {
@@ -10,11 +11,14 @@ export function WritingCard({ writing }: { writing: WritingSummary }) {
           {writing.category}
         </p>
         <span className="shrink-0 rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--muted)]">
-          {writing.isDraft ? "Taslak" : "Public"}
+          {publishStateLabels[writing.publishState]}
         </span>
       </div>
       <h2 className="mt-4 text-xl font-semibold leading-snug break-words">{writing.title}</h2>
       <p className="mt-3 flex-1 text-sm leading-6 text-[var(--muted)]">{writing.excerpt}</p>
+      <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
+        {visibilityLabels[writing.visibility]} · {writing.sourceNote}
+      </div>
       <div className="mt-4 flex flex-wrap gap-2">
         {writing.tags.slice(0, 3).map((tag) => (
           <span key={tag} className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1 text-xs text-[var(--muted)]">

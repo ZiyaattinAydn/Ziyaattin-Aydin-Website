@@ -10,10 +10,11 @@ import { journeyItems, projects, writings } from "@/data/mock-content";
 
 const activeProjectCount = projects.filter((project) => project.status === "Devam Ediyor").length;
 const completedProjectCount = projects.filter((project) => project.status === "Tamamlandı").length;
+const draftWritingCount = writings.filter((writing) => writing.publishState === "draft").length;
 
 export default function HomePage() {
-  const featuredProjects = projects.slice(0, 3);
-  const featuredWritings = writings.slice(0, 2);
+  const featuredProjects = projects.filter((project) => project.isFeatured).slice(0, 3);
+  const featuredWritings = writings.filter((writing) => writing.isFeatured).slice(0, 2);
 
   return (
     <div className="space-y-10 overflow-hidden">
@@ -21,7 +22,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(18,217,120,.12),transparent_28rem)]" />
         <div className="relative z-10 max-w-2xl space-y-6">
           <div className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-            Public site · Sprint 02 mock içerik
+            Public site · Sprint 03 yayın sözleşmesi
           </div>
           <div>
             <p className="text-base text-[var(--accent)] sm:text-lg">Merhaba, ben</p>
@@ -33,7 +34,7 @@ export default function HomePage() {
             Öğrenme, üretme ve dijital sistem kurma yolculuğunu sade bir public yüzeyde topluyorum.
           </h2>
           <p className="max-w-xl text-base leading-7 text-[var(--muted)] sm:text-lg">
-            Bu public sürüm; proje, yazı ve yolculuk alanlarının responsive iskeletini gösterir. Gerçek bağlantılar ve kişisel detaylar kullanıcı onayından sonra eklenecek.
+            Bu public sürüm; proje, yazı ve yolculuk alanlarını ileride Studio publish akışına bağlanacak güvenli mock içerik sözleşmesiyle gösterir. Gerçek bağlantılar ve kişisel detaylar kullanıcı onayından sonra eklenecek.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
@@ -70,7 +71,7 @@ export default function HomePage() {
         <PublicStatCard value={String(projects.length)} label="Mock public proje" note="Gerçek proje sayısı iddiası değildir." />
         <PublicStatCard value={String(activeProjectCount)} label="Devam eden kayıt" note="Mock status alanından hesaplanır." />
         <PublicStatCard value={String(completedProjectCount)} label="Tamamlanan mock" note="Gerçek müşteri işi iddiası taşımaz." />
-        <PublicStatCard value={String(writings.length)} label="Mock yazı taslağı" note="Yayın içeriği netleşmeyi bekler." />
+        <PublicStatCard value={String(draftWritingCount)} label="Taslak yazı" note="Gerçek publish/database başlamadı." />
       </div>
 
       <PublicSection
@@ -114,7 +115,7 @@ export default function HomePage() {
             <MiniStat label="Aktif kategori" value="Mock" />
             <MiniStat label="Yayın modu" value="Public-safe" />
             <MiniStat label="Veri kaynağı" value="Mock" />
-            <MiniStat label="Link durumu" value="Bekliyor" />
+            <MiniStat label="Link durumu" value="Pasif" />
           </div>
         </Panel>
       </div>

@@ -2,10 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Panel } from "@/components/ui/panel";
 import { WritingExplorer } from "@/components/public/writing-explorer";
-import { writings } from "@/data/mock-content";
+import { publishStateLabels, visibilityLabels, writings } from "@/data/mock-content";
 
 export default function WritingsPage() {
-  const featured = writings[0];
+  const featured = writings.find((writing) => writing.isFeatured) ?? writings[0];
 
   return (
     <div className="space-y-8 overflow-hidden">
@@ -52,6 +52,9 @@ export default function WritingsPage() {
             <p className="text-sm text-[var(--accent)]">{featured.category}</p>
             <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">{featured.title}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)] sm:text-base">{featured.excerpt}</p>
+            <p className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
+              {featured.sourceNote}
+            </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {featured.tags.map((tag) => (
                 <span key={tag} className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1 text-xs text-[var(--muted)]">
@@ -64,7 +67,9 @@ export default function WritingsPage() {
               <span>·</span>
               <span>{featured.readingTime}</span>
               <span>·</span>
-              <span>{featured.isDraft ? "Taslak" : "Public"}</span>
+              <span>{publishStateLabels[featured.publishState]}</span>
+              <span>·</span>
+              <span>{visibilityLabels[featured.visibility]}</span>
               <Link href={`/writings/${featured.slug}`} className="font-semibold text-[var(--accent)]">
                 Oku →
               </Link>
