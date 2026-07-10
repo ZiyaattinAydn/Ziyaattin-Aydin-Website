@@ -5,7 +5,8 @@
 - Branch: `feat/core-supabase-runtime-s06`
 - Başlangıç main commit'i: `0c9d1bb`
 - Runtime foundation commit'i: `6d51ff3`
-- Push durumu: Dokümantasyon commit'i sonrasında doğrulanacak
+- Dokümantasyon commit'i: `392144b`
+- Push durumu: `origin/feat/core-supabase-runtime-s06` üzerine pushlandı
 - Başarı etiketi: `S06_CORE_OK`
 
 ## Tamamlanan işler

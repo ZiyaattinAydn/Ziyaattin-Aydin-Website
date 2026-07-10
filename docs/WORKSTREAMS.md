@@ -121,7 +121,7 @@ Notlar:
 - Branch: `feat/core-supabase-runtime-s06`
 - Başlangıç: `main@0c9d1bb`
 - Runtime commit: `6d51ff3`
-- Durum: `[x]` — kod ve yerel kalite kontrolleri tamamlandı; dokümantasyon/push kapanışı sürüyor
+- Durum: `[x]` — tamamlandı ve origin'e pushlandı
 - Sahiplik: Supabase paketleri, env validation, browser/server clients, Proxy, ortak Auth/session helpers, runtime tests ve Core handoff
 
 ### Pencere 2 — Public Supabase Adapter

@@ -147,6 +147,7 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [x] Env yokken Public mock production build'i başarılı.
 - [x] Env yokken Auth ve Studio fail closed.
 - [x] Runtime test, lint, typecheck ve build başarılı.
+- [x] Branch `origin/feat/core-supabase-runtime-s06` üzerine pushlandı; Vercel Preview runtime env değerleri bekleniyor.
 - [!] `npm audit`: 2 moderate, `GHSA-qx2v-qp2m-jg93`; force fix uygulanmadı.
 - [x] Gerçek Supabase URL, key, password veya owner UUID repository'ye eklenmedi.
 - [ ] Development Supabase project ve gerçek Preview runtime env kurulumu Core repository değişikliği dışında tamamlanacak.
