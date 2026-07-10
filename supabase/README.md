@@ -126,7 +126,7 @@ Aktif owner/admin:
 Bucket baseline limitleri:
 
 - `public-assets`: 10 MiB, image MIME türleri
-- `private-files`: 50 MiB, belge/sunum ve kontrollü image MIME türleri
+- `private-files`: 25 MiB, belge/sunum ve kontrollü image MIME türleri
 
 Supabase project-wide Storage limiti veya Dashboard ayarı daha kısıtlayıcı olabilir. Üretime geçmeden önce dosya boyutu ve MIME listesi kullanıcı tarafından onaylanmalıdır.
 

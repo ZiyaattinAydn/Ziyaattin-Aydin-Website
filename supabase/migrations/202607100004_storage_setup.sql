@@ -11,7 +11,7 @@
 --   <owner_uuid>/projects/project-cover.webp
 --   <owner_uuid>/documents/project-brief.pdf
 --
--- Bucket limits below are conservative baselines and still require user review.
+-- Bucket limits below reflect the approved Sprint 06 development baseline.
 -- The Supabase project-wide Storage limit or Dashboard configuration can impose
 -- a stricter cap. This migration creates policies only; it uploads no object.
 
@@ -34,16 +34,14 @@ values
       'image/jpeg',
       'image/png',
       'image/webp',
-      'image/avif',
-      'image/gif',
-      'image/svg+xml'
+      'image/avif'
     ]::text[]
   ),
   (
     'private-files',
     'private-files',
     false,
-    52428800,
+    26214400,
     array[
       'application/pdf',
       'application/vnd.ms-powerpoint',
