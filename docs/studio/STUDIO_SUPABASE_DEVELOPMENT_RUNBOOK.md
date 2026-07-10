@@ -1,67 +1,122 @@
 # Studio Supabase Development Runbook — Sprint 06
 
-## Proje
+## Ortam
 
-- Ayrı development projesi
-- Önerilen ad: `ziyaattin-aydin-website-dev`
+- Project: ziyaattin-aydin-website-dev
 - Region: APAC — Southeast Asia (Singapore)
-- Production projesi ve Production Vercel env bu sprintte değiştirilmez.
-
-Secret değerler sohbet, Git, source code, log veya ekran görüntüsüne eklenmez.
+- Development ve production ayrı project olarak tutulur.
+- Production project ve Production Vercel env bu sprintte değiştirilmez.
+- Secret değerler sohbet, Git, source code, log veya dokümana yazılmaz.
 
 ## Environment
 
-Local `.env.local` ve yalnız Vercel Preview environment:
+Local .env.local ve yalnız Vercel Preview:
 
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `NEXT_PUBLIC_SITE_URL`
+- NEXT_PUBLIC_SUPABASE_URL
+- NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+- NEXT_PUBLIC_SITE_URL
 
-`SUPABASE_SERVICE_ROLE_KEY` uygulama runtime env’sine eklenmez.
+SUPABASE_SERVICE_ROLE_KEY normal Auth/Studio runtime env'sine eklenmez.
 
-## Migration sırası
+## Auth Dashboard baseline
 
-SQL Editor’da dosyalar ayrı ayrı ve kesin sırayla çalıştırılır:
+- Email/password: enabled
+- Public signup: disabled
+- Manual linking: disabled
+- Anonymous sign-in: disabled
+- TOTP: enabled
+- SMS MFA: disabled
+- AAL1 session duration limit: enabled
+- Recovery code UI: yok
 
-1. `supabase/migrations/202607100001_initial_schema.sql`
-2. `supabase/migrations/202607100002_database_functions.sql`
-3. `supabase/migrations/202607100003_rls_policies.sql`
-4. `supabase/migrations/202607100004_storage_setup.sql`
+## Migration sırası ve development sonucu
 
-Bir dosya hata verirse sonraki dosyaya geçilmez. Rastgele SQL değişikliği yapılmaz.
+1. 202607100001_initial_schema.sql — başarılı
+2. 202607100002_database_functions.sql — başarılı
+3. 202607100003_rls_policies.sql — başarılı
+4. 202607100004_storage_setup.sql — hosted-compatible bucket setup
+
+Hosted Supabase SQL Editor, storage.objects relation sahibi olmadığı için
+policy DDL'si SQLSTATE 42501 ile reddedildi. Managed role/ownership değiştirilmedi.
+İki bucket migration ile, sekiz policy ise
+docs/studio/STUDIO_STORAGE_POLICY_RUNBOOK.md üzerinden Dashboard'da kuruldu.
 
 ## Owner aktivasyonu
 
-Auth Dashboard’dan owner e-posta/şifre kullanıcısı oluşturulur. Trigger pending
-`owner_profiles` satırı üretir. Gerçek UUID sohbet veya repository’ye yazılmadan
-SQL Editor çalışma kopyasında şu alanlar kontrollü biçimde güncellenir:
-
-- `role = 'owner'`
-- `status = 'active'`
-- `activated_at = now()`
-
-Yalnız hedef UUID satırı güncellenmeli ve başka active owner bulunmadığı
-doğrulanmalıdır.
+- Auth Dashboard'dan e-posta/şifre owner hesabı oluşturuldu.
+- Auto confirm uygulandı.
+- Trigger pending owner_profiles satırı oluşturdu.
+- Trusted SQL ile yalnız hedef profil role=owner, status=active yapıldı.
+- Active owner/admin count = 1 doğrulandı.
+- Gerçek UUID repository'ye yazılmadı.
 
 ## Development seed
 
-`supabase/seed/202607100001_development_seed.sql` dosyasındaki
-`REPLACE_WITH_OWNER_UUID` yalnız SQL Editor çalışma kopyasında gerçek owner UUID
-ile değiştirilir. Repository dosyası değiştirilmez. Seed yalnız development
-projesinde çalıştırılır.
+Seed tam bir active owner/admin profilini server-side çözer.
+UUID veya owner e-postası repository'ye yazılmaz.
 
-## Auth ayarları
+Doğrulanan deterministic satırlar:
 
-- Email/password açık
-- Public signup kapalı
-- Magic link ürün akışında kullanılmıyor
-- TOTP MFA açık
-- Recovery code UI yok
-- Studio current AAL2 olmadan kapalı
+- projects: 1
+- writings: 1
+- tasks: 1
+- notes: 1
 
-## Yaklaşık sekiz saatlik session hedefi
+## Local Auth/MFA kabulü
 
-Uygulama her korumalı istekte server-side AAL2 kontrolü yapar. Supabase planı veya
-Dashboard mevcut oturum süresi ayarını tam sekiz saate sabitlemiyorsa özel/uydurma
-session API eklenmez. JWT/session ayarı Dashboard’da desteklenen en yakın güvenli
-değere çekilir ve kalan sınırlama deployment kaydına yazılır.
+- Yanlış parola reddedildi ve generic hata gösterildi.
+- İlk TOTP enrollment tamamlandı.
+- Yanlış TOTP reddedildi.
+- Doğru TOTP current AAL2 oluşturdu.
+- AAL1 ile doğrudan /studio erişimi /mfa'ya yönlendirildi.
+- AAL2 ile Studio açıldı.
+- Logout session'ı temizleyip /login'e döndürdü.
+- Geri tuşu ve doğrudan Studio URL private içerik göstermedi.
+- İkinci verified TOTP faktörü eklendi.
+- Son verified faktörü kaldırma koruması doğrulandı.
+- Allowlist dışı authenticated kullanıcı Studio'ya alınmadı.
+
+## RLS kabul matrisi
+
+Anonymous:
+
+- projects/writings/journey SELECT privilege: true/true/true
+- tasks/notes/files/publish_queue SELECT privilege: false/false/false/false
+- Görünür seed satırları projects/writings/journey: 0/1/0
+
+Allowlist dışı authenticated AAL2:
+
+- is_current_user_owner: false
+- projects/writings/tasks/notes/files/publish_queue: 0/1/0/0/0/0
+
+Active owner AAL2:
+
+- is_current_user_owner: true
+- owner_profiles/projects/writings/tasks/notes/files/publish_queue:
+  1/1/1/1/1/0/0
+
+## Vercel Preview
+
+Yalnız Preview environment'a development URL, publishable key ve Preview site
+URL girildi. Deployment yeniden oluşturuldu ve şu testler geçti:
+
+- login
+- yanlış TOTP
+- doğru TOTP ve Studio
+- logout
+- direct Studio guard
+
+Production env boş bırakıldı ve production mock davranışı korunur.
+
+## Session hedefi
+
+Yaklaşık sekiz saatlik mutlak Studio session hedefi Free plan/Dashboard
+desteğiyle uygulanamadı. Uydurma session API eklenmedi.
+
+Uygulanan güvenlik:
+
+- Dashboard AAL1 süresi 15 dakika ile sınırlandı.
+- Her korumalı Studio request'inde trusted user + active owner + current AAL2
+  server-side kontrolü devam eder.
+- Production plan kararı sırasında time-box ve inactivity timeout yeniden
+  değerlendirilecektir.

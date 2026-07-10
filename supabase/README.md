@@ -1,6 +1,6 @@
 # Supabase SQL Paketi — Sprint 05
 
-> Durum: **Hazırlandı, uygulanmadı.** Bu klasördeki SQL hiçbir gerçek Supabase projesinde Sprint 05 kapsamında çalıştırılmamıştır.
+> Durum: **Development project üzerinde Sprint 06 kapsamında uygulandı ve doğrulandı; production'a uygulanmadı.**
 
 Bu paket, Kişisel Sistemim / Studio için owner-only yönetim modeli, anonymous public read sınırı, RLS, Storage bucket politikaları, development seed ve destructive rollback talimatlarını içerir.
 
@@ -30,7 +30,7 @@ Migration dosyaları tek seferliktir. Başarılı bir çalıştırmadan sonra ay
 | `202607100001_initial_schema.sql` | Enum/type, tablolar, foreign key, constraint ve indexler | Evet |
 | `202607100002_database_functions.sql` | `updated_at`, publish metadata, owner helper ve pending Auth profile trigger’ları | Evet |
 | `202607100003_rls_policies.sql` | SQL privilege + RLS politikaları | Evet |
-| `202607100004_storage_setup.sql` | `public-assets`, `private-files` ve `storage.objects` politikaları | Evet |
+| `202607100004_storage_setup.sql` | `public-assets` ve `private-files` bucket tanımları; hosted policy kurulumu ayrı runbook ile | Evet |
 | `202607100001_development_seed.sql` | Güvenli mock development verisi | Hayır |
 | `202607100001_rollback_sprint_05.sql` | Sprint 05 nesnelerini destructive kaldırma | Yalnız acil durumda |
 
@@ -215,9 +215,10 @@ Uygulama başlamadan önce ayrı test hesapları ve Supabase API/SQL test yönte
 
 Seed opsiyoneldir ve production için değildir.
 
-- Dosyadaki `REPLACE_WITH_OWNER_UUID` metnini gerçek owner Auth UUID’siyle değiştir.
-- Placeholder değiştirilmezse seed güvenli exception ile durur.
-- UUID `auth.users` içinde yoksa veya owner profile aktif değilse durur.
+- Repository dosyası gerçek owner UUID veya e-posta içermez.
+- Seed server-side olarak tam bir active owner/admin profilini çözer.
+- Hiç veya birden fazla active owner/admin varsa güvenli exception ile durur.
+- Çözülen UUID auth.users içinde yoksa durur.
 - Auth user oluşturmaz.
 - Gerçek GitHub/demo/contact/social link veya portre eklemez.
 - Deterministic ID + `ON CONFLICT DO NOTHING` kullandığı için tekrar çalıştırma mevcut seed satırlarını overwrite etmez.
@@ -247,3 +248,19 @@ Bucket’larda object varsa rollback güvenli exception ile durur. Önce backup 
 - RLS canlı ortamda test edilmedi.
 
 SQL ancak Sprint 05 entegrasyon güvenlik denetimi ve kullanıcı karar kapısından sonra uygulanmalıdır.
+
+
+
+## Sprint 06 development uygulama sonucu — S06_SUPABASE_DEV_APPLIED
+
+- Project: ayrı development Supabase project
+- Region: Southeast Asia (Singapore)
+- 001 initial schema: başarılı
+- 002 database functions: başarılı
+- 003 RLS policies: başarılı
+- 004 bucket setup: iki bucket başarılı
+- Hosted storage.objects policies: Dashboard runbook ile sekiz policy başarılı
+- Owner Auth: tek active owner
+- Development seed: project/writing/task/note sayıları 1/1/1/1
+- RLS matrisi: anon, outsider ve owner AAL2 beklenen sonuçları verdi
+- Production project, production migration ve production env uygulanmadı

@@ -208,3 +208,36 @@
 - Active owner allowlist ve server-side current AAL2 Studio guard eklendi.
 - TOTP enrollment, challenge, ikinci faktör yönetimi ve güvenli logout eklendi.
 - MFA recovery/reset ve development Supabase runbook’ları eklendi.
+
+
+
+## 2026-07-10 — Studio Auth/MFA Development Acceptance — S06_STUDIO_OK
+
+### Applied
+
+- Singapore development Supabase project oluşturuldu.
+- Schema, functions, RLS, iki Storage bucket ve sekiz Storage policy uygulandı.
+- Tek active owner hesabı ve development seed doğrulandı.
+- Preview environment development Supabase project'e bağlandı.
+
+### Verified
+
+- Password login, generic wrong-password davranışı
+- TOTP enrollment, wrong-code rejection ve AAL2 challenge
+- AAL1 Studio guard, AAL2 Studio access ve logout
+- Allowlist dışı kullanıcı reddi
+- İkinci TOTP ve son-factor protection
+- Anonymous, outsider ve owner RLS matrisi
+- Vercel Preview login/MFA/Studio/logout/direct URL
+
+### Changed
+
+- Hosted Storage relation-owner sınırı için 004 migration bucket-only yapıldı.
+- Sekiz hosted Storage policy için Dashboard runbook eklendi.
+- Development seed UUID placeholder yerine unique active owner çözümüne geçti.
+
+### Known limitations
+
+- Production Supabase project/env/migration uygulanmadı.
+- Free plan/Dashboard yaklaşık 8 saat session time-box sağlamadı.
+- npm audit iki moderate GHSA-qx2v-qp2m-jg93 uyarısını sürdürüyor.

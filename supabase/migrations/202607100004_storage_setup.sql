@@ -1,19 +1,20 @@
--- Kişisel Sistemim / Studio — Sprint 05 Storage buckets and policies
+-- Kişisel Sistemim / Studio — Sprint 06 hosted Storage bucket setup
 -- Run order: 4 of 4
+--
+-- Hosted Supabase note:
+-- storage.objects is owned by the managed supabase_storage_admin role. In the
+-- development project, Dashboard SQL Editor ran as postgres and could not
+-- create policies on that relation (SQLSTATE 42501).
+--
+-- This migration therefore installs only the two bucket definitions.
+-- Install and verify the eight storage.objects policies through:
+-- docs/studio/STUDIO_STORAGE_POLICY_RUNBOOK.md
 --
 -- Bucket model:
 -- - public-assets: public downloads; owner-only writes under <owner_uuid>/...
--- - private-files: no anonymous reads; verified owner-only access under <owner_uuid>/...
+-- - private-files: no anonymous reads; owner-only access under <owner_uuid>/...
 --
--- Path contract:
---   <owner_uuid>/<domain>/<filename>
--- Examples:
---   <owner_uuid>/projects/project-cover.webp
---   <owner_uuid>/documents/project-brief.pdf
---
--- Bucket limits below reflect the approved Sprint 06 development baseline.
--- The Supabase project-wide Storage limit or Dashboard configuration can impose
--- a stricter cap. This migration creates policies only; it uploads no object.
+-- This file uploads no object and stores no owner UUID or secret.
 
 begin;
 
@@ -55,119 +56,12 @@ values
       'image/webp',
       'image/avif'
     ]::text[]
-  );
-
--- Public assets: anyone may read objects from the public bucket. This does not
--- authorize listing or reading private-files.
-create policy public_assets_public_read
-on storage.objects
-for select
-to anon, authenticated
-using (bucket_id = 'public-assets');
-comment on policy public_assets_public_read on storage.objects is
-  'Public read for approved assets stored in the public-assets bucket.';
-
-create policy public_assets_owner_insert
-on storage.objects
-for insert
-to authenticated
-with check (
-  bucket_id = 'public-assets'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-);
-comment on policy public_assets_owner_insert on storage.objects is
-  'Verified owner/admin can upload public assets only inside the auth.uid() path prefix.';
-
-create policy public_assets_owner_update
-on storage.objects
-for update
-to authenticated
-using (
-  bucket_id = 'public-assets'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-)
-with check (
-  bucket_id = 'public-assets'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-);
-comment on policy public_assets_owner_update on storage.objects is
-  'Verified owner/admin can update/rename only public assets inside the owner path.';
-
-create policy public_assets_owner_delete
-on storage.objects
-for delete
-to authenticated
-using (
-  bucket_id = 'public-assets'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-);
-comment on policy public_assets_owner_delete on storage.objects is
-  'Verified owner/admin can delete only public assets inside the owner path.';
-
--- Private files: every operation, including downloads, requires the verified
--- owner and the auth.uid() folder prefix. No anon policy is created.
-create policy private_files_owner_read
-on storage.objects
-for select
-to authenticated
-using (
-  bucket_id = 'private-files'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-);
-comment on policy private_files_owner_read on storage.objects is
-  'Private downloads/listing are limited to the verified owner path.';
-
-create policy private_files_owner_insert
-on storage.objects
-for insert
-to authenticated
-with check (
-  bucket_id = 'private-files'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-);
-comment on policy private_files_owner_insert on storage.objects is
-  'Verified owner/admin can upload private files only under auth.uid().';
-
-create policy private_files_owner_update
-on storage.objects
-for update
-to authenticated
-using (
-  bucket_id = 'private-files'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-)
-with check (
-  bucket_id = 'private-files'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-);
-comment on policy private_files_owner_update on storage.objects is
-  'Verified owner/admin can update/rename private files only inside the owner path.';
-
-create policy private_files_owner_delete
-on storage.objects
-for delete
-to authenticated
-using (
-  bucket_id = 'private-files'
-  and (select private.is_current_user_owner())
-  and (storage.foldername(name))[1] = (select auth.uid())::text
-);
-comment on policy private_files_owner_delete on storage.objects is
-  'Verified owner/admin can delete only private objects inside the owner path.';
-
--- Safe deletion guidance:
--- 1. Verify the object belongs to the current owner path.
--- 2. Delete the Storage object through the authenticated Storage API.
--- 3. Only after success, remove or mark the matching public.files metadata row.
--- Cross-service object + metadata deletion is not a single PostgreSQL transaction,
--- so the application must handle retries and partial failures explicitly.
+  )
+on conflict (id) do update
+set
+  name = excluded.name,
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
 
 commit;

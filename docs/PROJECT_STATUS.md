@@ -160,3 +160,22 @@ Kod implementasyonu tamamlandı: gerçek password login, active owner doğrulama
 TOTP enrollment/challenge, current AAL2 Studio guard, güvenli logout ve recovery
 runbook. Development Supabase project, migration, seed, owner activation ve Preview
 runtime kabul testleri dış ortam adımı olarak bekliyor.
+
+
+
+## Sprint 06 Studio Auth/MFA — S06_STUDIO_OK
+
+- [x] Development Supabase project Singapore region'da oluşturuldu.
+- [x] Schema, functions ve application RLS development project'e uygulandı.
+- [x] İki Storage bucket ve sekiz Storage policy doğrulandı.
+- [x] Tek active owner Auth/profile modeli doğrulandı.
+- [x] Development seed 1/1/1/1 sonucu verdi.
+- [x] Password login, TOTP enrollment/challenge ve current AAL2 guard çalışıyor.
+- [x] Logout, direct Studio, wrong password/TOTP, outsider ve ikinci faktör
+  testleri geçti.
+- [x] Anonymous/outsider/owner RLS kabul matrisi geçti.
+- [x] Vercel Preview development Supabase env ile Ready ve kabul testleri geçti.
+- [x] Production Supabase env/migration uygulanmadı; mock davranışı korunuyor.
+- [!] Yaklaşık 8 saat session time-box Free plan/Dashboard sınırlaması nedeniyle
+  uygulanmadı; per-request AAL2 guard ve 15 dakikalık AAL1 sınırı aktif.
+- [!] npm audit iki moderate GHSA-qx2v-qp2m-jg93 uyarısını izlemeye devam ediyor.
