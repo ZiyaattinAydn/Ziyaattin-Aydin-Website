@@ -196,7 +196,10 @@ const proxySource = fs.readFileSync(
   path.join(root, "src/proxy.ts"),
   "utf8",
 );
-assert.match(proxySource, /matcher:\s*\["\/login", "\/studio\/:path\*"\]/);
+assert.match(
+  proxySource,
+  /matcher:\s*\["\/login", "\/mfa", "\/studio\/:path\*"\]/,
+);
 assert.match(proxySource, /status:\s*503/);
 
 console.log("Supabase runtime verification passed.");

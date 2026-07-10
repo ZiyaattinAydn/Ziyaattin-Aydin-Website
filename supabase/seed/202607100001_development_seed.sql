@@ -3,16 +3,15 @@
 -- real owner Auth account.
 --
 -- SQL Editor instructions:
--- 1. Replace the exact text REPLACE_WITH_OWNER_UUID below with the real Auth UUID.
--- 2. Confirm the UUID exists in auth.users.
--- 3. Confirm public.owner_profiles has status='active' and role='owner'/'admin'.
--- 4. Run the complete file once in a development or preview project.
+-- 1. All four migration steps and hosted Storage policy runbook must be complete.
+-- 2. Exactly one active owner/admin profile must exist.
+-- 3. Run the complete file once in a development or preview project.
 --
 -- Safety:
 -- - This file never inserts into auth.users.
--- - It contains no secret, real link, contact/social URL or portrait.
--- - If the placeholder is unchanged, invalid, unknown or inactive, the
---   transaction raises an exception and commits no seed data.
+-- - It contains no owner UUID, secret, real link, contact/social URL or portrait.
+-- - It resolves the unique active owner/admin profile server-side.
+-- - Missing or multiple active owners abort the transaction.
 -- - Deterministic seed IDs plus ON CONFLICT DO NOTHING make reruns non-overwriting.
 
 begin;
@@ -21,21 +20,26 @@ create temporary table s05_seed_context (
   owner_id uuid not null
 ) on commit drop;
 
-do $$
+do $
 declare
-  owner_uuid_text constant text := 'REPLACE_WITH_OWNER_UUID';
   parsed_owner_uuid uuid;
 begin
-  if owner_uuid_text = 'REPLACE_WITH_OWNER_UUID' then
-    raise exception
-      'Seed aborted: replace REPLACE_WITH_OWNER_UUID with the real Supabase Auth owner UUID.';
-  end if;
-
   begin
-    parsed_owner_uuid := owner_uuid_text::uuid;
+    select profile.user_id
+    into strict parsed_owner_uuid
+    from public.owner_profiles as profile
+    where profile.status = 'active'::public.owner_profile_status
+      and profile.role in (
+        'owner'::public.studio_role,
+        'admin'::public.studio_role
+      );
   exception
-    when invalid_text_representation then
-      raise exception 'Seed aborted: owner UUID is not a valid UUID.';
+    when no_data_found then
+      raise exception
+        'Seed aborted: one active owner/admin profile is required.';
+    when too_many_rows then
+      raise exception
+        'Seed aborted: exactly one active owner/admin profile is required.';
   end;
 
   if not exists (
@@ -44,27 +48,13 @@ begin
     where auth_user.id = parsed_owner_uuid
   ) then
     raise exception
-      'Seed aborted: owner UUID does not exist in auth.users. This seed never creates Auth users.';
-  end if;
-
-  if not exists (
-    select 1
-    from public.owner_profiles as profile
-    where profile.user_id = parsed_owner_uuid
-      and profile.status = 'active'::public.owner_profile_status
-      and profile.role in (
-        'owner'::public.studio_role,
-        'admin'::public.studio_role
-      )
-  ) then
-    raise exception
-      'Seed aborted: owner profile must be explicitly activated before seeding.';
+      'Seed aborted: active owner UUID does not exist in auth.users.';
   end if;
 
   insert into pg_temp.s05_seed_context (owner_id)
   values (parsed_owner_uuid);
 end;
-$$;
+$;
 
 insert into public.projects (
   id,

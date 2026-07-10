@@ -120,3 +120,27 @@ Sprint 06 başlamadan önce en az şu cevaplar alınmalıdır:
 - `docs/studio/STUDIO_DATA_MODEL_DRAFT.md`
 - `docs/studio/STUDIO_SECURITY_RLS_PLAN.md`
 - `docs/studio/STUDIO_PUBLISH_FLOW.md`
+
+## Sprint 06 Auth/MFA implementasyonu — S06_STUDIO_AUTH_IMPLEMENTATION
+
+- E-posta/şifre ilk faktör olarak gerçek Supabase Auth’a bağlandı.
+- Login sonrası active `owner_profiles` allowlist server-side doğrulanır.
+- Client metadata ve hard-coded owner identity kullanılmaz.
+- Verified TOTP yoksa enrollment, varsa AAL1→AAL2 challenge zorunludur.
+- `/studio/**` server layout current AAL2 olmadan içerik render etmez.
+- İkinci TOTP faktörü yönetimi ve son faktörü koruyan davranış eklendi.
+- Recovery code özelliği eklenmedi; Dashboard reset runbook’u kullanılır.
+- Logout server-side sign out, no-store redirect ve client cache temizliği uygular.
+
+
+
+## Sprint 06 doğrulama sonucu — S06_STUDIO_AUTH_VALIDATED
+
+- Tek active owner modeli development project'te doğrulandı.
+- Email/password + zorunlu TOTP akışı local ve Preview ortamında çalıştı.
+- Studio current AAL2 olmadan render edilmedi.
+- Public signup, anonymous sign-in, manual linking ve SMS MFA kapalıdır.
+- İkinci verified TOTP ve son faktör koruması doğrulandı.
+- Recovery code eklenmedi; Dashboard reset runbook'u geçerlidir.
+- Yaklaşık 8 saat mutlak time-box plan sınırlaması nedeniyle uygulanmadı;
+  AAL1 15 dakika ve per-request AAL2 guard kullanılır.

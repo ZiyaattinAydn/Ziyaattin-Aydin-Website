@@ -7,6 +7,7 @@ import {
   isActiveOwnerProfile,
   isAssuranceLevel,
   type AssuranceLevel,
+  type ActiveOwnerProfile,
 } from "@/lib/auth/studio-authorization-rules";
 import { isSupabaseConfigured } from "@/lib/supabase/environment";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -30,6 +31,26 @@ export type AssuranceLevelResult =
   | {
       ok: false;
       reason: "assurance_unavailable";
+    };
+
+export type StudioMfaAccessResult =
+  | {
+      ok: true;
+      user: User;
+      profile: {
+        userId: string;
+        role: "owner" | "admin";
+      };
+      currentLevel: AssuranceLevel;
+      nextLevel: AssuranceLevel;
+    }
+  | {
+      ok: false;
+      reason:
+        | "configuration_missing"
+        | "unauthenticated"
+        | "unauthorized"
+        | "mfa_unavailable";
     };
 
 export type StudioAuthorizationResult =
@@ -72,6 +93,23 @@ async function readTrustedUser(
   };
 }
 
+async function readActiveOwnerProfile(
+  supabase: SupabaseClient,
+  user: User,
+): Promise<ActiveOwnerProfile | null> {
+  const { data: profile, error } = await supabase
+    .from("owner_profiles")
+    .select("user_id, role, status")
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (error || !isActiveOwnerProfile(profile, user.id)) {
+    return null;
+  }
+
+  return profile;
+}
+
 export async function getTrustedServerUser(): Promise<TrustedUserResult> {
   if (!isSupabaseConfigured()) {
     return {
@@ -81,7 +119,6 @@ export async function getTrustedServerUser(): Promise<TrustedUserResult> {
   }
 
   const supabase = await createServerSupabaseClient();
-
   return readTrustedUser(supabase);
 }
 
@@ -118,13 +155,12 @@ export async function getAuthenticatorAssuranceLevel(
 }
 
 /**
- * Canonical Studio authorization check.
+ * Server-side access check for the MFA enrollment, challenge and management UI.
  *
- * The trusted Auth user is resolved on the server, the caller's own
- * owner_profiles row is read through RLS, and current AAL2 is mandatory.
- * Client metadata, email strings and service-role bypass are not used.
+ * This deliberately verifies the trusted Auth user and the controlled
+ * owner_profiles allowlist before exposing any factor-management screen.
  */
-export async function getStudioAuthorization(): Promise<StudioAuthorizationResult> {
+export async function getStudioMfaAccess(): Promise<StudioMfaAccessResult> {
   if (!isSupabaseConfigured()) {
     return {
       ok: false,
@@ -139,16 +175,9 @@ export async function getStudioAuthorization(): Promise<StudioAuthorizationResul
     return trustedUser;
   }
 
-  const { data: profile, error } = await supabase
-    .from("owner_profiles")
-    .select("user_id, role, status")
-    .eq("user_id", trustedUser.user.id)
-    .maybeSingle();
+  const profile = await readActiveOwnerProfile(supabase, trustedUser.user);
 
-  if (
-    error ||
-    !isActiveOwnerProfile(profile, trustedUser.user.id)
-  ) {
+  if (!profile) {
     return {
       ok: false,
       reason: "unauthorized",
@@ -157,13 +186,10 @@ export async function getStudioAuthorization(): Promise<StudioAuthorizationResul
 
   const assuranceLevel = await getAuthenticatorAssuranceLevel(supabase);
 
-  if (
-    !assuranceLevel.ok ||
-    !hasRequiredStudioAssurance(assuranceLevel.currentLevel)
-  ) {
+  if (!assuranceLevel.ok) {
     return {
       ok: false,
-      reason: "mfa_required",
+      reason: "mfa_unavailable",
     };
   }
 
@@ -174,6 +200,42 @@ export async function getStudioAuthorization(): Promise<StudioAuthorizationResul
       userId: profile.user_id,
       role: profile.role,
     },
+    currentLevel: assuranceLevel.currentLevel,
+    nextLevel: assuranceLevel.nextLevel,
+  };
+}
+
+/**
+ * Canonical Studio authorization check.
+ *
+ * The trusted Auth user is resolved on the server, the caller's own
+ * owner_profiles row is read through RLS, and current AAL2 is mandatory.
+ * Client metadata, email strings and service-role bypass are not used.
+ */
+export async function getStudioAuthorization(): Promise<StudioAuthorizationResult> {
+  const mfaAccess = await getStudioMfaAccess();
+
+  if (!mfaAccess.ok) {
+    return {
+      ok: false,
+      reason:
+        mfaAccess.reason === "mfa_unavailable"
+          ? "mfa_required"
+          : mfaAccess.reason,
+    };
+  }
+
+  if (!hasRequiredStudioAssurance(mfaAccess.currentLevel)) {
+    return {
+      ok: false,
+      reason: "mfa_required",
+    };
+  }
+
+  return {
+    ok: true,
+    user: mfaAccess.user,
+    profile: mfaAccess.profile,
     assuranceLevel: "aal2",
   };
 }

@@ -151,3 +151,24 @@ Notlar:
 - Supabase durumu: dependency-free adapter/query-reader sınırı hazır; Core reader entegrasyonu yapılmadı
 - Yeni environment ihtiyacı: gelecekte server-only `PUBLIC_CONTENT_SOURCE=mock|supabase`; `.env.example` değiştirilmedi
 - Gerçek database cutover: bu sprint kapsamında değil
+
+## Studio Sprint 06 — S06_STUDIO_WORKSTREAM
+
+- Kod: tamamlandı.
+- Runtime foundation: Core `02f7c6a`.
+- Development Supabase setup/migration/seed: kullanıcı Dashboard adımı bekliyor.
+- Preview Auth/MFA/RLS kabul testi: development env sonrasında bekliyor.
+- Geniş CRUD ve production cutover kapsam dışı.
+
+
+
+## Studio Sprint 06 — S06_STUDIO_WORKSTREAM_OK
+
+- Branch: feat/studio-auth-mfa-s06
+- Core base: 02f7c6a
+- Durum: [x] — development ve Preview kabulü tamamlandı
+- Supabase development schema/RLS/Storage/seed: tamamlandı
+- Owner email/password + zorunlu TOTP AAL2: tamamlandı
+- Local ve Vercel Preview kabul testleri: tamamlandı
+- Production Supabase/env/migration: kapsam dışı ve uygulanmadı
+- Geniş CRUD, upload manager ve public cutover: kapsam dışı

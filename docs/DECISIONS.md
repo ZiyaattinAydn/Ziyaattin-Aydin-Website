@@ -177,3 +177,26 @@ Bu maddeler implementasyon kararı değildir. `docs/supabase/SPRINT_06_APPROVAL_
 - Link veya asset yalnız kendi approval state'i approved ve değeri güvenli/geçerliyse Public DTO'ya girer.
 - Ana sayfa portresi sabit kalır; About candidate portrait onaysızken gizlenir.
 - Durum: `ACCEPTED`.
+
+## Sprint 06 Studio güvenlik kararı — S06_STUDIO_SECURITY_DECISION
+
+Studio authorization üç birlikte zorunlu katmandan oluşur: trusted Supabase user,
+active owner/admin allowlist satırı ve current `aal2`. Proxy yalnız session refresh
+ve erken redirect sağlar; nihai karar server layout/helper ve RLS tarafından tekrar
+verilir. Recovery code yerine ikinci TOTP faktörü ve kontrollü Dashboard reset
+runbook’u kullanılır.
+
+
+
+## Sprint 06 Studio doğrulanan operasyon kararları — S06_STUDIO_VALIDATED
+
+- Hosted Supabase storage.objects managed relation olduğu için bucket DDL ve
+  policy kurulumu ayrıldı. Bucket'lar migration, sekiz policy Dashboard runbook
+  üzerinden uygulanır; managed relation ownership değiştirilmez.
+- Development seed owner UUID/e-posta hard-code etmez; tam bir active owner/admin
+  profilini server-side çözer ve belirsizlikte fail closed davranır.
+- Preview env yalnız development Supabase project'e bağlıdır.
+- Production env ve migration ayrı kullanıcı onayı olmadan uygulanmaz.
+- Free plan/Dashboard'da yaklaşık 8 saat time-box sağlanamadığında özel session
+  API yazılmaz; AAL1 15 dakika ile sınırlanır ve Studio her request'te current
+  AAL2 kontrol eder.

@@ -91,3 +91,20 @@ Faz 3 yalnız mimari hazırlık düzeyinde `[~]` kabul edilmelidir; gerçek Auth
 - [ ] Public profile/contact/social/portrait için kesin database şeması
 - [ ] Gerçek Public database cutover
 - [ ] Cache/revalidation ve slug history/redirect implementasyonu
+
+## Sprint 06 Studio — S06_STUDIO_ROADMAP
+
+Auth/MFA kodu hazır. Sprint kapanışı için development Supabase migration + seed,
+owner activation, RLS matrisi ve Vercel Preview login/TOTP/logout testleri gerekir.
+Production Supabase ve geniş Studio CRUD sonraki onaylı fazlara bırakılmıştır.
+
+
+
+## Sprint 06 Studio Auth/MFA sonucu — S06_STUDIO_OK
+
+- [x] Development Supabase project, schema, RLS ve Storage baseline
+- [x] Owner email/password ve zorunlu TOTP MFA
+- [x] Server-side current AAL2 Studio route guard
+- [x] Local ve Vercel Preview kabul testleri
+- [x] MFA recovery/reset ve ikinci faktör yaklaşımı
+- [~] Faz 3 devam ediyor: production cutover ve geniş CRUD sonraki sprintlerde
