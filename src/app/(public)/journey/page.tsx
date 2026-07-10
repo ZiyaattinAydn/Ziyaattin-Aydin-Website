@@ -9,7 +9,7 @@ export default function JourneyPage() {
       <PageIntro
         eyebrow="Yolculuğum"
         title="Üretim sürecini görünür kılan public zaman çizelgesi."
-        description="Gerçek kişisel tarihçe ve dönüm noktaları kullanıcı tarafından netleşene kadar bu sayfa mock aşamalarla public deneyimi test eder."
+        description="Gerçek kişisel tarihçe ve dönüm noktaları kullanıcı tarafından netleşene kadar bu sayfa mock aşamalarla public publish sözleşmesini test eder."
         meta={`${journeyItems.length} mock aşama`}
       />
 
@@ -37,7 +37,7 @@ export default function JourneyPage() {
             <h2 className="text-2xl font-semibold">Kapsam notu</h2>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-[var(--muted)]">
               <li>• Yaş, okul, iş veya kişisel başarı gibi doğrulanmamış yeni bilgi eklenmedi.</li>
-              <li>• Aşamalar gerçek kronoloji değil, public layout için geçici içeriktir.</li>
+              <li>• Aşamalar gerçek kronoloji değil; publishState, visibility ve sourceNote alanlarını test eden geçici içeriktir.</li>
               <li>• İlgili proje/yazı bağlantıları yalnız mevcut mock sluglara gider.</li>
             </ul>
           </Panel>

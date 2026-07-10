@@ -1,10 +1,24 @@
 export type ProjectStatus = "Devam Ediyor" | "Tamamlandı" | "Planlandı";
 
-export type ProjectLink = {
+export type PublicVisibility = "public" | "unlisted" | "private";
+export type PublishState = "draft" | "review" | "published";
+
+export type ProjectLinkTarget = {
   label: string;
   href: string | null;
   note: string;
   disabledLabel: string;
+};
+
+export type ProjectLinks = {
+  demo: ProjectLinkTarget;
+  github: ProjectLinkTarget;
+};
+
+export type WritingExternalLink = {
+  label: string;
+  href: string | null;
+  note: string;
 };
 
 export type ProjectMilestone = {
@@ -22,6 +36,10 @@ export type ProjectSummary = {
   category: string;
   timeframe: string;
   contentState: string;
+  visibility: PublicVisibility;
+  publishState: PublishState;
+  isFeatured: boolean;
+  sourceNote: string;
   visibilityNote: string;
   technologies: string[];
   summary: string;
@@ -33,7 +51,7 @@ export type ProjectSummary = {
   learnings: string[];
   nextSteps: string[];
   publicNotes: string[];
-  links: ProjectLink[];
+  links: ProjectLinks;
 };
 
 export type WritingSection = {
@@ -56,10 +74,15 @@ export type WritingSummary = {
   readingTime: string;
   sortOrder: number;
   coverLabel: string;
+  visibility: PublicVisibility;
+  publishState: PublishState;
+  isFeatured: boolean;
   isDraft: boolean;
+  sourceNote: string;
   placeholderNote: string;
   sections: WritingSection[];
   relatedSlugs: string[];
+  externalLinks: WritingExternalLink[];
 };
 
 export type JourneyItem = {
@@ -68,9 +91,47 @@ export type JourneyItem = {
   detail: string;
   lesson: string;
   statusNote: string;
+  visibility: PublicVisibility;
+  publishState: PublishState;
+  isFeatured: boolean;
+  sourceNote: string;
   relatedProjectSlug?: string;
   relatedWritingSlug?: string;
 };
+
+export type ProfileContent = {
+  displayName: string;
+  eyebrow: string;
+  headline: string;
+  description: string;
+  portrait: {
+    src: string;
+    alt: string;
+    approvalState: "candidate" | "approved";
+    note: string;
+  };
+  focusAreas: Array<{ title: string; text: string }>;
+  values: string[];
+  technologies: string[];
+  contactNote: string;
+  contactStateLabel: string;
+};
+
+export const publishStateLabels: Record<PublishState, string> = {
+  draft: "Taslak",
+  review: "İnceleme bekliyor",
+  published: "Yayında",
+};
+
+export const visibilityLabels: Record<PublicVisibility, string> = {
+  public: "Public görünür",
+  unlisted: "Liste dışı",
+  private: "Private",
+};
+
+export function getProjectActions(project: ProjectSummary): ProjectLinkTarget[] {
+  return [project.links.demo, project.links.github];
+}
 
 export const projects: ProjectSummary[] = [
   {
@@ -83,6 +144,10 @@ export const projects: ProjectSummary[] = [
     category: "Yapay Zekâ",
     timeframe: "Sprint mock kaydı",
     contentState: "Public taslak",
+    visibility: "public",
+    publishState: "draft",
+    isFeatured: true,
+    sourceNote: "Mock içerik; Studio publish akışı hazır olduğunda database kaydıyla eşlenecek.",
     visibilityNote: "Gerçek demo, GitHub veya ürün bağlantısı kullanıcı onayından sonra aktifleşecek.",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
     summary:
@@ -117,22 +182,22 @@ export const projects: ProjectSummary[] = [
     ],
     publicNotes: [
       "Bu proje kaydı gerçek link veya canlı ürün iddiası içermez.",
-      "Metinler Sprint 02 için geçici örnek içeriktir.",
+      "Metinler Sprint 03 için geçici örnek içeriktir.",
     ],
-    links: [
-      {
+    links: {
+      demo: {
         label: "Canlı Önizleme",
         href: null,
         note: "Henüz public/demo bağlantısı tanımlanmadı.",
         disabledLabel: "Yakında",
       },
-      {
+      github: {
         label: "GitHub",
         href: null,
         note: "Repository bağlantısı kullanıcı onayından sonra eklenecek.",
         disabledLabel: "Doğrulama bekliyor",
       },
-    ],
+    },
   },
   {
     slug: "flowfit",
@@ -144,6 +209,10 @@ export const projects: ProjectSummary[] = [
     category: "Mobil Ürün",
     timeframe: "Mock keşif aşaması",
     contentState: "Fikir taslağı",
+    visibility: "public",
+    publishState: "draft",
+    isFeatured: true,
+    sourceNote: "Mock plan kaydı; gerçek ürün linkleri ve mağaza bilgisi henüz yok.",
     visibilityNote: "Mağaza, demo veya kaynak kod bağlantısı gerçek ürün olmadan eklenmeyecek.",
     technologies: ["React Native", "Supabase", "TypeScript"],
     summary:
@@ -176,20 +245,20 @@ export const projects: ProjectSummary[] = [
       "Gerçek ekran görselleri hazır olana kadar mock galeri göstermemek.",
     ],
     publicNotes: ["Bu kayıt planlama aşamasını göstermek için mock seviyesinde tutuluyor."],
-    links: [
-      {
+    links: {
+      demo: {
         label: "Ürün Linki",
         href: null,
         note: "Henüz yayınlanmış public ürün bağlantısı yok.",
         disabledLabel: "Yayınlanmadı",
       },
-      {
+      github: {
         label: "Kaynak Kod",
         href: null,
         note: "Public repository bilgisi tanımlanmadı.",
         disabledLabel: "Beklemede",
       },
-    ],
+    },
   },
   {
     slug: "trace-analytics",
@@ -201,6 +270,10 @@ export const projects: ProjectSummary[] = [
     category: "Sistem Tasarımı",
     timeframe: "Mock prototip",
     contentState: "Public-safe anlatım",
+    visibility: "public",
+    publishState: "review",
+    isFeatured: true,
+    sourceNote: "Mock arayüz kaydı; gerçek log, sistem metriği veya private veri içermez.",
     visibilityNote: "Gerçek sistem metrikleri, loglar veya private veri public sayfaya taşınmayacak.",
     technologies: ["Next.js", "PostgreSQL", "WebSocket"],
     summary:
@@ -233,20 +306,20 @@ export const projects: ProjectSummary[] = [
       "Gerçek görsel veya ekran görüntüsü yalnız onaylandığında kullanmak.",
     ],
     publicNotes: ["Ekrandaki metrikler gerçek sistem verisi değildir."],
-    links: [
-      {
+    links: {
+      demo: {
         label: "Demo",
         href: null,
         note: "Demo URL henüz paylaşılmadı.",
         disabledLabel: "Yakında",
       },
-      {
+      github: {
         label: "GitHub",
         href: null,
         note: "Public kaynak bağlantısı henüz yok.",
         disabledLabel: "Doğrulama bekliyor",
       },
-    ],
+    },
   },
   {
     slug: "orbit-dashboard",
@@ -258,6 +331,10 @@ export const projects: ProjectSummary[] = [
     category: "Web",
     timeframe: "Mock tamamlandı",
     contentState: "Örnek sunum",
+    visibility: "public",
+    publishState: "review",
+    isFeatured: false,
+    sourceNote: "Mock tamamlandı kaydı; gerçek müşteri işi, canlı ürün veya başarı iddiası değildir.",
     visibilityNote: "Tamamlandı etiketi gerçek müşteri işi veya canlı ürün iddiası değildir.",
     technologies: ["React", "Tailwind CSS", "Chart.js"],
     summary:
@@ -290,20 +367,20 @@ export const projects: ProjectSummary[] = [
       "Canlı link bilgisi doğrulanırsa bağlantı alanını aktif yapmak.",
     ],
     publicNotes: ["Bu tamamlandı durumu gerçek müşteri işi iddiası değildir; mock sunum verisidir."],
-    links: [
-      {
+    links: {
+      demo: {
         label: "Canlı Önizleme",
         href: null,
         note: "Doğrulanmış link bulunmuyor.",
         disabledLabel: "Pasif",
       },
-      {
+      github: {
         label: "Kaynak",
         href: null,
         note: "Public kaynak kod bağlantısı eklenmedi.",
         disabledLabel: "Beklemede",
       },
-    ],
+    },
   },
 ];
 
@@ -315,11 +392,15 @@ export const writings: WritingSummary[] = [
     category: "Yapay Zekâ",
     tags: ["AI", "Yazılım", "Ürün düşüncesi"],
     date: "Mock tarih",
-    updatedLabel: "Sprint 02 taslak güncellemesi",
+    updatedLabel: "Sprint 03 taslak güncellemesi",
     readingTime: "6 dk",
     sortOrder: 3,
     coverLabel: "AI / DEV",
+    visibility: "public",
+    publishState: "draft",
+    isFeatured: true,
     isDraft: true,
+    sourceNote: "Mock yazı kaydı; gerçek yayın tarihi ve kaynak linkleri Studio publish sonrası netleşecek.",
     placeholderNote: "Bu yazı gerçek yayınlanmış blog içeriği değil; makale düzenini test eden mock taslaktır.",
     sections: [
       {
@@ -350,6 +431,7 @@ export const writings: WritingSummary[] = [
       },
     ],
     relatedSlugs: ["modern-web-performans-ipuclari", "minimal-tasarimin-gucu"],
+    externalLinks: [],
   },
   {
     slug: "modern-web-performans-ipuclari",
@@ -358,11 +440,15 @@ export const writings: WritingSummary[] = [
     category: "Yazılım",
     tags: ["Web", "Performans", "UX"],
     date: "Mock tarih",
-    updatedLabel: "Sprint 02 taslak güncellemesi",
+    updatedLabel: "Sprint 03 taslak güncellemesi",
     readingTime: "8 dk",
     sortOrder: 2,
     coverLabel: "WEB / PERF",
+    visibility: "public",
+    publishState: "draft",
+    isFeatured: false,
     isDraft: true,
+    sourceNote: "Mock yazı kaydı; ölçüm sonucu veya dış kaynak bağlantısı henüz tanımlanmadı.",
     placeholderNote: "Performans örnekleri gerçek ölçüm sonucu değil, yazı detay sayfasının yapısını test eden geçici içeriktir.",
     sections: [
       {
@@ -389,6 +475,7 @@ export const writings: WritingSummary[] = [
       },
     ],
     relatedSlugs: ["yapay-zeka-caginda-yazilim-gelistirici-olmak", "minimal-tasarimin-gucu"],
+    externalLinks: [],
   },
   {
     slug: "minimal-tasarimin-gucu",
@@ -397,11 +484,15 @@ export const writings: WritingSummary[] = [
     category: "Ürün",
     tags: ["Tasarım", "Okunabilirlik", "Ürün"],
     date: "Mock tarih",
-    updatedLabel: "Sprint 02 taslak güncellemesi",
+    updatedLabel: "Sprint 03 taslak güncellemesi",
     readingTime: "5 dk",
     sortOrder: 1,
     coverLabel: "UX / MIN",
+    visibility: "public",
+    publishState: "draft",
+    isFeatured: false,
     isDraft: true,
+    sourceNote: "Mock ürün yazısı; gerçek kişisel deneyim veya dış referans iddiası taşımaz.",
     placeholderNote: "Bu içerik gerçek kişisel deneyim iddiası taşımaz; ürün yazısı düzenini test eden mock metindir.",
     sections: [
       {
@@ -425,6 +516,7 @@ export const writings: WritingSummary[] = [
       },
     ],
     relatedSlugs: ["modern-web-performans-ipuclari", "yapay-zeka-caginda-yazilim-gelistirici-olmak"],
+    externalLinks: [],
   },
 ];
 
@@ -435,6 +527,10 @@ export const journeyItems: JourneyItem[] = [
     detail: "Gerçek zaman çizelgesi kullanıcı tarafından netleşene kadar bu alan mock yolculuk verisi olarak tutulur.",
     lesson: "Öğrenme yolculuğunu küçük ve takip edilebilir parçalara bölmek.",
     statusNote: "Gerçek tarih bekliyor",
+    visibility: "public",
+    publishState: "draft",
+    isFeatured: true,
+    sourceNote: "Mock journey kaydı; gerçek tarih alanı Studio publish sonrası eklenecek.",
     relatedWritingSlug: "minimal-tasarimin-gucu",
   },
   {
@@ -443,6 +539,10 @@ export const journeyItems: JourneyItem[] = [
     detail: "Public site; proje, yazı ve yolculuk kayıtlarını düzenli gösterecek temel yüzeyi hazırlar.",
     lesson: "İskelet doğru kurulursa gerçek içerik eklemek daha güvenli olur.",
     statusNote: "Mock kayıt",
+    visibility: "public",
+    publishState: "draft",
+    isFeatured: true,
+    sourceNote: "Mock journey kaydı; ilgili proje bağlantısı yalnız mevcut public slug'a gider.",
     relatedProjectSlug: "orbit-dashboard",
   },
   {
@@ -451,6 +551,10 @@ export const journeyItems: JourneyItem[] = [
     detail: "Studio ve public site ayrımı, hangi içeriğin dışarı açılacağını kontrollü yönetmek için planlanır.",
     lesson: "Public görünen bilgi ile private çalışma notlarını ayırmak gerekir.",
     statusNote: "Yayın akışı planı",
+    visibility: "public",
+    publishState: "review",
+    isFeatured: true,
+    sourceNote: "Mock journey kaydı; Studio publish ilişkisini göstermek için tutulur.",
     relatedProjectSlug: "next-ai-dashboard",
   },
   {
@@ -459,6 +563,35 @@ export const journeyItems: JourneyItem[] = [
     detail: "Projeler ve yazılar, gerçek link uydurmadan, yalnız onaylı bilgilerle public sayfaya taşınacak.",
     lesson: "Eksik bilgiyi gizlemek yerine placeholder olduğunu açıkça söylemek güven verir.",
     statusNote: "Doğrulama bekliyor",
+    visibility: "public",
+    publishState: "review",
+    isFeatured: false,
+    sourceNote: "Mock journey kaydı; gerçek yayın akışı başlamadı.",
     relatedWritingSlug: "yapay-zeka-caginda-yazilim-gelistirici-olmak",
   },
 ];
+
+export const profileContent: ProfileContent = {
+  displayName: "Ziyaattin Aydın",
+  eyebrow: "Hakkımda · Onay bekleyen profil alanı",
+  headline: "Kişisel web sitesi ve Studio sistemi için sade, doğrulanabilir bir public profil alanı.",
+  description:
+    "Bu sayfa gerçek biyografi tamamlanmadan önce kullanılacak geçici yapıyı gösterir. Kişisel geçmiş, yaş, başarı, sosyal link ve iletişim bilgisi kullanıcı tarafından netleştirilmeden kesin bilgi gibi sunulmaz.",
+  portrait: {
+    src: "/images/portraits/about-portrait.png",
+    alt: "Hakkımda sayfası için kullanıcı doğrulaması bekleyen aday portre",
+    approvalState: "candidate",
+    note: "Aday portre · doğrulama bekliyor",
+  },
+  focusAreas: [
+    { title: "Public ürün anlatımı", text: "Projeleri ve yazıları sade, okunabilir ve güvenli biçimde sunmak." },
+    { title: "Sistemli çalışma", text: "Public site ile private Studio ayrımını koruyan bir içerik akışı kurmak." },
+    { title: "Modern web", text: "Next.js, React ve TypeScript temelli sürdürülebilir arayüzler geliştirmek." },
+    { title: "Öğrenme notları", text: "Gerçek içerik netleştiğinde yolculuğu düzenli notlarla görünür kılmak." },
+  ],
+  values: ["Sadelik", "Dürüst placeholder", "Erişilebilirlik", "Sürdürülebilirlik", "Kontrollü yayın"],
+  technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "Git"],
+  contactNote:
+    "E-posta, GitHub, LinkedIn veya diğer sosyal bağlantılar kullanıcı tarafından onaylandığında eklenecek. Bu sprintte gerçek iletişim bilgisi uydurulmadı.",
+  contactStateLabel: "İletişim bilgisi beklemede",
+};

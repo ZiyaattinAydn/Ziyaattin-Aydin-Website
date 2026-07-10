@@ -81,8 +81,8 @@ export function StudioShell({ children }: PropsWithChildren) {
 
           <main className="p-4 sm:p-6 lg:p-10">
             <div className="mb-6 rounded-2xl border border-[var(--border)] bg-[rgba(18,217,120,0.04)] px-4 py-3 text-xs leading-6 text-[var(--muted)] sm:text-sm">
-              <strong className="text-[var(--foreground)]">Studio Sprint 02:</strong> Bu ekranlar mock workflow hazırlığıdır; gerçek login,
-              MFA, database, CRUD ve storage henüz uygulanmadı.
+              <strong className="text-[var(--foreground)]">Studio Sprint 03:</strong> Bu ekranlar mock data model hazırlığıdır; gerçek login,
+              MFA, database, CRUD, publish ve storage henüz uygulanmadı.
             </div>
             {children}
           </main>

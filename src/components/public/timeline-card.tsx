@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { JourneyItem } from "@/data/mock-content";
+import { publishStateLabels, visibilityLabels } from "@/data/mock-content";
 import { Panel } from "@/components/ui/panel";
 
 type TimelineCardProps = {
@@ -21,9 +22,15 @@ export function TimelineCard({ item, compact = false }: TimelineCardProps) {
         <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1 text-xs text-[var(--muted)]">
           {item.statusNote}
         </span>
+        <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1 text-xs text-[var(--muted)]">
+          {publishStateLabels[item.publishState]}
+        </span>
       </div>
       <h2 className="mt-3 text-xl font-semibold leading-snug">{item.title}</h2>
       <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{item.detail}</p>
+      <p className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
+        {visibilityLabels[item.visibility]} · {item.sourceNote}
+      </p>
       {!compact ? (
         <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Öğrenilen not</p>

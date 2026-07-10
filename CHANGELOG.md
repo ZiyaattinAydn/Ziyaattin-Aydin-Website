@@ -1,3 +1,23 @@
+## Sprint 03 Integration — 2026-07-07
+
+### Added
+- Core Sprint 03: Vercel checklist ve environment contract dokümanları eklendi.
+- Public Sprint 03: public content contract dokümanı eklendi.
+- Studio Sprint 03: Studio data model draft ve auth decision dokümanları eklendi.
+- Sprint 03 entegrasyon handoff kaydı eklendi: `docs/handoffs/2026-07-07-integration-sprint-03.md`.
+
+### Changed
+- Public mock içerikler publish/görünürlük/link güvenliği kararlarına hazırlanacak şekilde genişletildi.
+- Studio mock workflow verisi future DB mapping ve publish queue hazırlığına daha uygun hâle getirildi.
+- Deployment, environment, public publish ve Studio workflow kararları gerçek implementasyon başlamadan önce dokümante edildi.
+
+### Verified
+- `npm run lint`, `npm run typecheck` ve `npm run build` Sprint 03 integration branch üzerinde başarılı tamamlandı.
+- `npm audit` çalıştırıldı; 2 moderate vulnerability bilinen izleme notu olarak kaldı.
+- Yeni bağımlılık ve yeni environment değişkeni eklenmedi.
+- Gerçek secret, middleware, SQL migration, Supabase/Auth/Storage/CRUD implementasyonu eklenmedi.
+- `npm audit fix --force` çalıştırılmadı.
+
 ## Sprint 02 Integration — 2026-07-07
 
 ### Added
@@ -26,6 +46,10 @@
 ## Unreleased
 
 ### Added
+- Vercel Preview / Production doğrulama checklist'i eklendi: `docs/deployment/VERCEL_CHECKLIST.md`
+- Environment değişken sözleşmesi eklendi: `docs/deployment/ENVIRONMENT.md`
+- `.env.example` içine güvenli placeholder deployment ve Supabase hazırlık değişkenleri eklendi
+- Faz 3 öncesi Supabase Auth, MFA, route guard, Storage, RLS ve public publish karar başlıkları karar kaydına eklendi
 - Core UI primitive setine `ProgressBar` ve `SectionShell` eklendi
 - Next.js 16, React 19, TypeScript ve Tailwind CSS tabanlı başlangıç projesi
 - Public, auth ve Studio rota iskeletleri
@@ -37,6 +61,9 @@
 - UI primitive barrel export dosyası: `src/components/ui/index.ts`
 
 ### Changed
+- Project tracking belgeleri Sprint 03 Core deployment hazırlığına göre güncellendi
+- Faz 2 durumu Vercel gerçek doğrulaması beklediği için açık şekilde `[~]` bırakıldı
+- `.env.example` service role key'in client tarafında kullanılmaması gerektiğini belirtecek şekilde güçlendirildi
 - `siteConfig` metadata, navigation, admin entry, contact ve social alanlarıyla daha güvenli yapılandırıldı
 - Root metadata `siteConfig` ile tutarlı hâle getirildi
 - Footer doğrulanmamış contact/social bilgilerini aktif link gibi göstermeyecek şekilde config tabanlı hale getirildi
@@ -49,12 +76,15 @@
 - `Panel` ve `Tag` bileşenleri geriye uyumlu kalacak şekilde küçük varyant/tone desteği aldı
 
 ### Verified
+- Sprint 03 başlangıç main commit'i kullanıcı tarafından verilen yerel doğrulama bağlamına göre `e77d2d1` olarak kayda geçirildi
+- `npm run lint`, `npm run typecheck` ve `npm run build` bu snapshot üzerinde başarıyla çalıştı
+- Build çıktısında workspace root / multiple lockfile uyarısı görünmedi; ilk build için build cache uyarısı ve telemetry bilgilendirmesi görüldü
+- `package-lock.json` içinde özel/internal registry izi bulunmadı
 - Sprint 02 başlangıç main commit’i kullanıcı tarafından verilen yerel doğrulama bağlamına göre `62d5227` olarak kayda geçirildi
 - Next.js 16 yerel dokümanlarında `turbopack.root` davranışı kontrol edildi
-- `package-lock.json` içinde özel/internal registry izi bulunmadı
-- `npm run lint`, `npm run typecheck` ve `npm run build` ayrı ayrı başarıyla çalıştı
 
 ### Known Issues
+<<<<<<< Updated upstream
 - Workspace root uyarısı gerçek Windows ortamında tekrar gözlenmeli; uyarı devam ederse repo dışındaki `C:\Users\ziyaa\package-lock.json` dosyasının gereksiz olup olmadığı kontrol edilmeli
 - Snapshot içinde `.git` metadata bulunmadığı için GitHub remote, `main` ↔ `origin/main` senkronu ve gerçek son commit doğrulanamadı
 - Bu ortamda `npm config get registry` protected registry hatası verdi
@@ -111,3 +141,11 @@
 - `.env.example` dışında gizli environment dosyası tespit edilmedi
 - Sprint 01 entegrasyonunda `npm run lint`, `npm run typecheck` ve `npm run build` başarılı tamamlandı
 >>>>>>> origin/feat/public-site-s02
+=======
+- Vercel Preview / Production gerçek URL üzerinden henüz doğrulanmadıysa deployment tamamlandı sayılmamalı
+- `npm audit` iki orta seviye uyarı göstermeye devam ediyor: `next` ve dolaylı `postcss` (`GHSA-qx2v-qp2m-jg93`). `npm audit fix --force` çalıştırılmadı
+- Supabase Auth, MFA, PostgreSQL, Storage, RLS ve gerçek route guard henüz başlamadı
+- Public ve Studio hâlâ mock veriyle çalışıyor
+- Hakkımda portresi ve gerçek iletişim/sosyal linkler kullanıcı onayı olmadan aktif edilmeyecek
+- Snapshot içinde `.git` metadata bulunmadığı için GitHub remote, `main` ↔ `origin/main` senkronu ve gerçek son commit sandbox içinde doğrulanamadı
+>>>>>>> Stashed changes

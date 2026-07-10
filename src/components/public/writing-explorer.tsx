@@ -24,7 +24,7 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
       .filter((writing) => {
         const matchesCategory = category === "Tümü" || writing.category === category;
         const matchesQuery = normalizedQuery
-          ? [writing.title, writing.excerpt, writing.category, ...writing.tags]
+          ? [writing.title, writing.excerpt, writing.category, writing.sourceNote, writing.publishState, ...writing.tags]
               .join(" ")
               .toLocaleLowerCase("tr-TR")
               .includes(normalizedQuery)
@@ -34,6 +34,7 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
       .sort((first, second) => {
         if (sort === "oldest") return first.sortOrder - second.sortOrder;
         if (sort === "title") return first.title.localeCompare(second.title, "tr");
+        if (first.isFeatured !== second.isFeatured) return Number(second.isFeatured) - Number(first.isFeatured);
         return second.sortOrder - first.sortOrder;
       });
   }, [category, query, sort, writings]);
@@ -91,7 +92,7 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
           Tüm public yazı taslakları
         </h2>
         <p className="mt-1 text-sm text-[var(--muted)]">
-          {filteredWritings.length} sonuç gösteriliyor. Tarihler ve içerikler geçici mock/taslak veridir.
+          {filteredWritings.length} sonuç gösteriliyor. Tarihler, publish durumu ve içerikler geçici mock/taslak veridir; gerçek yayın Studio publish akışıyla bağlanacak.
         </p>
       </div>
 

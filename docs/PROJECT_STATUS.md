@@ -12,7 +12,7 @@ Son güncelleme: 2026-07-07
 
 ## Mevcut Faz
 
-**Faz 2 — Teknik Temel ve Proje İskeleti**
+**Faz 2 — Teknik Temel, Proje İskeleti ve Deployment Hazırlığı**
 
 - [x] Proje ana dokümanı PDF olarak hazırlandı
 - [x] Next.js + React + TypeScript projesi oluşturuldu
@@ -28,14 +28,20 @@ Son güncelleme: 2026-07-07
 - [m] Sprint 01 Public Site `main`e alındı
 - [m] Sprint 01 Studio Shell `main`e alındı
 - [m] Sprint 01 entegrasyonu ve Studio düzeltmesi `main`e alındı
-- [x] Sprint 02 Core Foundation branch içinde tamamlandı
-- [!] `npm audit` güncel Next.js bağımlılığında iki orta seviye PostCSS uyarısı gösteriyor; resmi patch takip edilecek
-- [x] Yerel bootstrap commit oluşturuldu (`dd8ff0b`)
-- [x] Sprint 02 başlangıç `main` commit'i kullanıcı tarafından verilen yerel doğrulama bağlamına göre `62d5227`
-- [x] `main` / `origin/main` senkron durumu Sprint 02 başlangıç bağlamına göre güncel
-- [!] Sandbox snapshot içinde `.git` metadata bulunmadığı için Git komutları burada tekrar çalıştırılamadı; gerçek worktree'de handoff öncesi `git rev-parse --short HEAD` ile son commit doldurulmalı
-- [!] Next.js workspace root uyarısı incelendi; repo içinden `next.config.ts` içinde `turbopack.root: process.cwd()` ayarı eklendi ve build worker sayısı `experimental.cpus: 4` ile sınırlandı. Uyarı devam ederse repo dışındaki `C:\Users\ziyaa\package-lock.json` dosyasının gerekliliği kullanıcı tarafından kontrol edilmeli ve gereksizse silinmeli
-- [ ] Vercel preview bağlantısı kurulacak
+- [m] Sprint 02 entegrasyonu kullanıcı tarafından verilen bağlama göre tamamlandı
+- [x] Sprint 03 Core Deployment hazırlığı branch içinde tamamlandı
+- [x] Vercel deployment checklist dokümantasyonu hazırlandı
+- [x] Environment değişken sözleşmesi hazırlandı
+- [!] Vercel Preview / Production gerçek URL üzerinden henüz doğrulanmadıysa deployment tamamlandı sayılmamalı
+- [!] `npm audit` iki orta seviye uyarı göstermeye devam ediyor: doğrudan `next`, dolaylı `postcss` (`GHSA-qx2v-qp2m-jg93`). `npm audit fix --force` çalıştırılmadı ve çalıştırılmamalı
+- [!] Supabase Auth, MFA, PostgreSQL, Storage, RLS ve gerçek route guard henüz başlamadı
+- [!] Public ve Studio hâlâ mock veriyle çalışıyor
+- [!] Hakkımda portresi ve gerçek iletişim/sosyal linkler kullanıcı onayı olmadan aktif edilmeyecek
+- [x] Sprint 03 başlangıç `main` commit'i kullanıcı tarafından verilen yerel doğrulama bağlamına göre `e77d2d1`
+- [!] Sandbox snapshot içinde `.git` metadata bulunmadığı için Git komutları burada tekrar çalıştırılamadı; gerçek worktree'de handoff öncesi `git rev-parse --short HEAD` ile son commit doğrulanmalı
+- [x] Önceki Next.js workspace root / multiple lockfile uyarısı Sprint 02 sonrası yerel build bağlamına göre görünmüyor
+- [ ] Vercel preview bağlantısı gerçek URL üzerinden doğrulanacak
+- [ ] Vercel production bağlantısı gerçek URL üzerinden doğrulanacak
 
 ## Sprint 01 — Core Foundation
 
@@ -49,20 +55,31 @@ Son güncelleme: 2026-07-07
 
 ## Sprint 02 — Core Foundation
 
-- [x] Sprint 01 sonrası main başlangıç commit'i `62d5227` olarak kayda geçirildi
-- [x] Next.js 16 yerel dokümanlarında Turbopack filesystem root davranışı incelendi
-- [x] Workspace root uyarısı için repo içi çözüm olarak `next.config.ts` içinde `turbopack.root` proje köküne sabitlendi ve build worker sayısı `experimental.cpus: 4` ile sınırlandı
-- [x] `package-lock.json`, `package.json` ve varsa `.npmrc` içinde özel/internal registry izi arandı; bulunmadı
-- [x] Ortak UI primitive setine `ProgressBar` ve `SectionShell` eklendi
-- [x] `src/lib/site-config.ts` içinde metadata, navigation, admin entry, contact ve social alanları daha güvenli yapılandırıldı
-- [x] Root metadata `siteConfig` ile tutarlı hâle getirildi
-- [x] Footer doğrulanmamış contact/social bilgilerini aktif link gibi göstermeyecek şekilde config tabanlı hale getirildi
-- [!] `npm config get registry` bu sandbox ortamında `registry option is protected` hatası verdi; gerçek yerel makinede tekrar doğrulanmalı
-- [!] Build sırasında workspace root uyarısının gerçek Windows ortamında kaybolup kaybolmadığı yeniden gözlenmeli; repo dışı `C:\Users\ziyaa\package-lock.json` dosyası uyarının muhtemel sebebidir
-- [!] `npm run check` bu sandbox ortamında iç build aşamasında zaman aşımına uğradı; `npm run lint`, `npm run typecheck` ve `npm run build` ayrı ayrı başarıyla tamamlandı
+- [m] Sprint 01 sonrası main başlangıç commit'i `62d5227` olarak kayda geçirildi
+- [m] Next.js 16 yerel dokümanlarında Turbopack filesystem root davranışı incelendi
+- [m] Workspace root uyarısı için repo içi çözüm olarak `next.config.ts` içinde `turbopack.root` proje köküne sabitlendi ve build worker sayısı `experimental.cpus: 4` ile sınırlandı
+- [m] `package-lock.json`, `package.json` ve varsa `.npmrc` içinde özel/internal registry izi arandı; bulunmadı
+- [m] Ortak UI primitive setine `ProgressBar` ve `SectionShell` eklendi
+- [m] `src/lib/site-config.ts` içinde metadata, navigation, admin entry, contact ve social alanları daha güvenli yapılandırıldı
+- [m] Root metadata `siteConfig` ile tutarlı hâle getirildi
+- [m] Footer doğrulanmamış contact/social bilgilerini aktif link gibi göstermeyecek şekilde config tabanlı hale getirildi
+- [!] `npm audit` çıktısındaki 2 moderate vulnerability izleniyor; zorla major downgrade/upgrade yapılmadı
+
+## Sprint 03 — Core Deployment Hazırlığı
+
+- [x] Sprint 03 başlangıç main commit'i kullanıcı tarafından verilen bağlama göre `e77d2d1` olarak kayda geçirildi
+- [x] Vercel deployment doğrulama checklist'i oluşturuldu: `docs/deployment/VERCEL_CHECKLIST.md`
+- [x] Environment değişken sözleşmesi oluşturuldu: `docs/deployment/ENVIRONMENT.md`
+- [x] `.env.example` güvenli placeholder env değerleri ve service role uyarısıyla güncellendi
+- [x] Supabase/Auth/Storage/RLS implementasyonu yapılmadan karar başlıkları `docs/DECISIONS.md` içine eklendi
+- [x] `npm audit` sonucu belgelendi; `npm audit fix --force` çalıştırılmadı
+- [x] `npm run lint`, `npm run typecheck` ve `npm run build` bu sandbox snapshot üzerinde başarılı çalıştı
+- [!] Vercel gerçek Preview / Production doğrulaması yapılmadı; checklist hazırlandı ama deployment tamamlandı denemez
+- [!] Build çıktısında workspace root uyarısı bu sandbox çalıştırmasında görünmedi; Turbopack `experimental.cpus: 4` bilgisi, ilk build için build cache uyarısı ve Next.js telemetry bilgilendirmesi görüldü; blocker sayılmadı
 
 ## Sonraki Kilometre Taşı
 
+<<<<<<< Updated upstream
 Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalışma hatları güncel `main` üzerinden başlatılacak. Vercel kurulmadığı için Faz 2 tamamen kapanmış sayılmamalı.
 =======
 # Proje Durumu
@@ -144,3 +161,18 @@ Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `
 - [m] Next.js workspace root / multiple lockfile uyarısı Core Sprint 02 sonrası integration build çıktısında görünmedi.
 - [!] Vercel preview / production deployment doğrulaması henüz tamamlanmadı.
 - [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage gerçek implementasyonu henüz başlamadı.
+=======
+Sprint 03 Core branch entegrasyonundan sonra Public Content ve Studio Data Sprint 03 çalışma hatları güncel `main` üzerinden başlatılacak. Vercel gerçek Preview / Production doğrulaması tamamlanmadan Faz 2 tamamen kapanmış sayılmamalı. Faz 3 Auth/Supabase kararları kullanıcı onayı sonrası başlatılmalı.
+>>>>>>> Stashed changes
+
+## Sprint 03 Entegrasyon Özeti
+
+- [m] Sprint 03 Core deployment readiness çalışması `integration/sprint-03` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 03 Public content contract çalışması `integration/sprint-03` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 03 Studio data planning çalışması `integration/sprint-03` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 03 entegrasyonunda `npm run lint`, `npm run typecheck` ve `npm run build` kontrolleri başarılı tamamlandı.
+- [x] Vercel checklist ve environment contract dokümanları hazırlandı.
+- [!] Vercel preview / production gerçek doğrulaması henüz tamamlanmadıysa tamamlandı sayılmamalı.
+- [!] `npm audit` çıktısında 2 moderate vulnerability izlenmeye devam ediyor; `npm audit fix --force` çalıştırılmadı ve çalıştırılmamalı.
+- [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
+- [!] Hakkımda portresi kullanıcı doğrulaması bekleyen aday portre olarak kalmalı.
