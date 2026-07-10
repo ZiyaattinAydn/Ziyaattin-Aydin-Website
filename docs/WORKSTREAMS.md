@@ -81,3 +81,19 @@ Notlar:
 - Public content contract ve mock publish hazırlıkları main'e alınmaya hazırlandı.
 - Studio data model draft ve auth decision dokümanları main'e alınmaya hazırlandı.
 - Gerçek Auth/Supabase/Storage/CRUD kapsamı Sprint 03'te bilinçli olarak başlatılmadı.
+
+## Sprint 04 Entegrasyon Sonucu
+
+- Core Sprint 04 — `feat/core-vercel-s04`: `[m]`
+- Public Sprint 04 — `feat/public-publish-plan-s04`: `[m]`
+- Studio Sprint 04 — `feat/studio-auth-plan-s04`: `[m]`
+- Entegrasyon Sprint 04 — `integration/sprint-04`: `[m]`
+- Orkestrasyon: `[~]`
+
+Notlar:
+
+- GitHub → Vercel automatic Preview Deployment doğrulandı.
+- Node.js runtime 22.x olarak sabitlendi.
+- Production Deployment main push sonrasında doğrulanacak.
+- Public publish ve Studio Auth/RLS/Publish Flow karar hazırlıkları tamamlandı.
+- Gerçek Supabase/Auth/Storage/CRUD implementasyonu Sprint 04 kapsamında yapılmadı.

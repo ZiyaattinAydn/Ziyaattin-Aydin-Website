@@ -101,3 +101,18 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [!] `npm audit` çıktısında 2 moderate vulnerability izlenmeye devam ediyor; `npm audit fix --force` çalıştırılmadı ve çalıştırılmamalı.
 - [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
 - [!] Hakkımda portresi kullanıcı doğrulaması bekleyen aday portre olarak kalmalı.
+
+## Sprint 04 Entegrasyon Özeti
+
+- [m] Sprint 04 Core Vercel deployment flow çalışması entegrasyona alındı.
+- [m] Sprint 04 Public publish planning çalışması entegrasyona alındı.
+- [m] Sprint 04 Studio Auth/Security planning çalışması entegrasyona alındı.
+- [m] Sprint 04 integration branch kalite kontrollerini geçti.
+- [x] Feature branch push → automatic Preview Deployment doğrulandı.
+- [x] Preview runtime Node.js 22.x olarak doğrulandı.
+- [x] Production branch `main` olarak bildirildi.
+- [!] Production Deployment main push sonrasında ayrıca doğrulanmalıdır.
+- [!] Production URL açılmadan deployment tamamen tamamlandı sayılmamalıdır.
+- [!] `npm audit` 2 moderate vulnerability göstermeye devam ediyor.
+- [ ] Supabase/Auth/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
+- [!] Hakkımda portresi ve gerçek linkler kullanıcı onayı bekliyor.

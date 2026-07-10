@@ -33,3 +33,12 @@
 - Faz 2: `[~]` — Deployment readiness dokümantasyonu hazırlandı; Vercel gerçek preview / production doğrulaması yapılmadıysa faz tamamen kapanmış sayılmamalı.
 - Faz 3: `[ ]` — Supabase Auth, MFA, PostgreSQL, Storage, RLS ve route guard gerçek implementasyonu henüz başlatılmadı.
 - Faz 3 karar hazırlığı: `[x]` — Environment contract, public content contract, Studio data model draft ve auth decision başlıkları dokümante edildi.
+
+## Sprint 04 Sonrası Durum Notu
+
+- Faz 2: `[~]` — GitHub → Vercel automatic Preview Deployment doğrulandı; Production Deployment main push sonrasında ayrıca doğrulanmalıdır.
+- Faz 3 karar hazırlığı: `[x]` — Public publish flow, Studio Auth karar matrisi, Security/RLS planı ve Studio publish flow hazırlandı.
+- Supabase gerçek implementasyonu: `[ ]`
+- Auth ve MFA gerçek implementasyonu: `[ ]`
+- PostgreSQL, Storage, RLS ve route guard implementasyonu: `[ ]`
+- Production URL doğrulaması başarısız veya erişilemezse Faz 2 tamamen kapanmış sayılmamalıdır.

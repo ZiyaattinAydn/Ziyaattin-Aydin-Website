@@ -1,3 +1,36 @@
+## Sprint 04 Integration — 2026-07-07
+
+### Added
+
+- GitHub → Vercel automatic deployment verification kaydı.
+- Public publish flow planı.
+- Studio Security/RLS planı.
+- Studio publish flow planı.
+- Sprint 04 integration handoff kaydı.
+
+### Changed
+
+- Node.js runtime `22.x` olarak sabitlendi.
+- Vercel deployment modeli feature push → Preview ve main push → Production akışına göre güncellendi.
+- Public mock content publish state, approval ve link approval alanlarıyla genişletildi.
+- Studio Auth/MFA karar matrisi ve data model referansları güncellendi.
+
+### Verified
+
+- Feature branch push → automatic Preview Deployment başarılı.
+- Preview runtime Node.js 22.x.
+- `npm ci`, `npm run lint`, `npm run typecheck` ve `npm run build` başarılı.
+- Workspace root / multiple lockfile uyarısı görünmedi.
+- Yeni environment değeri veya gerçek secret eklenmedi.
+- Manuel `vercel --prod` kullanılmadı.
+- Gerçek Supabase/Auth/Storage/RLS/CRUD implementasyonu yapılmadı.
+
+### Known Issues
+
+- Production Deployment main push sonrasında doğrulanmalıdır.
+- `npm audit` 2 moderate vulnerability göstermeye devam ediyor.
+- `npm audit fix --force` çalıştırılmamalıdır.
+
 ## Sprint 03 Integration — 2026-07-07
 
 ### Added
