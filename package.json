@@ -27,6 +27,6 @@
   },
   "description": "Ziyaattin için public portföy ve özel Studio çalışma alanı.",
   "engines": {
-    "node": ">=20.9.0"
+    "node": "22.x"
   }
 }
