@@ -74,7 +74,7 @@ Vercel Project Settings → Environment Variables altında tanımlanacak alanlar
 - [ ] `NEXT_PUBLIC_SITE_URL` Preview için doğru preview/custom URL ile tanımlandı
 - [ ] `NEXT_PUBLIC_SITE_URL` Production için production URL/custom domain ile tanımlandı
 - [ ] `NEXT_PUBLIC_SUPABASE_URL` Faz 3 başlamadan gerçek production secret gibi kullanılmadı
-- [ ] `NEXT_PUBLIC_SUPABASE_ANON_KEY` Faz 3 başlamadan gerçek production secret gibi kullanılmadı
+- [ ] `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` Faz 3 başlamadan gerçek production secret gibi kullanılmadı
 - [ ] `SUPABASE_SERVICE_ROLE_KEY` yalnız server-side secret olarak tanımlandıysa tanımlandı; client tarafına aktarılmadı
 - [ ] `SUPABASE_SERVICE_ROLE_KEY` hiçbir zaman `NEXT_PUBLIC_` prefix'i almadı
 - [ ] Gerçek secret repository'ye commit edilmedi

@@ -10,7 +10,7 @@ Bu dosya `.env.example`, local `.env.local` ve Vercel Environment Variables aras
 | --- | --- | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Site canonical URL ve deployment URL referansı | `.env.local` içinde `http://localhost:3000` kullanılabilir | Preview için preview/custom preview URL; Production için production URL/custom domain | Public | Kısmen hazırlık; metadata/deployment doğrulamasında kullanılacak |
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL | Faz 3 başlamadan boş kalmalı | Preview ve Production için ayrı project/ortam kararı sonrası tanımlanmalı | Public | Henüz aktif değil |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon key; client tarafı isteklerde kullanılabilir public key | Faz 3 başlamadan boş kalmalı | Preview ve Production için Supabase kararından sonra tanımlanmalı | Public | Henüz aktif değil |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase anon key; client tarafı isteklerde kullanılabilir public key | Faz 3 başlamadan boş kalmalı | Preview ve Production için Supabase kararından sonra tanımlanmalı | Public | Henüz aktif değil |
 | `SUPABASE_SERVICE_ROLE_KEY` | Server-side Supabase yönetim işlemleri için yüksek yetkili secret | Yalnız `.env.local`; client koduna aktarılmamalı | Gerekiyorsa yalnız server-side kullanım için Vercel Environment Variables | Secret | Henüz aktif değil |
 
 ## Güvenlik notları
@@ -48,3 +48,13 @@ Faz 3 başlamadan önce şu başlıklar netleştirilmeli:
 - Storage bucket ayrımı ve dosya limitleri
 - RLS policy kapsamı
 - Studio’dan Public siteye publish akışı
+
+## Sprint 06 Runtime Notu
+
+- Canonical browser-safe key adı `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` olarak seçildi.
+- `NEXT_PUBLIC_SUPABASE_URL` ve publishable key yalnız Supabase client gerçekten istendiğinde doğrulanır.
+- Public mock rotaları Supabase değerleri olmadan build olmaya devam eder.
+- `/login` ve `/studio/**` Supabase yapılandırması yoksa fail closed davranır.
+- Gerçek development değerleri yalnız yerel `.env.local` ve Vercel Preview scope içinde tutulacaktır.
+- Production Supabase environment değerleri Sprint 06 Core kapsamında eklenmez.
+- `SUPABASE_SERVICE_ROLE_KEY` normal Auth veya Studio CRUD akışında kullanılmaz.

@@ -1,3 +1,46 @@
+## Sprint 06 Core Supabase Runtime — 2026-07-10
+
+### Added
+
+- `@supabase/supabase-js@2.110.2` ve `@supabase/ssr@0.12.0`.
+- Lazy Supabase environment validation ve generic fail-closed configuration error.
+- Browser, request-scoped server ve Proxy cookie refresh client factory'leri.
+- Next.js 16 `src/proxy.ts` ile `/login` ve `/studio/**` erken yönlendirme/session refresh sınırı.
+- Güvenli internal redirect helper'ı.
+- Trusted Auth user, active owner profile ve current `aal2` Studio authorization helper'ları.
+- Environment, redirect, AAL, owner ve browser secret-boundary kontrolleri için `test:supabase`.
+
+### Changed
+
+- Canonical public key environment adı `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` oldu.
+- Public mock build Supabase env olmadan çalışmaya devam eder.
+- Auth ve Studio rotaları Supabase env eksikken fail closed davranır.
+- Sprint 06 karar kapısı Singapore development region ve ayrık development/production modeliyle onaylandı.
+
+### Verified
+
+- `npm ci`
+- `npm run test:supabase`
+- `npm run lint`
+- `npm run typecheck`
+- Supabase env olmadan `npm run build`
+- Gerçek Supabase URL, key, JWT, password veya owner UUID repository'ye eklenmedi.
+
+### Known Issues
+
+- `npm audit` iki moderate vulnerability gösteriyor.
+- Advisory: `GHSA-qx2v-qp2m-jg93`.
+- Önerilen force fix Next.js'i kırıcı biçimde geriye düşürdüğü için `npm audit fix --force` çalıştırılmadı.
+
+### Not Applied
+
+- Supabase Dashboard project oluşturma
+- SQL migration ve development seed
+- Owner Auth kullanıcı oluşturma
+- Login/TOTP UI ve Studio layout entegrasyonu
+- CRUD, Storage upload ve Public database cutover
+- Production Supabase environment veya migration
+
 ## Sprint 05 Integration — 2026-07-10
 
 ### Added

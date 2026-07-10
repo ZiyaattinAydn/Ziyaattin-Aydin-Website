@@ -114,3 +114,27 @@ Notlar:
 - Auth, MFA, middleware, route guard, CRUD, Storage upload ve gerçek publish implementasyonu başlamadı.
 - Anonymous erişim yalnız published/public project, writing ve journey kayıtlarıyla sınırlandı.
 - Sprint 06, `SPRINT_05_FINAL_DECISION_GATE.md` cevaplanmadan başlatılmamalıdır.
+
+## Sprint 06 — Aktif Çalışma Hatları
+
+### Pencere 1 — Core Supabase Runtime
+- Branch: `feat/core-supabase-runtime-s06`
+- Başlangıç: `main@0c9d1bb`
+- Runtime commit: `6d51ff3`
+- Durum: `[x]` — kod ve yerel kalite kontrolleri tamamlandı; dokümantasyon/push kapanışı sürüyor
+- Sahiplik: Supabase paketleri, env validation, browser/server clients, Proxy, ortak Auth/session helpers, runtime tests ve Core handoff
+
+### Pencere 2 — Public Supabase Adapter
+- Branch: `feat/public-supabase-adapter-s06`
+- Durum: `[~]`
+- Sahiplik: mock-first public repository sınırı ve güvenli database adapter hazırlığı
+
+### Pencere 3 — Studio Supabase Uygulaması
+- Durum: `[~]`
+- Sahiplik: development project kurulumu, SQL/seed, owner Auth, Login/TOTP UI ve Studio entegrasyonu
+
+### Sprint 06 ortak notları
+- Production mevcut mock davranışını korur.
+- Vercel Preview development Supabase project'e bağlanacaktır.
+- Production Supabase env ve migration bu sprintte yapılmaz.
+- Core Proxy nihai authorization değildir; Studio server layout ve mutation katmanı ortak helper'ı yeniden kullanmalıdır.
