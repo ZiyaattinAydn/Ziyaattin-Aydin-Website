@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { ProjectSummary, ProjectStatus } from "@/data/mock-content";
+import type { ProjectSummary, ProjectStatus } from "@/features/public/content/model";
 import { ProjectCard } from "@/components/public/project-card";
 import { Panel } from "@/components/ui/panel";
 

@@ -65,3 +65,64 @@ Faz 3 yalnız mimari hazırlık düzeyinde `[~]` kabul edilmelidir; gerçek Auth
 - Storage bucket oluşturma: `[ ]`
 - Studio route guard ve CRUD: `[ ]`
 - Sprint 06 başlangıcı: `[!] USER_APPROVAL_REQUIRED`
+
+## Sprint 06 Core Sonrası Durum
+
+- Faz 3 Auth ve güvenlik temeli: `[~]`
+- Supabase SSR/runtime foundation: `[x]`
+- Environment fail-closed sınırı: `[x]`
+- Browser/server/Proxy client altyapısı: `[x]`
+- Studio trusted user + active owner + current `aal2` helper'ı: `[x]`
+- Development Supabase project kurulumu: `[ ]`
+- SQL migration ve development seed: `[ ]`
+- Login/password ve TOTP UI: `[ ]`
+- Studio server layout entegrasyonu: `[ ]`
+- Public database adapter/cutover: `[ ]`
+- Production Supabase project/env/migration: `[!] ayrı onay gerekli`
+
+## Sprint 06 — Public Data Access Hazırlığı
+
+- [x] Public repository interface ve canonical DTO sınırı
+- [x] Mock repository adapter ve mevcut production mock davranışının korunması
+- [x] Dependency-free Supabase query-reader ve explicit query mapping
+- [x] Visibility/notFound/approval policy testleri
+- [x] Production source'un mock'a kilitlenmesi
+- [ ] Core Supabase reader ile Integration wiring
+- [ ] Public profile/contact/social/portrait için kesin database şeması
+- [ ] Gerçek Public database cutover
+- [ ] Cache/revalidation ve slug history/redirect implementasyonu
+
+## Sprint 06 Studio — S06_STUDIO_ROADMAP
+
+Auth/MFA kodu hazır. Sprint kapanışı için development Supabase migration + seed,
+owner activation, RLS matrisi ve Vercel Preview login/TOTP/logout testleri gerekir.
+Production Supabase ve geniş Studio CRUD sonraki onaylı fazlara bırakılmıştır.
+
+
+
+## Sprint 06 Studio Auth/MFA sonucu — S06_STUDIO_OK
+
+- [x] Development Supabase project, schema, RLS ve Storage baseline
+- [x] Owner email/password ve zorunlu TOTP MFA
+- [x] Server-side current AAL2 Studio route guard
+- [x] Local ve Vercel Preview kabul testleri
+- [x] MFA recovery/reset ve ikinci faktör yaklaşımı
+- [~] Faz 3 devam ediyor: production cutover ve geniş CRUD sonraki sprintlerde
+
+## Sprint 06 Integration Sonrası — S06_INTEGRATION_ROADMAP
+
+Sıradaki zorunlu adımlar:
+
+1. Kullanıcı main merge onayı
+2. Integration branch'in main'e kontrollü merge'i
+3. Main final kalite kapıları
+4. Main push
+5. Production deployment doğrulaması
+
+Sonraki sprint adayları:
+
+- Production Supabase hazırlığı
+- Public database cutover
+- Geniş Studio CRUD
+- PWA
+- Audit advisory için güvenli upstream güncelleme

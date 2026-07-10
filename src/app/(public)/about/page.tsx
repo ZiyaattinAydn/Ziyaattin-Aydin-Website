@@ -1,9 +1,11 @@
 import Image from "next/image";
 import { Panel } from "@/components/ui/panel";
 import { PublishStatusNote } from "@/components/public/publish-status-note";
-import { profileContent } from "@/data/mock-content";
+import { getPublicContentRepository } from "@/features/public/content/source-selection";
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const repository = getPublicContentRepository();
+  const profileContent = await repository.getProfile();
   return (
     <div className="space-y-8 overflow-hidden">
       <section className="relative overflow-hidden rounded-3xl border border-[var(--border)] px-5 py-8 sm:px-8 lg:grid lg:grid-cols-[1fr_.78fr] lg:items-center lg:px-10">
@@ -22,19 +24,27 @@ export default function AboutPage() {
             {profileContent.description}
           </p>
         </div>
-        <div className="relative z-10 mt-8 min-h-72 lg:mt-0 lg:h-96">
-          <div className="absolute inset-x-5 bottom-0 top-8 rounded-[2rem] border border-[var(--border)] bg-[var(--surface-strong)]" />
-          <Image
-            src={profileContent.portrait.src}
-            alt={profileContent.portrait.alt}
-            fill
-            sizes="(max-width:1024px) 100vw, 40vw"
-            className="object-contain object-bottom"
-          />
-          <span className="absolute left-4 top-4 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1 text-xs text-[var(--muted)]">
-            {profileContent.portrait.note}
-          </span>
-        </div>
+        {profileContent.portrait ? (
+          <div className="relative z-10 mt-8 min-h-72 lg:mt-0 lg:h-96">
+            <div className="absolute inset-x-5 bottom-0 top-8 rounded-[2rem] border border-[var(--border)] bg-[var(--surface-strong)]" />
+            <Image
+              src={profileContent.portrait.src}
+              alt={profileContent.portrait.alt}
+              fill
+              sizes="(max-width:1024px) 100vw, 40vw"
+              className="object-contain object-bottom"
+            />
+            <span className="absolute left-4 top-4 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1 text-xs text-[var(--muted)]">
+              {profileContent.portrait.note ?? profileContent.portraitNote}
+            </span>
+          </div>
+        ) : (
+          <Panel className="relative z-10 mt-8 flex min-h-72 items-center justify-center p-6 text-center lg:mt-0 lg:h-96">
+            <p className="max-w-sm text-sm leading-6 text-[var(--muted)]">
+              Hakkımda portresi kullanıcı onayı tamamlanana kadar gösterilmiyor.
+            </p>
+          </Panel>
+        )}
       </section>
 
       <div className="grid gap-5 lg:grid-cols-4">
@@ -81,7 +91,7 @@ export default function AboutPage() {
             <PublishStatusNote
               publishFlowState={profileContent.publishFlowState}
               visibility="public"
-              sourceNote={profileContent.portrait.note}
+              sourceNote={profileContent.portraitNote}
               approvalNote={profileContent.approvalNote}
             />
           </div>

@@ -135,3 +135,78 @@ Bu maddeler implementasyon kararı değildir. `docs/supabase/SPRINT_06_APPROVAL_
 - Her adım ayrı stop point'tir; başarısız adım sonrası ilerlenmez.
 - Preview kabulü, backup ve kullanıcı onayı olmadan Production migration çalıştırılmaz.
 - Uygulanmış migration sessizce değiştirilmez; düzeltme yeni migration dosyasıdır.
+
+## Sprint 06 — Onaylanan Supabase Runtime Kararları
+
+- Development ve Production ayrı Supabase project kullanacak.
+- Development region: **APAC — Southeast Asia (Singapore)**.
+- Local development ve Vercel Preview aynı development project'i kullanabilir.
+- Production Supabase environment değerleri Sprint 06 Core kapsamında eklenmeyecek.
+- Canonical browser-safe key adı `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+- İlk Auth provider email/password; magic link ilk sürümde kapalı.
+- Studio erişimi için TOTP ve current `aal2` zorunlu.
+- Owner yetkisi active `owner_profiles` kaydı ve Auth UUID ile belirlenir.
+- Client metadata veya e-posta string'i authorization kaynağı değildir.
+- Yaklaşık 8 saatlik Studio session hedeflenir; plan desteği Dashboard kurulumu sırasında doğrulanır.
+- `public-assets` ve `private-files` ayrı bucket olarak kullanılacak.
+- Public dosya limiti 10 MB, private dosya limiti 25 MB.
+- Public MIME allowlist JPEG, PNG, WebP ve AVIF.
+- Sprint 05 SQL paketi ve development seed development project'te kontrollü sırayla çalıştırılabilir.
+- Production migration Preview kabulünden sonra ayrı kullanıcı onayı gerektirir.
+- Service role normal Auth, Public veya Studio CRUD akışında kullanılmaz.
+
+## Sprint 06 — Public Repository ve Kaynak Seçimi
+
+### Public data repository sınırı
+
+- Public route'lar veri kaynağını bilmez; yalnız `PublicContentRepository` sözleşmesini kullanır.
+- Mock ve gelecekteki Supabase adapter aynı public-safe DTO modeline map edilir.
+- Database row'ları doğrudan component props olarak kullanılmaz.
+- Durum: `ACCEPTED`.
+
+### Production source kilidi
+
+- Sprint 06 boyunca Production public content source kesin olarak `mock` kalır.
+- `PUBLIC_CONTENT_SOURCE=supabase` yalnız non-production ortamında ve Core query reader bağlandığında aktive edilebilir.
+- Gerçek reader aktifken database/query hatası sessiz mock fallback yapmaz.
+- Durum: `ACCEPTED`.
+
+### Public approval kapıları
+
+- Content publish state, visibility, link approval, image approval ve portrait approval bağımsızdır.
+- Link veya asset yalnız kendi approval state'i approved ve değeri güvenli/geçerliyse Public DTO'ya girer.
+- Ana sayfa portresi sabit kalır; About candidate portrait onaysızken gizlenir.
+- Durum: `ACCEPTED`.
+
+## Sprint 06 Studio güvenlik kararı — S06_STUDIO_SECURITY_DECISION
+
+Studio authorization üç birlikte zorunlu katmandan oluşur: trusted Supabase user,
+active owner/admin allowlist satırı ve current `aal2`. Proxy yalnız session refresh
+ve erken redirect sağlar; nihai karar server layout/helper ve RLS tarafından tekrar
+verilir. Recovery code yerine ikinci TOTP faktörü ve kontrollü Dashboard reset
+runbook’u kullanılır.
+
+
+
+## Sprint 06 Studio doğrulanan operasyon kararları — S06_STUDIO_VALIDATED
+
+- Hosted Supabase storage.objects managed relation olduğu için bucket DDL ve
+  policy kurulumu ayrıldı. Bucket'lar migration, sekiz policy Dashboard runbook
+  üzerinden uygulanır; managed relation ownership değiştirilmez.
+- Development seed owner UUID/e-posta hard-code etmez; tam bir active owner/admin
+  profilini server-side çözer ve belirsizlikte fail closed davranır.
+- Preview env yalnız development Supabase project'e bağlıdır.
+- Production env ve migration ayrı kullanıcı onayı olmadan uygulanmaz.
+- Free plan/Dashboard'da yaklaşık 8 saat time-box sağlanamadığında özel session
+  API yazılmaz; AAL1 15 dakika ile sınırlanır ve Studio her request'te current
+  AAL2 kontrol eder.
+
+## Sprint 06 Integration Kararı — S06_INTEGRATION_DECISION
+
+- Merge sırası Core → Public → Studio olarak uygulandı.
+- Development ve Production Supabase ayrımı korunmuştur.
+- Production Supabase bu sprintte oluşturulmamış ve migration uygulanmamıştır.
+- Production Public source mock kalır.
+- Auth ve Studio env yokken fail closed kalır.
+- TOTP ve current AAL2 zorunluluğu korunmuştur.
+- Main merge ve push için açık kullanıcı onayı zorunludur.

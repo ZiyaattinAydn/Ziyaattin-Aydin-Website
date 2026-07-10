@@ -1,3 +1,115 @@
+## Sprint 06 Integration — 2026-07-10
+
+Marker: `S06_INTEGRATION_CHANGELOG`
+
+- Core Supabase runtime, Public repository adapter ve Studio Auth/TOTP/AAL2 branch'leri kontrollü sırayla birleştirildi.
+- Tracking conflict'leri Core, Public ve Studio kayıtları korunarak çözüldü.
+- Hosted development Supabase kabul sonuçları integration kayıtlarına işlendi.
+- Public policy testleri 7/7, Studio verifier'ları, lint, typecheck ve env'siz production build başarılıdır.
+- Owner identity literal'i verifier betiklerinden kaldırıldı.
+- Audit sonucu bilinen 2 moderate advisory'dir; breaking `npm audit fix --force` uygulanmadı.
+- Integration branch main onay kapısına hazırdır.
+
+## Sprint 06 Public — 2026-07-10
+
+### Added
+
+- Public projects, writings, journey ve profile için ortak repository interface'i.
+- Mevcut mock veriyi repository arkasına alan adapter.
+- Core-owned client için dependency-free `PublicQueryReader` sınırı.
+- Explicit select listeleri ve public-safe Supabase row mapper.
+- Visibility, approval, source selection ve URL güvenliği policy testleri.
+- Public repository implementasyon sözleşmesi ve branch handoff kaydı.
+
+### Changed
+
+- Public route ve component'lerin doğrudan mock veri import'ları kaldırıldı.
+- Detail lookup repository üzerinden yapılarak görünmeyen kayıtlar tek `notFound()` sınırına taşındı.
+- Candidate About portrait production render verisinden çıkarıldı.
+- Empty list/featured durumları nötr ve erişilebilir fallback ile ele alındı.
+- Production content source Sprint 06 boyunca mock'a sabitlendi.
+
+### Security
+
+- Anonymous adapter filtreleri `visibility = public`, `publish_state = published` ve `published_at IS NOT NULL` olarak açıkça uygulandı.
+- `select *` kullanılmadı.
+- Onaysız/geçersiz link ve asset URL'leri Public DTO'ya taşınmıyor.
+- Database hata ayrıntıları client'a yansıtılmıyor.
+- Gerçek secret, Supabase URL/key veya JWT eklenmedi.
+
+### Verified
+
+- `npm ci`: başarılı; package dosyaları değişmedi.
+- Node built-in policy tests: 7/7 başarılı.
+- `npm run lint`: başarılı.
+- `npm run typecheck`: başarılı.
+- `npm run build`: başarılı; 14/14 static page üretildi ve dynamic detail rotaları korundu.
+- Doğrudan Public route/component mock import kontrolü temiz.
+- `select *` kontrolü temiz.
+- Secret taraması yalnız boş placeholder, dokümantasyon, package-lock integrity ve binary eşleşmeleri gösterdi.
+- Yeni dependency eklenmedi.
+
+### Known Audit Status
+
+- `npm audit`: 2 moderate vulnerability.
+- Etkilenen zincir mevcut `next` → dolaylı `postcss` bağımlılığıdır.
+- Önerilen `npm audit fix --force`, breaking `next@9.3.3` değişimi yaptığı için uygulanmadı.
+
+### Pending
+
+- Branch push sonrası Vercel Preview Deployment
+
+### Not Applied
+
+- Production Supabase cutover yapılmadı.
+- Gerçek environment değeri eklenmedi.
+- Core Supabase helper/client kopyalanmadı veya merge edilmedi.
+- SQL, Auth, MFA, Studio CRUD, publish editor ve slug history uygulanmadı.
+
+
+## Sprint 06 Core Supabase Runtime — 2026-07-10
+
+### Added
+
+- `@supabase/supabase-js@2.110.2` ve `@supabase/ssr@0.12.0`.
+- Lazy Supabase environment validation ve generic fail-closed configuration error.
+- Browser, request-scoped server ve Proxy cookie refresh client factory'leri.
+- Next.js 16 `src/proxy.ts` ile `/login` ve `/studio/**` erken yönlendirme/session refresh sınırı.
+- Güvenli internal redirect helper'ı.
+- Trusted Auth user, active owner profile ve current `aal2` Studio authorization helper'ları.
+- Environment, redirect, AAL, owner ve browser secret-boundary kontrolleri için `test:supabase`.
+
+### Changed
+
+- Canonical public key environment adı `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` oldu.
+- Public mock build Supabase env olmadan çalışmaya devam eder.
+- Auth ve Studio rotaları Supabase env eksikken fail closed davranır.
+- Sprint 06 karar kapısı Singapore development region ve ayrık development/production modeliyle onaylandı.
+
+### Verified
+
+- `npm ci`
+- `npm run test:supabase`
+- `npm run lint`
+- `npm run typecheck`
+- Supabase env olmadan `npm run build`
+- Gerçek Supabase URL, key, JWT, password veya owner UUID repository'ye eklenmedi.
+
+### Known Issues
+
+- `npm audit` iki moderate vulnerability gösteriyor.
+- Advisory: `GHSA-qx2v-qp2m-jg93`.
+- Önerilen force fix Next.js'i kırıcı biçimde geriye düşürdüğü için `npm audit fix --force` çalıştırılmadı.
+
+### Not Applied
+
+- Supabase Dashboard project oluşturma
+- SQL migration ve development seed
+- Owner Auth kullanıcı oluşturma
+- Login/TOTP UI ve Studio layout entegrasyonu
+- CRUD, Storage upload ve Public database cutover
+- Production Supabase environment veya migration
+
 ## Sprint 05 Integration — 2026-07-10
 
 ### Added
@@ -158,3 +270,43 @@
 - Snapshot içinde `.git` metadata bulunmadığı için GitHub remote, `main` ↔ `origin/main` senkronu ve gerçek son commit doğrulanamadı
 - Bu ortamda `npm config get registry` protected registry hatası verdi
 - `npm run check` bu ortamda build aşamasında zaman aşımına uğradı; alt komutlar ayrı ayrı başarılı
+
+## 2026-07-10 — Studio Auth/MFA — S06_STUDIO_CHANGELOG
+
+- Gerçek Supabase email/password login eklendi.
+- Active owner allowlist ve server-side current AAL2 Studio guard eklendi.
+- TOTP enrollment, challenge, ikinci faktör yönetimi ve güvenli logout eklendi.
+- MFA recovery/reset ve development Supabase runbook’ları eklendi.
+
+
+
+## 2026-07-10 — Studio Auth/MFA Development Acceptance — S06_STUDIO_OK
+
+### Applied
+
+- Singapore development Supabase project oluşturuldu.
+- Schema, functions, RLS, iki Storage bucket ve sekiz Storage policy uygulandı.
+- Tek active owner hesabı ve development seed doğrulandı.
+- Preview environment development Supabase project'e bağlandı.
+
+### Verified
+
+- Password login, generic wrong-password davranışı
+- TOTP enrollment, wrong-code rejection ve AAL2 challenge
+- AAL1 Studio guard, AAL2 Studio access ve logout
+- Allowlist dışı kullanıcı reddi
+- İkinci TOTP ve son-factor protection
+- Anonymous, outsider ve owner RLS matrisi
+- Vercel Preview login/MFA/Studio/logout/direct URL
+
+### Changed
+
+- Hosted Storage relation-owner sınırı için 004 migration bucket-only yapıldı.
+- Sekiz hosted Storage policy için Dashboard runbook eklendi.
+- Development seed UUID placeholder yerine unique active owner çözümüne geçti.
+
+### Known limitations
+
+- Production Supabase project/env/migration uygulanmadı.
+- Free plan/Dashboard yaklaşık 8 saat session time-box sağlamadı.
+- npm audit iki moderate GHSA-qx2v-qp2m-jg93 uyarısını sürdürüyor.

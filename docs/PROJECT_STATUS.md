@@ -133,3 +133,76 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [!] Sprint 06 ve gerçek SQL uygulaması karar kapısı tamamlanana kadar başlamamalı.
 - [x] Gerçek secret, Supabase URL/key veya owner UUID repository'ye eklenmedi.
 - [x] Production uygulaması mock davranışını koruyor.
+
+## Sprint 06 — Core Supabase Runtime
+
+- [x] Branch: `feat/core-supabase-runtime-s06`
+- [x] Başlangıç main commit'i: `0c9d1bb`
+- [x] Runtime foundation commit'i: `6d51ff3`
+- [x] `@supabase/supabase-js@2.110.2` ve `@supabase/ssr@0.12.0` eklendi.
+- [x] Canonical env adı `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` olarak uygulandı.
+- [x] Browser, server ve Proxy Supabase client factory'leri eklendi.
+- [x] Next.js 16 `src/proxy.ts` session refresh ve erken redirect sınırı eklendi.
+- [x] Güvenli redirect, trusted user, active owner ve current `aal2` helper'ları eklendi.
+- [x] Env yokken Public mock production build'i başarılı.
+- [x] Env yokken Auth ve Studio fail closed.
+- [x] Runtime test, lint, typecheck ve build başarılı.
+- [x] Branch `origin/feat/core-supabase-runtime-s06` üzerine pushlandı; Vercel Preview runtime env değerleri bekleniyor.
+- [!] `npm audit`: 2 moderate, `GHSA-qx2v-qp2m-jg93`; force fix uygulanmadı.
+- [x] Gerçek Supabase URL, key, password veya owner UUID repository'ye eklenmedi.
+- [ ] Development Supabase project ve gerçek Preview runtime env kurulumu Core repository değişikliği dışında tamamlanacak.
+- [ ] SQL uygulaması, seed, owner Auth hesabı, Login/TOTP UI, Studio route entegrasyonu, CRUD ve Storage ayrı işlerde tamamlanacak.
+- [ ] Production Supabase project/env/migration ayrıca onay bekliyor.
+
+## Sprint 06 — Public Repository Boundary
+
+- [x] Public branch `feat/public-supabase-adapter-s06`, `main@0c9d1bb` tabanından açıldı.
+- [x] Project, writing, journey ve profile için ortak server-side repository sözleşmesi eklendi.
+- [x] Mevcut mock içerik repository arkasına alındı; production mock davranışı korundu.
+- [x] Public route ve component'lerin doğrudan `@/data/mock-content` bağımlılığı kaldırıldı.
+- [x] Dependency-free Supabase `PublicQueryReader` ve explicit-select adapter sınırı hazırlandı.
+- [x] Anonymous query filtreleri `published + public + published_at` olarak hem request hem mapper katmanında uygulandı.
+- [x] Link, image ve portrait approval filtreleri publish state'ten bağımsız tutuldu.
+- [x] Candidate About portresi final görsel gibi render edilmiyor; ana sayfa portresi değişmedi.
+- [x] Empty list ve featured sonuçları güvenli nötr state ile ele alındı.
+- [x] Node built-in runner policy testleri 7/7 başarılı.
+- [x] `npm ci`, 7/7 policy testi, `npm run lint`, `npm run typecheck` ve `npm run build` başarılı.
+- [x] Build 14/14 static page üretti; project ve writing detail rotaları dynamic server route olarak korundu.
+- [!] `npm audit` bilinen 2 moderate `next` / dolaylı `postcss` uyarısını gösteriyor; önerilen force çözüm breaking downgrade yaptığı için uygulanmadı.
+- [!] Preview Deployment branch push sonrasında doğrulanacak.
+- [x] Core Sprint 06 runtime branch'i `origin/feat/core-supabase-runtime-s06@02f7c6a` olarak mevcut; Public branch'e merge edilmedi veya kodu kopyalanmadı.
+- [x] Yeni dependency, gerçek Supabase URL/key/JWT veya service-role secret eklenmedi.
+
+## Sprint 06 Studio Auth/MFA — S06_STUDIO_CODE_STATUS
+
+Kod implementasyonu tamamlandı: gerçek password login, active owner doğrulaması,
+TOTP enrollment/challenge, current AAL2 Studio guard, güvenli logout ve recovery
+runbook. Development Supabase project, migration, seed, owner activation ve Preview
+runtime kabul testleri dış ortam adımı olarak bekliyor.
+
+
+
+## Sprint 06 Studio Auth/MFA — S06_STUDIO_OK
+
+- [x] Development Supabase project Singapore region'da oluşturuldu.
+- [x] Schema, functions ve application RLS development project'e uygulandı.
+- [x] İki Storage bucket ve sekiz Storage policy doğrulandı.
+- [x] Tek active owner Auth/profile modeli doğrulandı.
+- [x] Development seed 1/1/1/1 sonucu verdi.
+- [x] Password login, TOTP enrollment/challenge ve current AAL2 guard çalışıyor.
+- [x] Logout, direct Studio, wrong password/TOTP, outsider ve ikinci faktör
+  testleri geçti.
+- [x] Anonymous/outsider/owner RLS kabul matrisi geçti.
+- [x] Vercel Preview development Supabase env ile Ready ve kabul testleri geçti.
+- [x] Production Supabase env/migration uygulanmadı; mock davranışı korunuyor.
+- [!] Yaklaşık 8 saat session time-box Free plan/Dashboard sınırlaması nedeniyle
+  uygulanmadı; per-request AAL2 guard ve 15 dakikalık AAL1 sınırı aktif.
+- [!] npm audit iki moderate GHSA-qx2v-qp2m-jg93 uyarısını izlemeye devam ediyor.
+
+## Sprint 06 Integration — S06_INTEGRATION_STATUS
+
+Durum: `READY_FOR_MAIN_APPROVAL`
+
+Core, Public ve Studio Sprint 06 feature branch'leri `integration/sprint-06` üzerinde birleşmiştir. Birleşik statik testler, lint, typecheck, env'siz build ve security source taramaları başarılıdır.
+
+Main merge ve Production deployment henüz yapılmamıştır.

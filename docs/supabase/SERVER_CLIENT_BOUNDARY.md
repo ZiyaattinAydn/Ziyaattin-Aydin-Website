@@ -1,6 +1,6 @@
 # Server / Client Boundary
 
-Durum: Sprint 06 öncesi teknik sınır. Kod implementasyonu içermez.
+Durum: Sprint 06 server/client runtime sınırı uygulandı; geniş CRUD ve public database cutover kapsam dışıdır.
 
 ## Varsayılan yaklaşım
 
@@ -129,3 +129,17 @@ Service role gerekiyorsa:
 - Public published içerik cache edilebilir; publish/unpublish sonrası revalidation gerekir.
 - Auth cookie yazan response CDN/shared cache ile karışmamalıdır.
 - Cache stratejisi implementasyon sırasında Next.js 16 yerel docs ile yeniden doğrulanmalıdır.
+
+## Sprint 06 Kod Karşılıkları
+
+| Sınır | Uygulama |
+| --- | --- |
+| Public environment okuma ve lazy validation | `src/lib/supabase/environment.ts` |
+| Browser client | `src/lib/supabase/client.ts` |
+| Request-scoped server client | `src/lib/supabase/server.ts` |
+| Proxy cookie refresh client | `src/lib/supabase/proxy.ts` |
+| Server-only service-role presence kontrolü | `src/lib/supabase/server-environment.ts` |
+| Studio authorization | `src/lib/auth/studio-authorization.ts` |
+| Redirect doğrulama | `src/lib/auth/safe-redirect.ts` |
+
+Server Component içinde cookie yazma desteklenmediğinde client factory yazma hatasını yutar; writable session refresh Proxy, Server Function veya Route Handler katmanında yapılır.

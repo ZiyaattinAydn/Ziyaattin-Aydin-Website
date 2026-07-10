@@ -114,3 +114,72 @@ Notlar:
 - Auth, MFA, middleware, route guard, CRUD, Storage upload ve gerçek publish implementasyonu başlamadı.
 - Anonymous erişim yalnız published/public project, writing ve journey kayıtlarıyla sınırlandı.
 - Sprint 06, `SPRINT_05_FINAL_DECISION_GATE.md` cevaplanmadan başlatılmamalıdır.
+
+## Sprint 06 — Aktif Çalışma Hatları
+
+### Pencere 1 — Core Supabase Runtime
+- Branch: `feat/core-supabase-runtime-s06`
+- Başlangıç: `main@0c9d1bb`
+- Runtime commit: `6d51ff3`
+- Durum: `[x]` — tamamlandı ve origin'e pushlandı
+- Sahiplik: Supabase paketleri, env validation, browser/server clients, Proxy, ortak Auth/session helpers, runtime tests ve Core handoff
+
+### Pencere 2 — Public Supabase Adapter
+- Branch: `feat/public-supabase-adapter-s06`
+- Durum: `[~]`
+- Sahiplik: mock-first public repository sınırı ve güvenli database adapter hazırlığı
+
+### Pencere 3 — Studio Supabase Uygulaması
+- Durum: `[~]`
+- Sahiplik: development project kurulumu, SQL/seed, owner Auth, Login/TOTP UI ve Studio entegrasyonu
+
+### Sprint 06 ortak notları
+- Production mevcut mock davranışını korur.
+- Vercel Preview development Supabase project'e bağlanacaktır.
+- Production Supabase env ve migration bu sprintte yapılmaz.
+- Core Proxy nihai authorization değildir; Studio server layout ve mutation katmanı ortak helper'ı yeniden kullanmalıdır.
+
+## Sprint 06 — Public Site
+
+### Pencere 2 — Public Supabase Adapter
+
+- Branch: `feat/public-supabase-adapter-s06`
+- Başlangıç: `main@0c9d1bb`
+- Durum: `[x]` — implementasyon, policy testleri, lint, typecheck, build ve audit incelemesi tamamlandı; commit, push ve Preview doğrulaması bekleniyor
+- Sahiplik: `src/app/(public)/**`, `src/components/public/**`, `src/features/public/**`, `docs/content/**`, Public tracking ve handoff
+- Production source: `mock`
+- Supabase durumu: dependency-free adapter/query-reader sınırı hazır; Core reader entegrasyonu yapılmadı
+- Yeni environment ihtiyacı: gelecekte server-only `PUBLIC_CONTENT_SOURCE=mock|supabase`; `.env.example` değiştirilmedi
+- Gerçek database cutover: bu sprint kapsamında değil
+
+## Studio Sprint 06 — S06_STUDIO_WORKSTREAM
+
+- Kod: tamamlandı.
+- Runtime foundation: Core `02f7c6a`.
+- Development Supabase setup/migration/seed: kullanıcı Dashboard adımı bekliyor.
+- Preview Auth/MFA/RLS kabul testi: development env sonrasında bekliyor.
+- Geniş CRUD ve production cutover kapsam dışı.
+
+
+
+## Studio Sprint 06 — S06_STUDIO_WORKSTREAM_OK
+
+- Branch: feat/studio-auth-mfa-s06
+- Core base: 02f7c6a
+- Durum: [x] — development ve Preview kabulü tamamlandı
+- Supabase development schema/RLS/Storage/seed: tamamlandı
+- Owner email/password + zorunlu TOTP AAL2: tamamlandı
+- Local ve Vercel Preview kabul testleri: tamamlandı
+- Production Supabase/env/migration: kapsam dışı ve uygulanmadı
+- Geniş CRUD, upload manager ve public cutover: kapsam dışı
+
+## Sprint 06 Integration — S06_INTEGRATION_WORKSTREAM
+
+- Branch entegrasyonu: tamamlandı
+- Conflict çözümü: tamamlandı
+- Birleşik kalite kapıları: tamamlandı
+- Integration handoff: tamamlandı
+- Continuity belgesi: tamamlandı
+- Integration branch push: bu kapanış commit'inden sonra
+- Main merge: kullanıcı onayı bekliyor
+- Production doğrulaması: main push sonrasında

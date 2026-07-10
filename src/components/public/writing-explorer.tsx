@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { WritingSummary } from "@/data/mock-content";
+import type { WritingSummary } from "@/features/public/content/model";
 import { WritingCard } from "@/components/public/writing-card";
 import { Panel } from "@/components/ui/panel";
 

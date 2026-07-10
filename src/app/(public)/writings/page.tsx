@@ -3,10 +3,27 @@ import Link from "next/link";
 import { Panel } from "@/components/ui/panel";
 import { PublishStatusNote } from "@/components/public/publish-status-note";
 import { WritingExplorer } from "@/components/public/writing-explorer";
-import { publishStateLabels, visibilityLabels, writings } from "@/data/mock-content";
+import { publishStateLabels, visibilityLabels } from "@/features/public/content/model";
+import { getPublicContentRepository } from "@/features/public/content/source-selection";
 
-export default function WritingsPage() {
-  const featured = writings.find((writing) => writing.isFeatured) ?? writings[0];
+export default async function WritingsPage() {
+  const repository = getPublicContentRepository();
+  const writings = await repository.listWritings();
+  const featured = (await repository.listFeaturedWritings(1))[0] ?? writings[0];
+
+  if (!featured) {
+    return (
+      <div className="space-y-8 overflow-hidden">
+        <Panel className="p-8 text-center">
+          <h1 className="text-3xl font-semibold">Henüz yayınlanmış yazı yok</h1>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[var(--muted)]">
+            Yeni public yazılar yayınlandığında burada görünecek.
+          </p>
+        </Panel>
+        <WritingExplorer writings={writings} />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8 overflow-hidden">

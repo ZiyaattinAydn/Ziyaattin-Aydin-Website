@@ -1,6 +1,6 @@
 # Supabase Environment Strategy
 
-Durum: **Sprint 05 environment sözleşmesi**. Gerçek değer veya secret içermez.
+Durum: **Sprint 06 runtime sözleşmesi uygulanıyor**. Repository gerçek değer veya secret içermez.
 
 ## Temel kurallar
 
@@ -17,7 +17,7 @@ Durum: **Sprint 05 environment sözleşmesi**. Gerçek değer veya secret içerm
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `NEXT_PUBLIC_SITE_URL` | Public | Evet | `http://localhost:3000` | Doğrulanmış Preview/custom URL | `https://ziyaattin-aydin-website.vercel.app` veya doğrulanmış custom domain | Client + server | Production URL proje bağlamında biliniyor; repository'de secret değil, fakat deploy ortamı ayrıca doğrulanmalı |
 | `NEXT_PUBLIC_SUPABASE_URL` | Public | Evet | Non-production project URL | Non-production project URL | Production project URL | Client + server | Hayır — `USER_APPROVAL_REQUIRED` |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Public publishable/anon key | Evet | Non-production public key | Non-production public key | Production public key | Client + server | Hayır — `USER_APPROVAL_REQUIRED` |
+| `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Public publishable/anon key | Evet | Non-production public key | Non-production public key | Production public key | Client + server | Hayır — `USER_APPROVAL_REQUIRED` |
 | `SUPABASE_SERVICE_ROLE_KEY` | Secret | **Hayır** | Yalnız gerçekten admin server işi gerekiyorsa | Varsayılan olarak tanımlanmaz; gerekiyorsa ayrı non-production secret | Yalnız onaylanmış server-only admin işinde | Server-only admin modülü | Hayır — bu sprintte boş |
 
 ## Önerilen project/environment eşleşmesi
@@ -51,7 +51,7 @@ Kurallar:
 - Preview ve Production farklı project kullanırsa değerler environment seviyesinde ayrılır.
 - URL bilinmeden placeholder dışında değer commit edilmez.
 
-### `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+### `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
 
 - Browser kullanımına uygun public publishable/anon key'dir.
 - Güvenlik anahtarı gibi davranılmamalı; yetki RLS ve grants ile sınırlandırılmalıdır.
@@ -92,3 +92,15 @@ Secret sızıntısı şüphesinde:
 - Service role client güvenlik notu vardır.
 - Production/Preview ayrımı açıklanır.
 - `.env.local` commit edilmez.
+
+## Sprint 06 Uygulama Durumu
+
+- Canonical public key: `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- Runtime validation: client istendiği anda, kontrollü ve generic hata ile
+- Public mock build: Supabase env olmadan başarılı
+- Auth/Studio: env eksikken fail closed
+- Browser client: yalnız project URL + publishable key
+- Server client: async Next.js `cookies()` adapter'ı
+- Service role: normal akışta kullanılmıyor; gerçek değer eklenmedi
+- Local ve Vercel Preview: development Supabase project'i kullanacak
+- Vercel Production: production project oluşturulana kadar Supabase env tanımlanmayacak
