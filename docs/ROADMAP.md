@@ -108,3 +108,21 @@ Production Supabase ve geniş Studio CRUD sonraki onaylı fazlara bırakılmış
 - [x] Local ve Vercel Preview kabul testleri
 - [x] MFA recovery/reset ve ikinci faktör yaklaşımı
 - [~] Faz 3 devam ediyor: production cutover ve geniş CRUD sonraki sprintlerde
+
+## Sprint 06 Integration Sonrası — S06_INTEGRATION_ROADMAP
+
+Sıradaki zorunlu adımlar:
+
+1. Kullanıcı main merge onayı
+2. Integration branch'in main'e kontrollü merge'i
+3. Main final kalite kapıları
+4. Main push
+5. Production deployment doğrulaması
+
+Sonraki sprint adayları:
+
+- Production Supabase hazırlığı
+- Public database cutover
+- Geniş Studio CRUD
+- PWA
+- Audit advisory için güvenli upstream güncelleme

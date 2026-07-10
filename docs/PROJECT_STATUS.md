@@ -198,3 +198,11 @@ runtime kabul testleri dış ortam adımı olarak bekliyor.
 - [!] Yaklaşık 8 saat session time-box Free plan/Dashboard sınırlaması nedeniyle
   uygulanmadı; per-request AAL2 guard ve 15 dakikalık AAL1 sınırı aktif.
 - [!] npm audit iki moderate GHSA-qx2v-qp2m-jg93 uyarısını izlemeye devam ediyor.
+
+## Sprint 06 Integration — S06_INTEGRATION_STATUS
+
+Durum: `READY_FOR_MAIN_APPROVAL`
+
+Core, Public ve Studio Sprint 06 feature branch'leri `integration/sprint-06` üzerinde birleşmiştir. Birleşik statik testler, lint, typecheck, env'siz build ve security source taramaları başarılıdır.
+
+Main merge ve Production deployment henüz yapılmamıştır.

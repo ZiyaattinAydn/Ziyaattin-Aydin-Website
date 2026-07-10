@@ -200,3 +200,13 @@ runbook’u kullanılır.
 - Free plan/Dashboard'da yaklaşık 8 saat time-box sağlanamadığında özel session
   API yazılmaz; AAL1 15 dakika ile sınırlanır ve Studio her request'te current
   AAL2 kontrol eder.
+
+## Sprint 06 Integration Kararı — S06_INTEGRATION_DECISION
+
+- Merge sırası Core → Public → Studio olarak uygulandı.
+- Development ve Production Supabase ayrımı korunmuştur.
+- Production Supabase bu sprintte oluşturulmamış ve migration uygulanmamıştır.
+- Production Public source mock kalır.
+- Auth ve Studio env yokken fail closed kalır.
+- TOTP ve current AAL2 zorunluluğu korunmuştur.
+- Main merge ve push için açık kullanıcı onayı zorunludur.

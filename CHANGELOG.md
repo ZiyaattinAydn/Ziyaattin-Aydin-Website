@@ -1,3 +1,15 @@
+## Sprint 06 Integration — 2026-07-10
+
+Marker: `S06_INTEGRATION_CHANGELOG`
+
+- Core Supabase runtime, Public repository adapter ve Studio Auth/TOTP/AAL2 branch'leri kontrollü sırayla birleştirildi.
+- Tracking conflict'leri Core, Public ve Studio kayıtları korunarak çözüldü.
+- Hosted development Supabase kabul sonuçları integration kayıtlarına işlendi.
+- Public policy testleri 7/7, Studio verifier'ları, lint, typecheck ve env'siz production build başarılıdır.
+- Owner identity literal'i verifier betiklerinden kaldırıldı.
+- Audit sonucu bilinen 2 moderate advisory'dir; breaking `npm audit fix --force` uygulanmadı.
+- Integration branch main onay kapısına hazırdır.
+
 ## Sprint 06 Public — 2026-07-10
 
 ### Added

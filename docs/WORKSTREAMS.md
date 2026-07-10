@@ -172,3 +172,14 @@ Notlar:
 - Local ve Vercel Preview kabul testleri: tamamlandı
 - Production Supabase/env/migration: kapsam dışı ve uygulanmadı
 - Geniş CRUD, upload manager ve public cutover: kapsam dışı
+
+## Sprint 06 Integration — S06_INTEGRATION_WORKSTREAM
+
+- Branch entegrasyonu: tamamlandı
+- Conflict çözümü: tamamlandı
+- Birleşik kalite kapıları: tamamlandı
+- Integration handoff: tamamlandı
+- Continuity belgesi: tamamlandı
+- Integration branch push: bu kapanış commit'inden sonra
+- Main merge: kullanıcı onayı bekliyor
+- Production doğrulaması: main push sonrasında
