@@ -50,11 +50,17 @@ export function MfaForm({ mode, nextPath }: MfaFormProps) {
       throw error;
     }
 
-    const nextFactors: TotpFactor[] = data.totp.map((factor) => ({
-      id: factor.id,
-      friendlyName: factor.friendly_name || "Authenticator",
-      status: factor.status === "verified" ? "verified" : "unverified",
-    }));
+    const nextFactors: TotpFactor[] = data.totp.map(
+      (factor: {
+        id: string;
+        friendly_name?: string | null;
+        status?: string | null;
+      }) => ({
+        id: factor.id,
+        friendlyName: factor.friendly_name || "Authenticator",
+        status: factor.status === "verified" ? "verified" : "unverified",
+      }),
+    );
 
     setFactors(nextFactors);
 
@@ -74,20 +80,23 @@ export function MfaForm({ mode, nextPath }: MfaFormProps) {
   useEffect(() => {
     let isActive = true;
 
-    void loadFactors()
-      .catch(() => {
-        if (isActive) {
-          setErrorMessage(genericMfaError);
-        }
-      })
-      .finally(() => {
-        if (isActive) {
-          setIsLoading(false);
-        }
-      });
+    const timeoutId = window.setTimeout(() => {
+      void loadFactors()
+        .catch(() => {
+          if (isActive) {
+            setErrorMessage(genericMfaError);
+          }
+        })
+        .finally(() => {
+          if (isActive) {
+            setIsLoading(false);
+          }
+        });
+    }, 0);
 
     return () => {
       isActive = false;
+      window.clearTimeout(timeoutId);
     };
   }, [loadFactors]);
 
