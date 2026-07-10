@@ -133,3 +133,23 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [!] Sprint 06 ve gerçek SQL uygulaması karar kapısı tamamlanana kadar başlamamalı.
 - [x] Gerçek secret, Supabase URL/key veya owner UUID repository'ye eklenmedi.
 - [x] Production uygulaması mock davranışını koruyor.
+
+## Sprint 06 — Core Supabase Runtime
+
+- [x] Branch: `feat/core-supabase-runtime-s06`
+- [x] Başlangıç main commit'i: `0c9d1bb`
+- [x] Runtime foundation commit'i: `6d51ff3`
+- [x] `@supabase/supabase-js@2.110.2` ve `@supabase/ssr@0.12.0` eklendi.
+- [x] Canonical env adı `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` olarak uygulandı.
+- [x] Browser, server ve Proxy Supabase client factory'leri eklendi.
+- [x] Next.js 16 `src/proxy.ts` session refresh ve erken redirect sınırı eklendi.
+- [x] Güvenli redirect, trusted user, active owner ve current `aal2` helper'ları eklendi.
+- [x] Env yokken Public mock production build'i başarılı.
+- [x] Env yokken Auth ve Studio fail closed.
+- [x] Runtime test, lint, typecheck ve build başarılı.
+- [x] Branch `origin/feat/core-supabase-runtime-s06` üzerine pushlandı; Vercel Preview runtime env değerleri bekleniyor.
+- [!] `npm audit`: 2 moderate, `GHSA-qx2v-qp2m-jg93`; force fix uygulanmadı.
+- [x] Gerçek Supabase URL, key, password veya owner UUID repository'ye eklenmedi.
+- [ ] Development Supabase project ve gerçek Preview runtime env kurulumu Core repository değişikliği dışında tamamlanacak.
+- [ ] SQL uygulaması, seed, owner Auth hesabı, Login/TOTP UI, Studio route entegrasyonu, CRUD ve Storage ayrı işlerde tamamlanacak.
+- [ ] Production Supabase project/env/migration ayrıca onay bekliyor.

@@ -1,6 +1,6 @@
 # Auth Session and Guard Architecture
 
-Durum: **Öneri / kullanıcı onayı bekliyor.** Gerçek Auth, Proxy veya route guard implementasyonu yapılmamıştır.
+Durum: **Sprint 06 runtime temeli uygulandı.** Login/MFA UI ve gerçek Supabase runtime değerleri Studio hattında tamamlanacaktır.
 
 ## Önerilen baseline
 
@@ -125,3 +125,17 @@ Plan desteklemeyen özellikler uygulanmış gibi belgelenmemelidir.
 - Session inactivity/time-box/single-session değerleri ve plan uyumu
 - Recovery prosedürü ve backup factor
 - Auth implementasyonuna Sprint 06'da başlanması
+
+## Sprint 06 Uygulama Kaydı
+
+- Next.js 16 Proxy: `src/proxy.ts`
+- Proxy matcher: yalnız `/login` ve `/studio/:path*`
+- Session refresh adapter: `src/lib/supabase/proxy.ts`
+- Güvenli internal redirect: `src/lib/auth/safe-redirect.ts`
+- Trusted user / owner / MFA helper: `src/lib/auth/studio-authorization.ts`
+- Saf owner ve AAL kuralları: `src/lib/auth/studio-authorization-rules.ts`
+- Studio için yalnız current `aal2` kabul edilir.
+- Owner kontrolü `owner_profiles.user_id`, `status = active` ve `role IN (owner, admin)` üzerinden yapılır.
+- Client metadata, e-posta string'i ve service-role bypass yetkilendirme kaynağı değildir.
+- Proxy nihai authorization katmanı değildir; Studio server layout ve mutation katmanı helper'ı yeniden kullanmalıdır.
+- Login formu, TOTP enrollment/challenge UI ve Studio layout entegrasyonu Studio hattına aittir.

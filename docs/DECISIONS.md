@@ -135,3 +135,22 @@ Bu maddeler implementasyon kararı değildir. `docs/supabase/SPRINT_06_APPROVAL_
 - Her adım ayrı stop point'tir; başarısız adım sonrası ilerlenmez.
 - Preview kabulü, backup ve kullanıcı onayı olmadan Production migration çalıştırılmaz.
 - Uygulanmış migration sessizce değiştirilmez; düzeltme yeni migration dosyasıdır.
+
+## Sprint 06 — Onaylanan Supabase Runtime Kararları
+
+- Development ve Production ayrı Supabase project kullanacak.
+- Development region: **APAC — Southeast Asia (Singapore)**.
+- Local development ve Vercel Preview aynı development project'i kullanabilir.
+- Production Supabase environment değerleri Sprint 06 Core kapsamında eklenmeyecek.
+- Canonical browser-safe key adı `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`.
+- İlk Auth provider email/password; magic link ilk sürümde kapalı.
+- Studio erişimi için TOTP ve current `aal2` zorunlu.
+- Owner yetkisi active `owner_profiles` kaydı ve Auth UUID ile belirlenir.
+- Client metadata veya e-posta string'i authorization kaynağı değildir.
+- Yaklaşık 8 saatlik Studio session hedeflenir; plan desteği Dashboard kurulumu sırasında doğrulanır.
+- `public-assets` ve `private-files` ayrı bucket olarak kullanılacak.
+- Public dosya limiti 10 MB, private dosya limiti 25 MB.
+- Public MIME allowlist JPEG, PNG, WebP ve AVIF.
+- Sprint 05 SQL paketi ve development seed development project'te kontrollü sırayla çalıştırılabilir.
+- Production migration Preview kabulünden sonra ayrı kullanıcı onayı gerektirir.
+- Service role normal Auth, Public veya Studio CRUD akışında kullanılmaz.

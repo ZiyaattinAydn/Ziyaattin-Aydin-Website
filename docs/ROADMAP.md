@@ -65,3 +65,17 @@ Faz 3 yalnız mimari hazırlık düzeyinde `[~]` kabul edilmelidir; gerçek Auth
 - Storage bucket oluşturma: `[ ]`
 - Studio route guard ve CRUD: `[ ]`
 - Sprint 06 başlangıcı: `[!] USER_APPROVAL_REQUIRED`
+
+## Sprint 06 Core Sonrası Durum
+
+- Faz 3 Auth ve güvenlik temeli: `[~]`
+- Supabase SSR/runtime foundation: `[x]`
+- Environment fail-closed sınırı: `[x]`
+- Browser/server/Proxy client altyapısı: `[x]`
+- Studio trusted user + active owner + current `aal2` helper'ı: `[x]`
+- Development Supabase project kurulumu: `[ ]`
+- SQL migration ve development seed: `[ ]`
+- Login/password ve TOTP UI: `[ ]`
+- Studio server layout entegrasyonu: `[ ]`
+- Public database adapter/cutover: `[ ]`
+- Production Supabase project/env/migration: `[!] ayrı onay gerekli`

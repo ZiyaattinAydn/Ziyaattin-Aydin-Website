@@ -1,6 +1,6 @@
 # Supabase Architecture Contract
 
-Durum: **Sprint 05 mimari sözleşmesi**. Bu belge uygulanabilir teknik sınırları tanımlar; gerçek Supabase projesi, client kodu, SQL migration, Auth, Proxy/route guard, Storage veya secret kurulumu içermez.
+Durum: **Sprint 06 runtime temeli uygulandı.** Supabase client, Proxy ve server-side authorization yardımcıları eklendi; gerçek project/secret, SQL uygulaması, Login/MFA UI, CRUD ve Storage işlemleri ayrı işlerde tamamlanacaktır.
 
 ## Amaç
 
@@ -152,3 +152,17 @@ Bu belgedeki mimari **önerilen baseline** niteliğindedir. Bölge, provider, MF
 - Supabase RLS: https://supabase.com/docs/guides/database/postgres/row-level-security
 - Supabase Storage access control: https://supabase.com/docs/guides/storage/security/access-control
 - Next.js 16 Proxy convention: https://nextjs.org/docs/app/api-reference/file-conventions/proxy
+
+## Sprint 06 Runtime Uygulaması
+
+Core Sprint 06 ile aşağıdaki mimari parçalar kaynak koda taşındı:
+
+- `@supabase/supabase-js@2.110.2`
+- `@supabase/ssr@0.12.0`
+- Lazy ve fail-closed environment validation
+- Browser ve request-scoped server client factory'leri
+- Next.js 16 `src/proxy.ts` session refresh ve erken redirect sınırı
+- Server-only trusted user, active owner ve current `aal2` authorization helper'ı
+- Redirect, environment, AAL ve owner kuralları için Node tabanlı runtime doğrulama betiği
+
+Production mock davranışı korunur. Gerçek Supabase project değerleri, SQL uygulaması, Login/MFA UI, Studio CRUD, Storage upload ve Public database cutover bu Core değişikliğinde yapılmaz.
