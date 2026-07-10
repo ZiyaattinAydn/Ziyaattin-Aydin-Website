@@ -4,7 +4,8 @@ import { Panel } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/tag";
 import { DetailSection } from "@/components/public/detail-section";
 import { StatusPill } from "@/components/public/status-pill";
-import { getProjectActions, projects, publishStateLabels, visibilityLabels } from "@/data/mock-content";
+import { PublishStatusNote } from "@/components/public/publish-status-note";
+import { getProjectActions, linkApprovalLabels, projects, publishFlowStateLabels, publishStateLabels } from "@/data/mock-content";
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -30,6 +31,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </span>
             <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--muted)]">
               {publishStateLabels[project.publishState]}
+            </span>
+            <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--accent)]">
+              Yayın akışı: {publishFlowStateLabels[project.publishFlowState]}
             </span>
           </div>
           <h1 className="mt-6 max-w-4xl text-4xl font-semibold tracking-tight break-words sm:text-5xl lg:text-6xl">
@@ -61,9 +65,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </p>
             <h2 className="mt-3 text-2xl font-semibold">Doğrulanmış link yoksa pasif kalır</h2>
             <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{project.visibilityNote}</p>
-            <p className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
-              {visibilityLabels[project.visibility]} · {project.sourceNote}
-            </p>
+            <div className="mt-3">
+              <PublishStatusNote
+                publishFlowState={project.publishFlowState}
+                visibility={project.visibility}
+                sourceNote={project.sourceNote}
+                approvalNote={project.approvalNote}
+              />
+            </div>
           </div>
           <div className="mt-6 space-y-3">
             {getProjectActions(project).map((link) => (
@@ -71,7 +80,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <p className="font-semibold">{link.label}</p>
                   <span className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--muted)]">
-                    {link.disabledLabel}
+                    {link.disabledLabel} · {linkApprovalLabels[link.approvalState]}
                   </span>
                 </div>
                 <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{link.note}</p>

@@ -1,9 +1,10 @@
 import Link from "next/link";
 import type { ProjectSummary } from "@/data/mock-content";
-import { publishStateLabels, visibilityLabels } from "@/data/mock-content";
+import { publishStateLabels } from "@/data/mock-content";
 import { Panel } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/tag";
 import { StatusPill } from "@/components/public/status-pill";
+import { PublishStatusNote } from "@/components/public/publish-status-note";
 
 export function ProjectCard({ project }: { project: ProjectSummary }) {
   return (
@@ -29,9 +30,6 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
         <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1">
           {publishStateLabels[project.publishState]}
         </span>
-        <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1">
-          {visibilityLabels[project.visibility]}
-        </span>
       </div>
 
       <p className="mt-4 text-sm font-medium leading-6 text-[var(--foreground)]">{project.statusLabel}</p>
@@ -53,9 +51,17 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
         ))}
       </div>
 
-      <div className="mt-5 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
-        {project.visibilityNote}
-        <span className="mt-2 block text-[var(--foreground)]">{project.sourceNote}</span>
+      <div className="mt-5 space-y-3">
+        <p className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
+          {project.visibilityNote}
+        </p>
+        <PublishStatusNote
+          publishFlowState={project.publishFlowState}
+          visibility={project.visibility}
+          sourceNote={project.sourceNote}
+          approvalNote={project.approvalNote}
+          compact
+        />
       </div>
 
       <Link

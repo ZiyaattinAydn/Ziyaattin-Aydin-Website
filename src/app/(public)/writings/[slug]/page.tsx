@@ -4,8 +4,9 @@ import { notFound } from "next/navigation";
 import { Panel } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/tag";
 import { DetailSection } from "@/components/public/detail-section";
+import { PublishStatusNote } from "@/components/public/publish-status-note";
 import { WritingCard } from "@/components/public/writing-card";
-import { publishStateLabels, visibilityLabels, writings } from "@/data/mock-content";
+import { linkApprovalLabels, publishFlowStateLabels, publishStateLabels, visibilityLabels, writings } from "@/data/mock-content";
 
 export default async function WritingDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -36,6 +37,8 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
             <span>{publishStateLabels[writing.publishState]}</span>
             <span>·</span>
             <span>{visibilityLabels[writing.visibility]}</span>
+            <span>·</span>
+            <span>{publishFlowStateLabels[writing.publishFlowState]}</span>
           </div>
           <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight tracking-tight break-words sm:text-5xl lg:text-6xl">
             {writing.title}
@@ -88,9 +91,14 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
           </div>
 
           <DetailSection eyebrow="Yayın notu" title="Bu içerik henüz gerçek yayın değildir" description={writing.placeholderNote}>
-            <div className="space-y-2 text-sm leading-6 text-[var(--muted)]">
+            <div className="space-y-4 text-sm leading-6 text-[var(--muted)]">
               <p>Son güncelleme etiketi: {writing.updatedLabel}</p>
-              <p>{writing.sourceNote}</p>
+              <PublishStatusNote
+                publishFlowState={writing.publishFlowState}
+                visibility={writing.visibility}
+                sourceNote={writing.sourceNote}
+                approvalNote={writing.approvalNote}
+              />
             </div>
           </DetailSection>
 
@@ -115,6 +123,7 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
                     >
                       <p className="font-semibold text-[var(--foreground)]">{externalLink.label}</p>
                       <p className="mt-2 leading-6">{externalLink.note}</p>
+                      <p className="mt-2 text-xs text-[var(--accent)]">{linkApprovalLabels[externalLink.approvalState]}</p>
                     </div>
                   ),
                 )}

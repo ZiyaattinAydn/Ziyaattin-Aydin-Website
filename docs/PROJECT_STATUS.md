@@ -176,3 +176,13 @@ Sprint 03 Core branch entegrasyonundan sonra Public Content ve Studio Data Sprin
 - [!] `npm audit` çıktısında 2 moderate vulnerability izlenmeye devam ediyor; `npm audit fix --force` çalıştırılmadı ve çalıştırılmamalı.
 - [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
 - [!] Hakkımda portresi kullanıcı doğrulaması bekleyen aday portre olarak kalmalı.
+
+## Public Sprint 04 Çıktısı
+
+- [x] Public publish flow planı `docs/content/PUBLIC_PUBLISH_FLOW.md` içinde belgelendi.
+- [x] `docs/content/PUBLIC_CONTENT_MODEL.md` publish flow ve Studio alan eşleşmesi açısından güncellendi.
+- [x] Mock content tarafında publish flow state, kullanıcı onayı ve link approval alanları tutarlı hâle getirildi.
+- [x] Proje, yazı, journey ve about public UI alanlarında küçük publish/onay durumu göstergeleri güçlendirildi.
+- [x] Gerçek olmayan demo/GitHub/dış kaynak/contact linkleri aktif bağlantı gibi render edilmedi.
+- [x] Hakkımda portresi aday/doğrulama bekleyen portre olarak korundu.
+- [!] Gerçek Studio publish CRUD, database, Supabase, Auth, Storage veya API implementasyonu bu sprintte yapılmadı.

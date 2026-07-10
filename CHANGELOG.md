@@ -1,12 +1,14 @@
 ## Sprint 03 Integration — 2026-07-07
 
 ### Added
+- Public Sprint 04 için `docs/content/PUBLIC_PUBLISH_FLOW.md` publish akışı planı eklendi.
 - Core Sprint 03: Vercel checklist ve environment contract dokümanları eklendi.
 - Public Sprint 03: public content contract dokümanı eklendi.
 - Studio Sprint 03: Studio data model draft ve auth decision dokümanları eklendi.
 - Sprint 03 entegrasyon handoff kaydı eklendi: `docs/handoffs/2026-07-07-integration-sprint-03.md`.
 
 ### Changed
+- Public Sprint 04 kapsamında publish flow state, kullanıcı onayı ve link approval bilgileri public mock içerik ve UI durum etiketlerinde netleştirildi.
 - Public mock içerikler publish/görünürlük/link güvenliği kararlarına hazırlanacak şekilde genişletildi.
 - Studio mock workflow verisi future DB mapping ve publish queue hazırlığına daha uygun hâle getirildi.
 - Deployment, environment, public publish ve Studio workflow kararları gerçek implementasyon başlamadan önce dokümante edildi.

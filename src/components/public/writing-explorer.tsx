@@ -24,7 +24,16 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
       .filter((writing) => {
         const matchesCategory = category === "Tümü" || writing.category === category;
         const matchesQuery = normalizedQuery
-          ? [writing.title, writing.excerpt, writing.category, writing.sourceNote, writing.publishState, ...writing.tags]
+          ? [
+              writing.title,
+              writing.excerpt,
+              writing.category,
+              writing.sourceNote,
+              writing.approvalNote,
+              writing.publishState,
+              writing.publishFlowState,
+              ...writing.tags,
+            ]
               .join(" ")
               .toLocaleLowerCase("tr-TR")
               .includes(normalizedQuery)

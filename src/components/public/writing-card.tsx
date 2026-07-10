@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { WritingSummary } from "@/data/mock-content";
-import { publishStateLabels, visibilityLabels } from "@/data/mock-content";
+import { publishStateLabels } from "@/data/mock-content";
 import { Panel } from "@/components/ui/panel";
+import { PublishStatusNote } from "@/components/public/publish-status-note";
 
 export function WritingCard({ writing }: { writing: WritingSummary }) {
   return (
@@ -16,8 +17,14 @@ export function WritingCard({ writing }: { writing: WritingSummary }) {
       </div>
       <h2 className="mt-4 text-xl font-semibold leading-snug break-words">{writing.title}</h2>
       <p className="mt-3 flex-1 text-sm leading-6 text-[var(--muted)]">{writing.excerpt}</p>
-      <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
-        {visibilityLabels[writing.visibility]} · {writing.sourceNote}
+      <div className="mt-4">
+        <PublishStatusNote
+          publishFlowState={writing.publishFlowState}
+          visibility={writing.visibility}
+          sourceNote={writing.sourceNote}
+          approvalNote={writing.approvalNote}
+          compact
+        />
       </div>
       <div className="mt-4 flex flex-wrap gap-2">
         {writing.tags.slice(0, 3).map((tag) => (
