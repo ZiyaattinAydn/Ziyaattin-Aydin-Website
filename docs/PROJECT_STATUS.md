@@ -116,3 +116,20 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [!] `npm audit` 2 moderate vulnerability göstermeye devam ediyor.
 - [ ] Supabase/Auth/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
 - [!] Hakkımda portresi ve gerçek linkler kullanıcı onayı bekliyor.
+
+## Sprint 05 Entegrasyon Özeti
+
+- [m] Core Sprint 05 Supabase mimari sınırları entegrasyona alındı.
+- [m] Public Sprint 05 database transition sözleşmesi entegrasyona alındı.
+- [m] Studio Sprint 05 çalıştırılabilir SQL paketi entegrasyona alındı.
+- [m] Integration Sprint 05 SQL güvenlik ve sözleşme denetimi tamamlandı.
+- [m] SQL package prepared.
+- [ ] Supabase project created.
+- [ ] SQL applied.
+- [ ] Auth implemented.
+- [ ] RLS applied/tested on a real project.
+- [ ] Storage created.
+- [!] Final kullanıcı karar kapısı `USER_APPROVAL_REQUIRED`.
+- [!] Sprint 06 ve gerçek SQL uygulaması karar kapısı tamamlanana kadar başlamamalı.
+- [x] Gerçek secret, Supabase URL/key veya owner UUID repository'ye eklenmedi.
+- [x] Production uygulaması mock davranışını koruyor.

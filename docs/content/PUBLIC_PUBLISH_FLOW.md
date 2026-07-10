@@ -131,3 +131,12 @@ Public UI küçük ve sakin durum etiketleri kullanır:
 - Arşiv
 
 Bu etiketler debug paneli gibi büyük gösterilmez; ancak ziyaretçiye gerçek olmayan veya onay bekleyen içeriğin production iddiası taşımadığını anlatır.
+
+## Sprint 05 database geçişi sınırı
+
+Database geçişi için canonical workflow ve görünürlük ayrı tutulur:
+
+- `publish_state`: `draft`, `review`, `approved`, `published`, `unpublished`, `archived`
+- `visibility`: `public`, `hidden`, `private`
+
+Anonymous public okuma yalnız `publish_state = published` ve `visibility = public` birleşiminde mümkündür. Link ve image/portrait approval bu iki koşuldan bağımsızdır. Ayrıntılar `PUBLIC_VISIBILITY_RULES.md`, `PUBLIC_QUERY_CONTRACT.md` ve `PUBLIC_APPROVAL_RULES.md` içindedir.
