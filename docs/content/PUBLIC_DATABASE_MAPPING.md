@@ -17,7 +17,7 @@
 | — | `id` | `uuid` | Hayır | Hayır | Sistem | Hayır | Yok | Primary key. |
 | — | `owner_id` | `uuid` | Hayır | Hayır | Sistem/owner | Hayır | Yok | `auth.users(id)` ilişkisi; response dışı. |
 | `visibility` | `visibility` | enum/text | Hayır | Dolaylı | Evet | Evet | Public değilse `notFound()` | Hedef değerler: `public`, `hidden`, `private`. Eski `unlisted`, karar verilene kadar `hidden` kabul edilir. |
-| `publishState` / `publishFlowState` | `publish_state` | enum/text | Hayır | Dolaylı | Evet | Evet | Published değilse `notFound()` | Hedef değerler: `draft`, `review`, `approved`, `published`, `archived`. Tek canonical workflow alanına indirgenir. |
+| `publishState` / `publishFlowState` | `publish_state` | enum/text | Hayır | Dolaylı | Evet | Evet | Published değilse `notFound()` | Hedef değerler: `draft`, `review`, `approved`, `published`, `unpublished`, `archived`. Tek canonical workflow alanına indirgenir. |
 | `isFeatured` | `is_featured` | boolean | Hayır | Evet | Evet | Hayır | `false` | Featured olmak görünürlük sağlamaz. |
 | `sourceNote` | `source_note` | text | Evet | Sınırlı | Evet | Evet | UI'da gösterilmez | Production'da internal not olabilir; public response'a yalnız açıkça public-safe ise alınır. |
 | `approvalNote` | `approval_note` veya review metadata | text | Evet | Hayır | Evet | Evet | Gösterilmez | Public UI debug/review notu olarak taşınmamalı. |
@@ -134,7 +134,7 @@ Queue yalnız Studio/owner erişimindedir. Onay tamamlandığında canonical con
 - Project ve writing içindeki sıralı bloklar JSONB mi yoksa ilişkisel alt tablolar mı olacak?
 - Link approval tek kolon mu, link başına ayrı kolon/metadata mı olacak?
 - `owner_profiles` public profil ile private owner settings'i aynı tabloda mı, ayrı tablolarda mı tutacak?
-- `unlisted` kaldırılıp `hidden` olarak mı normalize edilecek?
+- Eski `unlisted` değeri database geçişinde `hidden` olarak normalize edilir; anonymous erişim sağlamaz.
 - Slug değişiklikleri redirect geçmişi gerektirecek mi?
 - Public-safe view veya materialized view kullanılacak mı?
 

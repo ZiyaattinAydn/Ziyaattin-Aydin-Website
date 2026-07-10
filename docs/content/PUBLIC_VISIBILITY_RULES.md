@@ -6,7 +6,7 @@
 
 Workflow ve görünürlük tek enum içinde birleştirilmemelidir:
 
-- `publish_state`: `draft`, `review`, `approved`, `published`, `archived`
+- `publish_state`: `draft`, `review`, `approved`, `published`, `unpublished`, `archived`
 - `visibility`: `public`, `hidden`, `private`
 
 Public erişim için **iki koşul birlikte** sağlanır:
@@ -25,6 +25,7 @@ publish_state = published AND visibility = public
 | `review` | Hayır | Hayır | Hayır | Evet | `noindex` | `notFound()` | Review token/session ile ileride desteklenebilir. |
 | `approved` | Hayır | Hayır | Hayır | Evet | `noindex` | `notFound()` | Publish öncesi owner preview desteklenebilir. |
 | `published` + `public` | Evet | Evet | Evet | Evet | Index alabilir | Normal render | Gerekmez. |
+| `unpublished` | Hayır | Hayır | Hayır | Evet | `noindex` | `notFound()` | Önceki yayın içeriği cache ve sitemap'ten düşürülür. |
 | `archived` | Varsayılan hayır | Hayır | Hayır | Evet | `noindex` | Şimdilik `notFound()` | İleride public arşiv kararıyla değişebilir. |
 | `hidden` | Hayır | Hayır | Hayır | Evet | `noindex` | `notFound()` | Owner-only preview olabilir. |
 | `private` | Hayır | Hayır | Hayır | Evet | `noindex` | `notFound()` | Public route üzerinden preview önerilmez. |
@@ -37,6 +38,7 @@ Public detail route aşağıdaki kayıtlar arasında farklı mesaj üretmez:
 - draft,
 - review,
 - approved ama yayınlanmamış,
+- unpublished,
 - archived,
 - hidden,
 - private,

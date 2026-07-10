@@ -18,7 +18,7 @@ comment on schema private is
 
 create type public.studio_role as enum ('owner', 'admin');
 create type public.owner_profile_status as enum ('pending', 'active', 'disabled');
-create type public.app_visibility as enum ('private', 'public');
+create type public.app_visibility as enum ('private', 'hidden', 'public');
 create type public.app_publish_state as enum (
   'draft',
   'review',

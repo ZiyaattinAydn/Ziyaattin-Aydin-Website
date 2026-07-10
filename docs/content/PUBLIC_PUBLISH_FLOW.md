@@ -136,7 +136,7 @@ Bu etiketler debug paneli gibi büyük gösterilmez; ancak ziyaretçiye gerçek 
 
 Database geçişi için canonical workflow ve görünürlük ayrı tutulur:
 
-- `publish_state`: `draft`, `review`, `approved`, `published`, `archived`
+- `publish_state`: `draft`, `review`, `approved`, `published`, `unpublished`, `archived`
 - `visibility`: `public`, `hidden`, `private`
 
 Anonymous public okuma yalnız `publish_state = published` ve `visibility = public` birleşiminde mümkündür. Link ve image/portrait approval bu iki koşuldan bağımsızdır. Ayrıntılar `PUBLIC_VISIBILITY_RULES.md`, `PUBLIC_QUERY_CONTRACT.md` ve `PUBLIC_APPROVAL_RULES.md` içindedir.
