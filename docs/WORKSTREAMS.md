@@ -22,7 +22,7 @@
 - Sprint 03 notu: Vercel checklist ve env sözleşmesi hazırlandı; gerçek Vercel doğrulaması yapılmadı; Supabase/Auth implementasyonu başlatılmadı
 
 ### Pencere 2 — Public Content
-- Branch: `feat/public-publish-plan-s04`
+- Branch: `feat/public-content-s03`
 - Durum: `[ ]`
 - Sahiplik: public içerik düzeni, mock content genişletme, kullanıcı onayı gerektiren public detaylar
 
