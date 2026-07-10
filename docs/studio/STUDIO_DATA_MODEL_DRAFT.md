@@ -299,3 +299,14 @@ Studio owner ayarları, kimlik doğrulama tercihleri, public profil kararları v
 - Storage bucket private/public ayrımı nasıl yapılacak?
 - Soft delete mi, archive modeli mi kullanılacak?
 - Owner settings hangi fazda ve hangi route altında açılacak?
+
+## Sprint 05 yürütülebilir SQL eşlemesi
+
+- Initial schema: `supabase/migrations/202607100001_initial_schema.sql`
+- Function ve trigger'lar: `supabase/migrations/202607100002_database_functions.sql`
+- RLS politikaları: `supabase/migrations/202607100003_rls_policies.sql`
+- Storage bucket ve policy'leri: `supabase/migrations/202607100004_storage_setup.sql`
+- Development seed: `supabase/seed/202607100001_development_seed.sql`
+- Destructive rollback: `supabase/rollback/202607100001_rollback_sprint_05.sql`
+
+Sprint 05 SQL isimleri, bu draft'taki `studio_*` kavramsal adlarını uygulama tarafında daha kısa public schema tablo adlarına (`projects`, `tasks`, `notes`, `files`) dönüştürür. Entegrasyon sırasında Core/Public content mapping ile kolon isimleri ayrıca karşılaştırılmalıdır.
