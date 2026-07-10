@@ -6,15 +6,21 @@ import { PublicSection } from "@/components/public/public-section";
 import { PublicStatCard } from "@/components/public/public-stat-card";
 import { TimelineCard } from "@/components/public/timeline-card";
 import { WritingCard } from "@/components/public/writing-card";
-import { journeyItems, projects, writings } from "@/data/mock-content";
+import { getPublicContentRepository } from "@/features/public/content/source-selection";
 
-const activeProjectCount = projects.filter((project) => project.status === "Devam Ediyor").length;
-const completedProjectCount = projects.filter((project) => project.status === "Tamamlandı").length;
-const draftWritingCount = writings.filter((writing) => writing.publishState === "draft").length;
+export default async function HomePage() {
+  const repository = getPublicContentRepository();
+  const [projects, writings, journeyItems, featuredProjects, featuredWritings] = await Promise.all([
+    repository.listProjects(),
+    repository.listWritings(),
+    repository.listJourneyItems(),
+    repository.listFeaturedProjects(3),
+    repository.listFeaturedWritings(2),
+  ]);
 
-export default function HomePage() {
-  const featuredProjects = projects.filter((project) => project.isFeatured).slice(0, 3);
-  const featuredWritings = writings.filter((writing) => writing.isFeatured).slice(0, 2);
+  const activeProjectCount = projects.filter((project) => project.status === "Devam Ediyor").length;
+  const completedProjectCount = projects.filter((project) => project.status === "Tamamlandı").length;
+  const draftWritingCount = writings.filter((writing) => writing.publishState === "draft").length;
 
   return (
     <div className="space-y-10 overflow-hidden">
@@ -81,11 +87,15 @@ export default function HomePage() {
         href="/projects"
         linkLabel="Tüm projeler"
       >
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {featuredProjects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
-          ))}
-        </div>
+        {featuredProjects.length > 0 ? (
+          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {featuredProjects.map((project) => (
+              <ProjectCard key={project.slug} project={project} />
+            ))}
+          </div>
+        ) : (
+          <RepositoryEmptyState label="Henüz öne çıkan yayınlanmış proje yok." />
+        )}
       </PublicSection>
 
       <div className="grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
@@ -96,11 +106,15 @@ export default function HomePage() {
           href="/writings"
           linkLabel="Tüm yazılar"
         >
-          <div className="grid gap-4 md:grid-cols-2">
-            {featuredWritings.map((writing) => (
-              <WritingCard key={writing.slug} writing={writing} />
-            ))}
-          </div>
+          {featuredWritings.length > 0 ? (
+            <div className="grid gap-4 md:grid-cols-2">
+              {featuredWritings.map((writing) => (
+                <WritingCard key={writing.slug} writing={writing} />
+              ))}
+            </div>
+          ) : (
+            <RepositoryEmptyState label="Henüz öne çıkan yayınlanmış yazı yok." />
+          )}
         </PublicSection>
 
         <Panel className="p-5 sm:p-6">
@@ -114,7 +128,7 @@ export default function HomePage() {
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <MiniStat label="Aktif kategori" value="Mock" />
             <MiniStat label="Yayın modu" value="Onay bekliyor" />
-            <MiniStat label="Veri kaynağı" value="Mock" />
+            <MiniStat label="Veri kaynağı" value={repository.source === "mock" ? "Mock" : "Supabase"} />
             <MiniStat label="Link durumu" value="Pasif" />
           </div>
         </Panel>
@@ -127,11 +141,15 @@ export default function HomePage() {
         href="/journey"
         linkLabel="Yolculuğu gör"
       >
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-          {journeyItems.map((item) => (
-            <TimelineCard key={item.marker} item={item} compact />
-          ))}
-        </div>
+        {journeyItems.length > 0 ? (
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {journeyItems.map((item) => (
+              <TimelineCard key={item.marker} item={item} compact />
+            ))}
+          </div>
+        ) : (
+          <RepositoryEmptyState label="Henüz yayınlanmış yolculuk kaydı yok." />
+        )}
       </PublicSection>
     </div>
   );
@@ -143,5 +161,13 @@ function MiniStat({ value, label }: { value: string; label: string }) {
       <p className="font-semibold text-[var(--foreground)]">{value}</p>
       <p className="mt-1 text-xs text-[var(--muted)]">{label}</p>
     </div>
+  );
+}
+
+function RepositoryEmptyState({ label }: { label: string }) {
+  return (
+    <Panel className="p-6 text-center">
+      <p className="text-sm leading-6 text-[var(--muted)]">{label}</p>
+    </Panel>
   );
 }

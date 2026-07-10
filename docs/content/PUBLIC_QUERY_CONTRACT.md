@@ -134,4 +134,15 @@ Database row doğrudan component props olarak kullanılmamalıdır. Arada public
 4. null/default normalizasyonu,
 5. yalnız public-safe DTO üretimi.
 
-Bu sprintte mapper kodu yazılmaz.
+Sprint 05 kapsamında mapper kodu yazılmamıştı. Sprint 06 implementasyon durumu aşağıda kayıtlıdır.
+
+## Sprint 06 implementasyon durumu
+
+- Route ve client component'ler mock dosyasına doğrudan bağımlı olmaktan çıkarıldı.
+- Public-safe mapper, repository interface ve dependency-free Supabase query-reader sınırı eklendi.
+- Projects, writings ve journey için explicit select kolonları ile canonical anonymous filtreleri kodlandı.
+- Production source bu sprintte mock'a kilitli kaldı; gerçek database cutover yapılmadı.
+- Supabase reader aktifken query hatası mock fallback yapmaz ve kontrollü repository unavailable hatasına gider.
+- Public profile şeması eksik olduğu için Supabase About/profile read aktive edilmedi.
+
+Ayrıntılı implementasyon kaydı: `docs/content/PUBLIC_REPOSITORY_BOUNDARY.md`.

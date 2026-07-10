@@ -32,3 +32,9 @@
 4. Görünür olmayan kayıtlar için tek public response `notFound()` olur.
 5. Database kesintisi ile gerçek 404 birbirinden operasyonel olarak ayrılır.
 6. Empty state yalnız yayınlanmış public sonuçların olmamasını anlatır; private kayıt sayısını açıklamaz.
+
+## Sprint 06 kaynak seçimi açıklaması
+
+Production'ın bu sprintte mock repository kullanması database kesintisinde yapılan otomatik fallback değildir; gerçek cutover öncesinde bilinçli ve sabitlenmiş kaynak seçimidir.
+
+Non-production ortamında `PUBLIC_CONTENT_SOURCE=supabase` seçilmiş fakat Core query reader henüz bağlanmamışsa configuration-level warning ile mock'a dönülebilir. Reader bağlandıktan ve Supabase repository gerçekten aktive edildikten sonra query/database hataları mock içerikle maskelenmez; kontrollü unavailable error davranışına gider.

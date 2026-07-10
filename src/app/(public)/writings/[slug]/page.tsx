@@ -6,17 +6,24 @@ import { Tag } from "@/components/ui/tag";
 import { DetailSection } from "@/components/public/detail-section";
 import { PublishStatusNote } from "@/components/public/publish-status-note";
 import { WritingCard } from "@/components/public/writing-card";
-import { linkApprovalLabels, publishFlowStateLabels, publishStateLabels, visibilityLabels, writings } from "@/data/mock-content";
+import {
+  linkApprovalLabels,
+  publishFlowStateLabels,
+  publishStateLabels,
+  visibilityLabels,
+} from "@/features/public/content/model";
+import { getPublicContentRepository } from "@/features/public/content/source-selection";
 
 export default async function WritingDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const writing = writings.find((item) => item.slug === slug);
+  const repository = getPublicContentRepository();
+  const writing = await repository.getWritingBySlug(slug);
 
   if (!writing) notFound();
 
-  const relatedWritings = writing.relatedSlugs
-    .map((relatedSlug) => writings.find((item) => item.slug === relatedSlug))
-    .filter((item): item is (typeof writings)[number] => Boolean(item));
+  const relatedWritings = await repository.listRelatedWritings(
+    writing.relatedSlugs,
+  );
 
   return (
     <article className="mx-auto max-w-6xl space-y-8 overflow-hidden">

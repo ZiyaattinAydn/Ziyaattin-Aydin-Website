@@ -153,3 +153,22 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [ ] Development Supabase project ve gerçek Preview runtime env kurulumu Core repository değişikliği dışında tamamlanacak.
 - [ ] SQL uygulaması, seed, owner Auth hesabı, Login/TOTP UI, Studio route entegrasyonu, CRUD ve Storage ayrı işlerde tamamlanacak.
 - [ ] Production Supabase project/env/migration ayrıca onay bekliyor.
+
+## Sprint 06 — Public Repository Boundary
+
+- [x] Public branch `feat/public-supabase-adapter-s06`, `main@0c9d1bb` tabanından açıldı.
+- [x] Project, writing, journey ve profile için ortak server-side repository sözleşmesi eklendi.
+- [x] Mevcut mock içerik repository arkasına alındı; production mock davranışı korundu.
+- [x] Public route ve component'lerin doğrudan `@/data/mock-content` bağımlılığı kaldırıldı.
+- [x] Dependency-free Supabase `PublicQueryReader` ve explicit-select adapter sınırı hazırlandı.
+- [x] Anonymous query filtreleri `published + public + published_at` olarak hem request hem mapper katmanında uygulandı.
+- [x] Link, image ve portrait approval filtreleri publish state'ten bağımsız tutuldu.
+- [x] Candidate About portresi final görsel gibi render edilmiyor; ana sayfa portresi değişmedi.
+- [x] Empty list ve featured sonuçları güvenli nötr state ile ele alındı.
+- [x] Node built-in runner policy testleri 7/7 başarılı.
+- [x] `npm ci`, 7/7 policy testi, `npm run lint`, `npm run typecheck` ve `npm run build` başarılı.
+- [x] Build 14/14 static page üretti; project ve writing detail rotaları dynamic server route olarak korundu.
+- [!] `npm audit` bilinen 2 moderate `next` / dolaylı `postcss` uyarısını gösteriyor; önerilen force çözüm breaking downgrade yaptığı için uygulanmadı.
+- [!] Preview Deployment branch push sonrasında doğrulanacak.
+- [x] Core Sprint 06 runtime branch'i `origin/feat/core-supabase-runtime-s06@02f7c6a` olarak mevcut; Public branch'e merge edilmedi veya kodu kopyalanmadı.
+- [x] Yeni dependency, gerçek Supabase URL/key/JWT veya service-role secret eklenmedi.

@@ -138,3 +138,16 @@ Notlar:
 - Vercel Preview development Supabase project'e bağlanacaktır.
 - Production Supabase env ve migration bu sprintte yapılmaz.
 - Core Proxy nihai authorization değildir; Studio server layout ve mutation katmanı ortak helper'ı yeniden kullanmalıdır.
+
+## Sprint 06 — Public Site
+
+### Pencere 2 — Public Supabase Adapter
+
+- Branch: `feat/public-supabase-adapter-s06`
+- Başlangıç: `main@0c9d1bb`
+- Durum: `[x]` — implementasyon, policy testleri, lint, typecheck, build ve audit incelemesi tamamlandı; commit, push ve Preview doğrulaması bekleniyor
+- Sahiplik: `src/app/(public)/**`, `src/components/public/**`, `src/features/public/**`, `docs/content/**`, Public tracking ve handoff
+- Production source: `mock`
+- Supabase durumu: dependency-free adapter/query-reader sınırı hazır; Core reader entegrasyonu yapılmadı
+- Yeni environment ihtiyacı: gelecekte server-only `PUBLIC_CONTENT_SOURCE=mock|supabase`; `.env.example` değiştirilmedi
+- Gerçek database cutover: bu sprint kapsamında değil

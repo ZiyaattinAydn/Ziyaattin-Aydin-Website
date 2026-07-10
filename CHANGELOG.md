@@ -1,3 +1,60 @@
+## Sprint 06 Public — 2026-07-10
+
+### Added
+
+- Public projects, writings, journey ve profile için ortak repository interface'i.
+- Mevcut mock veriyi repository arkasına alan adapter.
+- Core-owned client için dependency-free `PublicQueryReader` sınırı.
+- Explicit select listeleri ve public-safe Supabase row mapper.
+- Visibility, approval, source selection ve URL güvenliği policy testleri.
+- Public repository implementasyon sözleşmesi ve branch handoff kaydı.
+
+### Changed
+
+- Public route ve component'lerin doğrudan mock veri import'ları kaldırıldı.
+- Detail lookup repository üzerinden yapılarak görünmeyen kayıtlar tek `notFound()` sınırına taşındı.
+- Candidate About portrait production render verisinden çıkarıldı.
+- Empty list/featured durumları nötr ve erişilebilir fallback ile ele alındı.
+- Production content source Sprint 06 boyunca mock'a sabitlendi.
+
+### Security
+
+- Anonymous adapter filtreleri `visibility = public`, `publish_state = published` ve `published_at IS NOT NULL` olarak açıkça uygulandı.
+- `select *` kullanılmadı.
+- Onaysız/geçersiz link ve asset URL'leri Public DTO'ya taşınmıyor.
+- Database hata ayrıntıları client'a yansıtılmıyor.
+- Gerçek secret, Supabase URL/key veya JWT eklenmedi.
+
+### Verified
+
+- `npm ci`: başarılı; package dosyaları değişmedi.
+- Node built-in policy tests: 7/7 başarılı.
+- `npm run lint`: başarılı.
+- `npm run typecheck`: başarılı.
+- `npm run build`: başarılı; 14/14 static page üretildi ve dynamic detail rotaları korundu.
+- Doğrudan Public route/component mock import kontrolü temiz.
+- `select *` kontrolü temiz.
+- Secret taraması yalnız boş placeholder, dokümantasyon, package-lock integrity ve binary eşleşmeleri gösterdi.
+- Yeni dependency eklenmedi.
+
+### Known Audit Status
+
+- `npm audit`: 2 moderate vulnerability.
+- Etkilenen zincir mevcut `next` → dolaylı `postcss` bağımlılığıdır.
+- Önerilen `npm audit fix --force`, breaking `next@9.3.3` değişimi yaptığı için uygulanmadı.
+
+### Pending
+
+- Branch push sonrası Vercel Preview Deployment
+
+### Not Applied
+
+- Production Supabase cutover yapılmadı.
+- Gerçek environment değeri eklenmedi.
+- Core Supabase helper/client kopyalanmadı veya merge edilmedi.
+- SQL, Auth, MFA, Studio CRUD, publish editor ve slug history uygulanmadı.
+
+
 ## Sprint 06 Core Supabase Runtime — 2026-07-10
 
 ### Added

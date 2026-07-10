@@ -154,3 +154,26 @@ Bu maddeler implementasyon kararı değildir. `docs/supabase/SPRINT_06_APPROVAL_
 - Sprint 05 SQL paketi ve development seed development project'te kontrollü sırayla çalıştırılabilir.
 - Production migration Preview kabulünden sonra ayrı kullanıcı onayı gerektirir.
 - Service role normal Auth, Public veya Studio CRUD akışında kullanılmaz.
+
+## Sprint 06 — Public Repository ve Kaynak Seçimi
+
+### Public data repository sınırı
+
+- Public route'lar veri kaynağını bilmez; yalnız `PublicContentRepository` sözleşmesini kullanır.
+- Mock ve gelecekteki Supabase adapter aynı public-safe DTO modeline map edilir.
+- Database row'ları doğrudan component props olarak kullanılmaz.
+- Durum: `ACCEPTED`.
+
+### Production source kilidi
+
+- Sprint 06 boyunca Production public content source kesin olarak `mock` kalır.
+- `PUBLIC_CONTENT_SOURCE=supabase` yalnız non-production ortamında ve Core query reader bağlandığında aktive edilebilir.
+- Gerçek reader aktifken database/query hatası sessiz mock fallback yapmaz.
+- Durum: `ACCEPTED`.
+
+### Public approval kapıları
+
+- Content publish state, visibility, link approval, image approval ve portrait approval bağımsızdır.
+- Link veya asset yalnız kendi approval state'i approved ve değeri güvenli/geçerliyse Public DTO'ya girer.
+- Ana sayfa portresi sabit kalır; About candidate portrait onaysızken gizlenir.
+- Durum: `ACCEPTED`.
