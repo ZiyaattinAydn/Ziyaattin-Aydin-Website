@@ -144,3 +144,11 @@ Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `
 - [m] Next.js workspace root / multiple lockfile uyarısı Core Sprint 02 sonrası integration build çıktısında görünmedi.
 - [!] Vercel preview / production deployment doğrulaması henüz tamamlanmadı.
 - [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage gerçek implementasyonu henüz başlamadı.
+
+## Studio Sprint 03 — Data Model Draft and Supabase Preparation
+
+- [x] Studio veri modeli taslağı dokümante edildi.
+- [x] Studio Auth/MFA karar bekleyen başlıkları dokümante edildi.
+- [x] Studio mock workflow verisi future DB mapping için daha okunabilir hâle getirildi.
+- [x] Projects, Tasks, Notes ve Files modüllerinde sonraki faz veri ilişkileri açıklandı.
+- [x] Auth, MFA, Supabase, PostgreSQL, Storage, RLS, gerçek CRUD, gerçek upload ve gerçek publish bilinçli olarak eklenmedi.

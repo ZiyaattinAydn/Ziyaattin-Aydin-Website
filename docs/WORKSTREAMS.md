@@ -110,3 +110,7 @@ Notlar:
 - Public mock content modeli ve detay sayfası render akışı main'e alınmaya hazırlandı.
 - Studio mock workflow veri katmanı ve modül sayfaları main'e alınmaya hazırlandı.
 - Gerçek Auth/Supabase/Storage/CRUD kapsamı Sprint 02'de bilinçli olarak başlatılmadı.
+
+## Studio Sprint 03
+
+- [x] `feat/studio-data-s03` — Studio veri modeli taslağı, Auth/MFA karar notu ve mock workflow sözleşmesi hazırlandı.

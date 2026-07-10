@@ -1,18 +1,18 @@
 import { StudioListCard } from "@/components/studio/studio-list-card";
 import { StudioMockList } from "@/components/studio/studio-mock-list";
 import { StudioModulePage } from "@/components/studio/studio-module-page";
-import { mockStudioFiles, studioModules } from "@/features/studio/studio-content";
+import { mockStudioFiles, studioModules, studioPublishStateLabels, studioVisibilityLabels } from "@/features/studio/studio-content";
 
 const fileWorkflowNotes = [
   {
     title: "Storage bağlı değil",
     meta: "Supabase Storage sonraki faz",
-    description: "Bu sayfa gerçek dosya listelemez, upload yapmaz ve file picker açmaz.",
+    description: "Bu sayfa gerçek dosya listelemez, upload yapmaz, file picker açmaz ve delete işlemi çalıştırmaz.",
   },
   {
-    title: "Kategoriler hazır",
-    meta: "PDF / Sunum / Görsel",
-    description: "Dosya türleri ileride bucket ve metadata kararlarına temel olacak şekilde ayrıştırılır.",
+    title: "studio_files taslağı",
+    meta: "Future DB mapping",
+    description: "Dosyalar storageBucket, linkedEntity, visibility ve publishState alanlarıyla bucket/path/RLS kararına hazırlanır.",
   },
   {
     title: "Gizli anahtar yok",
@@ -25,10 +25,11 @@ export default function FilesPage() {
   return (
     <StudioModulePage
       module={studioModules.files}
+      status="studio_files mock"
       aside={
         <StudioMockList
           title="Dosya workflow notları"
-          description="Dosya yönetimi yalnız hazırlık ve kategori seviyesinde gösterilir."
+          description="Dosya yönetimi yalnız hazırlık, kategori ve Storage sözleşmesi seviyesinde gösterilir."
           items={fileWorkflowNotes}
         />
       }
@@ -37,22 +38,25 @@ export default function FilesPage() {
         <div>
           <h2 className="text-2xl font-semibold">Mock dosya ve depolama listesi</h2>
           <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-            Aşağıdaki kayıtlar gerçek Storage objesi değildir. Supabase Storage, bucket izinleri, RLS ve önizleme kararları sonraki fazda bağlanacak.
+            Aşağıdaki kayıtlar gerçek Storage objesi değildir. Supabase Storage, bucket izinleri, RLS, path stratejisi ve önizleme kararları sonraki fazda bağlanacak.
           </p>
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {mockStudioFiles.map((file) => (
             <StudioListCard
-              key={file.title}
+              key={file.id}
               eyebrow={file.kind}
               title={file.title}
               description={file.description}
-              status={file.status}
+              status={studioPublishStateLabels[file.publishState]}
               tone={file.tone}
               details={[
                 { label: "Alan", value: file.location },
                 { label: "Boyut", value: file.sizeLabel },
+                { label: "Bucket", value: file.storageBucket },
+                { label: "Görünürlük", value: studioVisibilityLabels[file.visibility] },
+                { label: "İlişkili kayıt", value: file.linkedEntity },
               ]}
               actionLabel="Dosyayı yönet"
             />

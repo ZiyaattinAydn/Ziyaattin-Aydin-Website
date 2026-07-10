@@ -111,3 +111,14 @@
 - `.env.example` dışında gizli environment dosyası tespit edilmedi
 - Sprint 01 entegrasyonunda `npm run lint`, `npm run typecheck` ve `npm run build` başarılı tamamlandı
 >>>>>>> origin/feat/public-site-s02
+
+## Studio Sprint 03 - Data Model and Auth Planning
+
+### Added
+- Studio veri modeli taslağı eklendi: `docs/studio/STUDIO_DATA_MODEL_DRAFT.md`.
+- Studio Auth/MFA karar notu eklendi: `docs/studio/STUDIO_AUTH_DECISIONS.md`.
+- Studio mock workflow verisi ileride Supabase tablolarına taşınabilecek alanlarla hizalandı.
+- Studio modüllerinde publish, sprint/workstream, bilgi kütüphanesi ve Storage sonraki faz ilişkileri netleştirildi.
+
+### Notes
+- Auth, MFA, Supabase, PostgreSQL, Storage, RLS, gerçek CRUD, gerçek upload ve gerçek publish implementasyonu yapılmadı.
