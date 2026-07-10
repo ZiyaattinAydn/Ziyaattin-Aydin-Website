@@ -50,7 +50,7 @@ const authorizationSource = fs.readFileSync(
 );
 
 if (
-  authorizationSource.includes("ziyaattin.aydin35@gmail.com") ||
+  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(authorizationSource) ||
   authorizationSource.includes("SUPABASE_SERVICE_ROLE_KEY")
 ) {
   throw new Error("Studio authorization contains a forbidden hard-coded identity or service role.");

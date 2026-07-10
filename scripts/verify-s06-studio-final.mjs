@@ -63,7 +63,7 @@ if (!handoff.includes("S06_STUDIO_OK")) {
 const authorization = source("src/lib/auth/studio-authorization.ts");
 
 if (
-  authorization.includes("ziyaattin.aydin35@gmail.com") ||
+  /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i.test(authorization) ||
   authorization.includes("SUPABASE_SERVICE_ROLE_KEY")
 ) {
   throw new Error(
