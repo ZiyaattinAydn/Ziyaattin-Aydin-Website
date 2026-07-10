@@ -1,6 +1,8 @@
 ## Sprint 04 Integration — 2026-07-07
 
 ### Added
+- Public Sprint 05 için database mapping, visibility, query, fallback, approval ve mock migration sözleşmesi belgeleri eklendi.
+- Public mock içeriklerin development seed uygunluğu ve production dışı bırakılacak placeholder/URL alanları envantere alındı.
 
 - GitHub → Vercel automatic deployment verification kaydı.
 - Public publish flow planı.
@@ -9,6 +11,7 @@
 - Sprint 04 integration handoff kaydı.
 
 ### Changed
+- Public anonymous read sınırı `publish_state = published` ve `visibility = public` olarak; görünmeyen detail kayıtları için ortak `notFound()` davranışı olarak netleştirildi.
 
 - Node.js runtime `22.x` olarak sabitlendi.
 - Vercel deployment modeli feature push → Preview ve main push → Production akışına göre güncellendi.

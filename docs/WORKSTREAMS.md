@@ -97,3 +97,9 @@ Notlar:
 - Production Deployment main push sonrasında doğrulanacak.
 - Public publish ve Studio Auth/RLS/Publish Flow karar hazırlıkları tamamlandı.
 - Gerçek Supabase/Auth/Storage/CRUD implementasyonu Sprint 04 kapsamında yapılmadı.
+
+## Pencere 2 — Public Site
+- Branch: `feat/public-data-transition-s05`
+- Durum: `[x]`
+- Sahiplik: public database mapping, anonymous visibility, query/fallback, approval ve mock migration sözleşmeleri
+- Not: Sprint 05 dokümantasyon sözleşmesi branch içinde tamamlandı; gerçek database geçişi, Supabase sorgusu ve publish CRUD `[ ]`.

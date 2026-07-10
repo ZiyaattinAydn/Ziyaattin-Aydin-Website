@@ -116,3 +116,12 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [!] `npm audit` 2 moderate vulnerability göstermeye devam ediyor.
 - [ ] Supabase/Auth/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
 - [!] Hakkımda portresi ve gerçek linkler kullanıcı onayı bekliyor.
+
+## Public Sprint 05 — Mock Veriden Database İçeriğine Geçiş Sözleşmesi
+
+- [x] Project, writing, journey ve profile/about mock alanları için database mapping sözleşmesi hazırlandı.
+- [x] Anonymous public read sınırı `published + public` olarak kesinleştirildi.
+- [x] Draft/review/approved/archived/hidden/private kayıtların bilgi sızdırmadan `notFound()` davranışına gitmesi belgelendi.
+- [x] Public query, empty/error fallback, link ve portrait approval kuralları tanımlandı.
+- [x] Mevcut mock içeriklerin development seed uygunluğu ve kullanıcı onayı bekleyen alanları envantere alındı.
+- [ ] Gerçek Supabase sorguları, database bağlantısı, public mapper, API route, publish CRUD ve gerçek database geçişi başlatılmadı.
