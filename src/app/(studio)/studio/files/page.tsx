@@ -6,7 +6,7 @@ import { mockStudioFiles, studioModules, studioPublishStateLabels, studioVisibil
 const fileWorkflowNotes = [
   {
     title: "Storage bağlı değil",
-    meta: "Supabase Storage sonraki faz",
+    meta: "Supabase Storage/RLS sonraki faz",
     description: "Bu sayfa gerçek dosya listelemez, upload yapmaz, file picker açmaz ve delete işlemi çalıştırmaz.",
   },
   {
@@ -29,7 +29,7 @@ export default function FilesPage() {
       aside={
         <StudioMockList
           title="Dosya workflow notları"
-          description="Dosya yönetimi yalnız hazırlık, kategori ve Storage sözleşmesi seviyesinde gösterilir."
+          description="Dosya yönetimi yalnız hazırlık, kategori ve Storage/RLS sözleşmesi seviyesinde gösterilir."
           items={fileWorkflowNotes}
         />
       }

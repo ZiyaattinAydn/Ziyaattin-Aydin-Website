@@ -149,3 +149,14 @@
 - Hakkımda portresi ve gerçek iletişim/sosyal linkler kullanıcı onayı olmadan aktif edilmeyecek
 - Snapshot içinde `.git` metadata bulunmadığı için GitHub remote, `main` ↔ `origin/main` senkronu ve gerçek son commit sandbox içinde doğrulanamadı
 >>>>>>> Stashed changes
+
+## Studio Sprint 04 - Auth/MFA/RLS Decision Planning
+
+### Added
+- Studio Auth/MFA karar dokümanı karar matrisiyle genişletildi.
+- Studio RLS ve Storage güvenlik planı eklendi.
+- Studio publish flow planı eklendi.
+- Studio data model draft dokümanına Auth/RLS/Publish flow referansları eklendi.
+
+### Notes
+- Auth, MFA, Supabase, PostgreSQL, Storage, RLS, middleware, route guard, gerçek CRUD, gerçek upload ve gerçek publish implementasyonu yapılmadı.

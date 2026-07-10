@@ -176,3 +176,11 @@ Sprint 03 Core branch entegrasyonundan sonra Public Content ve Studio Data Sprin
 - [!] `npm audit` çıktısında 2 moderate vulnerability izlenmeye devam ediyor; `npm audit fix --force` çalıştırılmadı ve çalıştırılmamalı.
 - [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
 - [!] Hakkımda portresi kullanıcı doğrulaması bekleyen aday portre olarak kalmalı.
+
+## Studio Sprint 04 — Auth/MFA/RLS Decision Planning
+
+- [x] Studio Auth/MFA karar matrisi branch içinde hazırlandı.
+- [x] Studio RLS ve Storage güvenlik planı dokümante edildi.
+- [x] Studio publish flow planı dokümante edildi.
+- [x] Studio data model draft dokümanı güvenlik ve publish flow referanslarıyla güncellendi.
+- [x] Auth, MFA, Supabase, PostgreSQL, Storage, RLS, middleware, route guard, gerçek CRUD, gerçek upload ve gerçek publish bilinçli olarak eklenmedi.

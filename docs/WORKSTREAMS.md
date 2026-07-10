@@ -137,3 +137,7 @@ Notlar:
 - Public content contract ve mock publish hazırlıkları main'e alınmaya hazırlandı.
 - Studio data model draft ve auth decision dokümanları main'e alınmaya hazırlandı.
 - Gerçek Auth/Supabase/Storage/CRUD kapsamı Sprint 03'te bilinçli olarak başlatılmadı.
+
+## Studio Sprint 04
+
+- [x] `feat/studio-auth-plan-s04` — Auth/MFA/RLS karar matrisi, Studio güvenlik planı ve publish flow dokümantasyonu hazırlandı.
