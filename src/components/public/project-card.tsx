@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ProjectSummary } from "@/data/mock-content";
+import { publishStateLabels, visibilityLabels } from "@/data/mock-content";
 import { Panel } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/tag";
 import { StatusPill } from "@/components/public/status-pill";
@@ -24,6 +25,15 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
         </span>
       </div>
 
+      <div className="mt-4 flex flex-wrap gap-2 text-xs text-[var(--muted)]">
+        <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1">
+          {publishStateLabels[project.publishState]}
+        </span>
+        <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1">
+          {visibilityLabels[project.visibility]}
+        </span>
+      </div>
+
       <p className="mt-4 text-sm font-medium leading-6 text-[var(--foreground)]">{project.statusLabel}</p>
       <p className="mt-2 flex-1 text-sm leading-6 text-[var(--muted)]">{project.description}</p>
 
@@ -45,6 +55,7 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
 
       <div className="mt-5 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
         {project.visibilityNote}
+        <span className="mt-2 block text-[var(--foreground)]">{project.sourceNote}</span>
       </div>
 
       <Link

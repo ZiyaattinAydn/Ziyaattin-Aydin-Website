@@ -14,6 +14,12 @@
 - Sprint 02 notu: workspace root uyarısı incelendi, metadata/site config düzenlendi, `ProgressBar` ve `SectionShell` eklendi
 
 ## Pencere 2 — Public Site
+- Branch: `feat/public-content-s03`
+- Durum: `[x]`
+- Sahiplik: public rotalar, mock içerik modeli, yayın/görünürlük sözleşmesi, link güvenliği
+- Not: Sprint 03 branch içinde tamamlandı; gerçek database/publish akışı başlatılmadı.
+
+## Pencere 2 — Public Site
 - Branch: `feat/public-site-s02`
 - Durum: `[ ]`
 - Sahiplik: public rotalar, sayfa blokları, responsive public deneyim

@@ -25,7 +25,16 @@ export function ProjectExplorer({ projects }: { projects: ProjectSummary[] }) {
     return projects
       .filter((project) => {
         const matchesQuery = normalizedQuery
-          ? [project.title, project.description, project.category, project.statusLabel, project.summary, ...project.technologies]
+          ? [
+              project.title,
+              project.description,
+              project.category,
+              project.statusLabel,
+              project.summary,
+              project.sourceNote,
+              project.publishState,
+              ...project.technologies,
+            ]
               .join(" ")
               .toLocaleLowerCase("tr-TR")
               .includes(normalizedQuery)
@@ -38,6 +47,7 @@ export function ProjectExplorer({ projects }: { projects: ProjectSummary[] }) {
         if (sort === "progress-desc") return second.progress - first.progress;
         if (sort === "progress-asc") return first.progress - second.progress;
         if (sort === "title") return first.title.localeCompare(second.title, "tr");
+        if (first.isFeatured !== second.isFeatured) return Number(second.isFeatured) - Number(first.isFeatured);
         return projects.indexOf(first) - projects.indexOf(second);
       });
   }, [category, projects, query, sort, status]);
@@ -111,7 +121,7 @@ export function ProjectExplorer({ projects }: { projects: ProjectSummary[] }) {
             Public proje kayıtları
           </h2>
           <p className="mt-1 text-sm text-[var(--muted)]">
-            {filteredProjects.length} sonuç gösteriliyor. İçerikler Sprint 02 için mock/placeholder seviyesindedir.
+            {filteredProjects.length} sonuç gösteriliyor. İçerikler Sprint 03 için mock/placeholder seviyesindedir; publish ve görünürlük alanları gerçek veriye hazırlık amacı taşır.
           </p>
         </div>
       </div>

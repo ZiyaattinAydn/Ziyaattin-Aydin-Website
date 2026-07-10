@@ -144,3 +144,12 @@ Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `
 - [m] Next.js workspace root / multiple lockfile uyarısı Core Sprint 02 sonrası integration build çıktısında görünmedi.
 - [!] Vercel preview / production deployment doğrulaması henüz tamamlanmadı.
 - [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage gerçek implementasyonu henüz başlamadı.
+
+## Public Sprint 03 Çıktısı
+
+- [x] Public içerik yayın sözleşmesi `docs/content/PUBLIC_CONTENT_MODEL.md` içinde belgelendi.
+- [x] Project, writing, journey ve profile/about içerik tipleri için mock alanlar, gelecekteki database alanları, görünürlük ve Studio publish ilişkisi netleştirildi.
+- [x] Public mock içeriklerde `visibility`, `publishState`, `isFeatured`, `sourceNote`, `links.demo` ve `links.github` alanları düzenlendi.
+- [x] Gerçek olmayan demo/GitHub/dış kaynak linkleri aktif bağlantı gibi render edilmedi.
+- [x] Hakkımda portresi aday/doğrulama bekleyen portre olarak kaldı.
+- [!] Gerçek database, Supabase publish akışı ve production içerik yayını bu sprintte başlamadı.

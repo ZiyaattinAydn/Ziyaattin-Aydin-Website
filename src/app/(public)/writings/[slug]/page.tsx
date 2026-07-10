@@ -5,7 +5,7 @@ import { Panel } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/tag";
 import { DetailSection } from "@/components/public/detail-section";
 import { WritingCard } from "@/components/public/writing-card";
-import { writings } from "@/data/mock-content";
+import { publishStateLabels, visibilityLabels, writings } from "@/data/mock-content";
 
 export default async function WritingDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -33,7 +33,9 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
             <span>·</span>
             <span>{writing.readingTime}</span>
             <span>·</span>
-            <span>{writing.isDraft ? "Taslak/mock içerik" : "Public içerik"}</span>
+            <span>{publishStateLabels[writing.publishState]}</span>
+            <span>·</span>
+            <span>{visibilityLabels[writing.visibility]}</span>
           </div>
           <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight tracking-tight break-words sm:text-5xl lg:text-6xl">
             {writing.title}
@@ -85,8 +87,43 @@ export default async function WritingDetailPage({ params }: { params: Promise<{ 
             <p className="font-mono text-sm font-semibold text-[var(--accent)]">{writing.coverLabel}</p>
           </div>
 
-          <DetailSection eyebrow="Taslak notu" title="Bu içerik henüz gerçek yayın değildir" description={writing.placeholderNote}>
-            <p className="text-sm leading-6 text-[var(--muted)]">Son güncelleme etiketi: {writing.updatedLabel}</p>
+          <DetailSection eyebrow="Yayın notu" title="Bu içerik henüz gerçek yayın değildir" description={writing.placeholderNote}>
+            <div className="space-y-2 text-sm leading-6 text-[var(--muted)]">
+              <p>Son güncelleme etiketi: {writing.updatedLabel}</p>
+              <p>{writing.sourceNote}</p>
+            </div>
+          </DetailSection>
+
+          <DetailSection eyebrow="Kaynak bağlantıları" title="Dış kaynak linkleri doğrulanmadan aktifleşmez">
+            {writing.externalLinks.length > 0 ? (
+              <div className="space-y-3">
+                {writing.externalLinks.map((externalLink) =>
+                  externalLink.href ? (
+                    <a
+                      key={externalLink.label}
+                      href={externalLink.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4 text-sm font-semibold text-[var(--accent)]"
+                    >
+                      {externalLink.label} →
+                    </a>
+                  ) : (
+                    <div
+                      key={externalLink.label}
+                      className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4 text-sm text-[var(--muted)]"
+                    >
+                      <p className="font-semibold text-[var(--foreground)]">{externalLink.label}</p>
+                      <p className="mt-2 leading-6">{externalLink.note}</p>
+                    </div>
+                  ),
+                )}
+              </div>
+            ) : (
+              <span aria-disabled="true" className="inline-flex cursor-not-allowed rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
+                Dış kaynak bağlantısı henüz eklenmedi
+              </span>
+            )}
           </DetailSection>
 
           <Panel className="p-5 sm:p-8">

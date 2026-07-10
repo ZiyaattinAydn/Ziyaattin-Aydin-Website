@@ -1,11 +1,13 @@
 ## Sprint 02 Integration — 2026-07-07
 
 ### Added
+- Public Sprint 03: `docs/content/PUBLIC_CONTENT_MODEL.md` ile public içerik yayın sözleşmesi eklendi.
 - Core Sprint 02: `ProgressBar` ve `SectionShell` ortak UI primitive'leri eklendi.
 - Studio Sprint 02: mock workflow için `StudioListCard` ve `StudioStatusPill` bileşenleri eklendi.
 - Sprint 02 entegrasyon handoff kaydı eklendi: `docs/handoffs/2026-07-07-integration-sprint-02.md`.
 
 ### Changed
+- Public Sprint 03: mock içeriklerde `visibility`, `publishState`, `isFeatured`, `sourceNote`, `links.demo` ve `links.github` alanları netleştirildi; gerçek olmayan linkler pasif/yakında durumunda bırakıldı.
 - Core Sprint 02: `next.config.ts` içinde Turbopack root ayarı proje köküne sabitlendi ve build worker sayısı `experimental.cpus: 4` ile sınırlandı.
 - Core Sprint 02: `siteConfig`, layout metadata ve footer doğrulanmamış linkleri aktif göstermeyecek şekilde düzenlendi.
 - Public Sprint 02: mock içerik modeli genişletildi; proje ve yazı detay sayfaları mock section verilerinden beslenecek şekilde iyileştirildi.

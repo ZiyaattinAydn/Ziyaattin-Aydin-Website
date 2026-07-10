@@ -4,7 +4,7 @@ import { Panel } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/tag";
 import { DetailSection } from "@/components/public/detail-section";
 import { StatusPill } from "@/components/public/status-pill";
-import { projects } from "@/data/mock-content";
+import { getProjectActions, projects, publishStateLabels, visibilityLabels } from "@/data/mock-content";
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -27,6 +27,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </span>
             <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--muted)]">
               {project.contentState}
+            </span>
+            <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--muted)]">
+              {publishStateLabels[project.publishState]}
             </span>
           </div>
           <h1 className="mt-6 max-w-4xl text-4xl font-semibold tracking-tight break-words sm:text-5xl lg:text-6xl">
@@ -58,9 +61,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </p>
             <h2 className="mt-3 text-2xl font-semibold">Doğrulanmış link yoksa pasif kalır</h2>
             <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{project.visibilityNote}</p>
+            <p className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
+              {visibilityLabels[project.visibility]} · {project.sourceNote}
+            </p>
           </div>
           <div className="mt-6 space-y-3">
-            {project.links.map((link) => (
+            {getProjectActions(project).map((link) => (
               <div key={link.label} className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <p className="font-semibold">{link.label}</p>
@@ -70,9 +76,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 </div>
                 <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{link.note}</p>
                 {link.href ? (
-                  <Link href={link.href} className="mt-3 inline-flex text-sm font-semibold text-[var(--accent)]">
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 inline-flex text-sm font-semibold text-[var(--accent)]"
+                  >
                     Bağlantıya git →
-                  </Link>
+                  </a>
                 ) : (
                   <span aria-disabled="true" className="mt-3 inline-flex cursor-not-allowed text-sm font-semibold text-[var(--muted)]">
                     Aktif bağlantı yok
