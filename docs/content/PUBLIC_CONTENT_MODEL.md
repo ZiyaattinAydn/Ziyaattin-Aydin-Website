@@ -289,3 +289,16 @@ Public taraf ileride Studio data modelinden gelen kayıtları şu public-safe al
 - Public site gerçek publish işlemini başlatmaz; yalnız onaylı veriyi render eder.
 - Studio private notları, gizli linkler, gerçek loglar veya kişisel doğrulama bekleyen bilgiler public content modeline taşınmamalıdır.
 - Rollback/unpublish durumunda public liste ve detay davranışı `PUBLIC_PUBLISH_FLOW.md` içindeki seçeneklerle kararlaştırılacaktır.
+
+## Sprint 05 database geçişi companion belgeleri
+
+Bu model sözleşmesi aşağıdaki Sprint 05 belgeleriyle birlikte değerlendirilmelidir:
+
+- `docs/content/PUBLIC_DATABASE_MAPPING.md`
+- `docs/content/PUBLIC_VISIBILITY_RULES.md`
+- `docs/content/PUBLIC_QUERY_CONTRACT.md`
+- `docs/content/PUBLIC_FALLBACK_MATRIX.md`
+- `docs/content/PUBLIC_APPROVAL_RULES.md`
+- `docs/content/MOCK_DATA_MIGRATION_INVENTORY.md`
+
+Bu belgeler gerçek Supabase bağlantısı veya migration değildir. Public anonymous read sınırı `published + public` olarak tanımlanır; görünmeyen detail kayıtları bilgi sızdırmadan `notFound()` davranışına gider.
