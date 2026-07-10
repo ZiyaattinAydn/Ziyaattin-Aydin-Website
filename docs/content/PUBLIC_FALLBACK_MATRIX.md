@@ -9,6 +9,7 @@
 | Slug bulunamadı | Etkisiz | `notFound()` | 404 + noindex | Aranan slug loglanacaksa kişisel veri içermemeli. |
 | İçerik `draft` | Listede yok | `notFound()` | 404/noindex | “Taslak var” mesajı yok. |
 | İçerik `review` / `approved` | Listede yok | `notFound()` | 404/noindex | Review varlığı sızmaz. |
+| İçerik `unpublished` | Listede yok | `notFound()` | 404/noindex | Önceki public cache ve sitemap kaydı invalidate edilir. |
 | İçerik `private` | Listede yok | `notFound()` | 404/noindex | Public ile private için aynı response. |
 | İçerik `hidden` | Listede yok | `notFound()` | 404/noindex | Eski `unlisted` kayıtlar karar verilene kadar hidden gibi davranır. |
 | İçerik `archived` | Varsayılan listede yok | Şimdilik `notFound()` | 404/noindex | Public arşiv kararı gelirse sözleşme revize edilir. |
