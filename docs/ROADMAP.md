@@ -79,3 +79,9 @@ Faz 3 yalnız mimari hazırlık düzeyinde `[~]` kabul edilmelidir; gerçek Auth
 - Studio server layout entegrasyonu: `[ ]`
 - Public database adapter/cutover: `[ ]`
 - Production Supabase project/env/migration: `[!] ayrı onay gerekli`
+
+## Sprint 06 Studio — S06_STUDIO_ROADMAP
+
+Auth/MFA kodu hazır. Sprint kapanışı için development Supabase migration + seed,
+owner activation, RLS matrisi ve Vercel Preview login/TOTP/logout testleri gerekir.
+Production Supabase ve geniş Studio CRUD sonraki onaylı fazlara bırakılmıştır.

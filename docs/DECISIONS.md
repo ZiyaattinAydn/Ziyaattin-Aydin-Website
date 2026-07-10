@@ -154,3 +154,11 @@ Bu maddeler implementasyon kararı değildir. `docs/supabase/SPRINT_06_APPROVAL_
 - Sprint 05 SQL paketi ve development seed development project'te kontrollü sırayla çalıştırılabilir.
 - Production migration Preview kabulünden sonra ayrı kullanıcı onayı gerektirir.
 - Service role normal Auth, Public veya Studio CRUD akışında kullanılmaz.
+
+## Sprint 06 Studio güvenlik kararı — S06_STUDIO_SECURITY_DECISION
+
+Studio authorization üç birlikte zorunlu katmandan oluşur: trusted Supabase user,
+active owner/admin allowlist satırı ve current `aal2`. Proxy yalnız session refresh
+ve erken redirect sağlar; nihai karar server layout/helper ve RLS tarafından tekrar
+verilir. Recovery code yerine ikinci TOTP faktörü ve kontrollü Dashboard reset
+runbook’u kullanılır.

@@ -153,3 +153,10 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [ ] Development Supabase project ve gerçek Preview runtime env kurulumu Core repository değişikliği dışında tamamlanacak.
 - [ ] SQL uygulaması, seed, owner Auth hesabı, Login/TOTP UI, Studio route entegrasyonu, CRUD ve Storage ayrı işlerde tamamlanacak.
 - [ ] Production Supabase project/env/migration ayrıca onay bekliyor.
+
+## Sprint 06 Studio Auth/MFA — S06_STUDIO_CODE_STATUS
+
+Kod implementasyonu tamamlandı: gerçek password login, active owner doğrulaması,
+TOTP enrollment/challenge, current AAL2 Studio guard, güvenli logout ve recovery
+runbook. Development Supabase project, migration, seed, owner activation ve Preview
+runtime kabul testleri dış ortam adımı olarak bekliyor.

@@ -20,13 +20,10 @@ function redirectWithCookies(
   sourceResponse: NextResponse,
 ): NextResponse {
   const redirectResponse = NextResponse.redirect(destination);
-
   sourceResponse.cookies.getAll().forEach((cookie) => {
     const { name, value, ...options } = cookie;
-
     redirectResponse.cookies.set(name, value, options);
   });
-
   return redirectResponse;
 }
 
@@ -38,10 +35,11 @@ function redirectWithCookies(
 export async function proxy(request: NextRequest): Promise<NextResponse> {
   const pathname = request.nextUrl.pathname;
   const isLoginRoute = pathname === "/login";
+  const isMfaRoute = pathname === "/mfa";
   const isStudioRoute =
     pathname === "/studio" || pathname.startsWith("/studio/");
 
-  if (!isLoginRoute && !isStudioRoute) {
+  if (!isLoginRoute && !isMfaRoute && !isStudioRoute) {
     return NextResponse.next();
   }
 
@@ -53,15 +51,13 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     const { response, hasAuthenticatedClaims } =
       await refreshSupabaseSession(request);
 
-    if (isStudioRoute && !hasAuthenticatedClaims) {
+    if ((isStudioRoute || isMfaRoute) && !hasAuthenticatedClaims) {
       const loginUrl = new URL("/login", request.url);
       const requestedPath = `${pathname}${request.nextUrl.search}`;
-
       loginUrl.searchParams.set(
         "next",
         getSafeRedirectPath(requestedPath),
       );
-
       return redirectWithCookies(loginUrl, response);
     }
 
@@ -69,11 +65,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       const nextPath = getSafeRedirectPath(
         request.nextUrl.searchParams.get("next"),
       );
-
-      return redirectWithCookies(
-        new URL(nextPath, request.url),
-        response,
-      );
+      return redirectWithCookies(new URL(nextPath, request.url), response);
     }
 
     return response;
@@ -83,5 +75,5 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
 }
 
 export const config = {
-  matcher: ["/login", "/studio/:path*"],
+  matcher: ["/login", "/mfa", "/studio/:path*"],
 };

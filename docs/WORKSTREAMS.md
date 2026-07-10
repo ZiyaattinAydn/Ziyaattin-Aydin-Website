@@ -138,3 +138,11 @@ Notlar:
 - Vercel Preview development Supabase project'e bağlanacaktır.
 - Production Supabase env ve migration bu sprintte yapılmaz.
 - Core Proxy nihai authorization değildir; Studio server layout ve mutation katmanı ortak helper'ı yeniden kullanmalıdır.
+
+## Studio Sprint 06 — S06_STUDIO_WORKSTREAM
+
+- Kod: tamamlandı.
+- Runtime foundation: Core `02f7c6a`.
+- Development Supabase setup/migration/seed: kullanıcı Dashboard adımı bekliyor.
+- Preview Auth/MFA/RLS kabul testi: development env sonrasında bekliyor.
+- Geniş CRUD ve production cutover kapsam dışı.

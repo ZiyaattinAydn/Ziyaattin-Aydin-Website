@@ -201,3 +201,10 @@
 - Snapshot içinde `.git` metadata bulunmadığı için GitHub remote, `main` ↔ `origin/main` senkronu ve gerçek son commit doğrulanamadı
 - Bu ortamda `npm config get registry` protected registry hatası verdi
 - `npm run check` bu ortamda build aşamasında zaman aşımına uğradı; alt komutlar ayrı ayrı başarılı
+
+## 2026-07-10 — Studio Auth/MFA — S06_STUDIO_CHANGELOG
+
+- Gerçek Supabase email/password login eklendi.
+- Active owner allowlist ve server-side current AAL2 Studio guard eklendi.
+- TOTP enrollment, challenge, ikinci faktör yönetimi ve güvenli logout eklendi.
+- MFA recovery/reset ve development Supabase runbook’ları eklendi.
