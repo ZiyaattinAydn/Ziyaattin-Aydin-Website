@@ -1,6 +1,10 @@
 ## Sprint 04 Integration — 2026-07-07
 
 ### Added
+- Studio Sprint 05 için çalıştırılabilir Supabase SQL paketi: initial schema, function/trigger, RLS, Storage, development seed ve destructive rollback
+- Owner-only allowlist modeli, anonymous published/public read ayrımı ve owner UUID path tabanlı Storage politikaları
+- `supabase/README.md` içinde SQL Editor çalışma sırası, owner aktivasyonu, doğrulama sorguları ve RLS test senaryoları
+- Studio Auth karar dokümanında tek owner, email/password veya magic link, TOTP MFA, session, recovery ve başarısız login baseline önerileri
 
 - GitHub → Vercel automatic deployment verification kaydı.
 - Public publish flow planı.

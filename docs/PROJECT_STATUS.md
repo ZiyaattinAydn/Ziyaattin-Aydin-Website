@@ -116,3 +116,17 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [!] `npm audit` 2 moderate vulnerability göstermeye devam ediyor.
 - [ ] Supabase/Auth/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
 - [!] Hakkımda portresi ve gerçek linkler kullanıcı onayı bekliyor.
+
+## Studio Sprint 05 — Çalıştırılabilir Supabase SQL Paketi
+
+- [x] Initial schema SQL; `owner_profiles`, `projects`, `writings`, `journey_items`, `tasks`, `notes`, `files` ve `publish_queue` tablolarıyla hazırlandı.
+- [x] `updated_at`, publish metadata, pending Auth profile ve owner doğrulama function/trigger SQL'i hazırlandı.
+- [x] Tüm application tablolarında RLS etkinleştiren; anonymous write'ı kapatan ve yalnız published/public proje, yazı ve yolculuk kayıtlarına anonymous read veren policy paketi hazırlandı.
+- [x] `public-assets` ve `private-files` bucket SQL'i ile owner UUID path tabanlı Storage policy'leri hazırlandı.
+- [x] Gerçek kullanıcı/secret içermeyen, owner UUID placeholder kontrolü yapan development seed hazırlandı.
+- [x] Veri kaybı uyarılı, object bulunan bucket'larda duran destructive rollback hazırlandı.
+- [x] `supabase/README.md` çalışma sırası, owner aktivasyonu, doğrulama ve RLS test senaryolarıyla oluşturuldu.
+- [x] Studio Auth/MFA baseline önerileri Sprint 06 karar kapısı için güncellendi.
+- [ ] Supabase projesi oluşturulmadı; SQL gerçek projeye uygulanmadı.
+- [ ] Gerçek owner UUID atanmadı; Auth, MFA, route guard, CRUD, upload ve publish implementasyonu başlamadı.
+- [!] Sprint 06 başlamadan Auth yöntemi, TOTP, owner e-postası/UUID, session, recovery, bucket limitleri, seed ve SQL uygulama onayı kullanıcı tarafından kararlaştırılmalı.

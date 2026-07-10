@@ -1,83 +1,122 @@
-# Studio Auth Decisions
+# Studio Auth Decisions — Sprint 05 Baseline
 
-> Bu belge Sprint 04 karar matrisi çıktısıdır. Gerçek Supabase Auth, MFA, middleware, route guard, session kontrolü, environment değişkeni veya migration implementasyonu içermez. Tüm başlıklar kullanıcı onayı ve entegrasyon kararı bekleyen plan maddeleridir.
+> Durum: **Karar önerisi hazırlandı, uygulanmadı.** Bu belge gerçek Supabase Auth, MFA, route guard, middleware, session/cookie yönetimi veya environment değişkeni içermez.
 
-## Mevcut durum
+## Güvenlik hedefi
 
-- `/login` sayfası placeholder durumundadır.
-- Form alanları ve giriş butonu bilinçli olarak disabled kalır.
-- `/studio` rotaları UI/mock workflow incelemesi için erişilebilir durumdadır.
-- Bu durum gerçek güvenlik sağlamaz; gizli URL güvenlik kabul edilmez.
-- Supabase Auth, MFA, RLS, Storage güvenliği ve route guard sonraki fazda bağlanacaktır.
+Studio yalnız Ziyaattin’in kullanacağı private yönetim alanıdır. İlk Auth implementasyonunda hedef çok kullanıcılı ekip sistemi değil, tek ve doğrulanmış owner hesabının güvenli erişimidir.
 
-## Ürün ilkesi
+Temel ilkeler:
 
-Studio yalnız Ziyaattin'in private çalışma alanı olacaktır. Herkese açık kayıt, self-service sign-up, davetli ekip yönetimi veya çok kullanıcılı rol matrisi Sprint 04 kapsamına alınmaz. İlk gerçek güvenlik fazında hedef, tek owner hesabı için admin-only erişim modelini sağlamaktır.
+- Public sign-up kapalı olmalıdır.
+- Auth olmuş her kullanıcı Studio owner kabul edilmemelidir.
+- Yetki yalnız client metadata, form role alanı veya gizli URL’ye dayanmamalıdır.
+- Owner yetkisi `auth.uid()` ile eşleşen, veritabanında kontrollü aktive edilmiş `owner_profiles` satırından gelmelidir.
+- MFA tamamlanmadan Studio private verisi okunmamalıdır.
+- Service role key browser/client bundle’a konmamalıdır.
+- Route guard tek güvenlik katmanı değildir; RLS nihai veri sınırını korumalıdır.
 
 ## Karar matrisi
 
-| Başlık | Öneri | Avantaj | Risk / dikkat | Kullanıcı kararı gerekli mi? | İmplementasyon sprint'i |
+| Karar | Önerilen baseline | Alternatif | Ana risk | Kullanıcı onayı gerekli mi? | Durum / hedef sprint |
 | --- | --- | --- | --- | --- | --- |
-| Supabase Auth provider | İlk fazda Supabase Auth üzerinde tek owner hesabı; ekstra OAuth provider eklenmesin. | Kurulum ve RLS ilişkisi sade kalır. | Provider çeşitliliği istenirse callback ve account linking karmaşıklaşır. | Evet; provider kapsamı onaylanmalı. | Faz 3 Auth sprint'i |
-| Email/password | Tek owner için e-posta/şifre kullanılabilir; public sign-up kapalı olmalı. | Basit, MFA ile birlikte anlaşılır akış. | Zayıf şifre veya yanlış sign-up ayarı risk oluşturur. | Evet; owner e-postası ve sign-up kapatma kararı gerekir. | Faz 3 Auth sprint'i |
-| Magic link | İlk fazda kapalı veya opsiyonel beklemede kalsın. | Kapalı kalırsa recovery ve link hijacking yüzeyi azalır. | Açılırsa e-posta erişimi kritik güvenlik faktörü olur. | Evet; kullanım kolaylığı mı, yüzey azaltma mı tercih edilecek? | Auth karar sprint'i sonrası |
-| MFA yöntemi | Authenticator uyumlu TOTP zorunlu olsun. | Tek owner Studio için güçlü ikinci faktör sağlar. | Recovery code ve cihaz kaybı akışı net değilse kilitlenme riski var. | Evet; TOTP zorunluluğu ve recovery davranışı onaylanmalı. | Faz 3 / MFA sprint'i |
-| Session timeout | Private Studio için kısa/orta süreli timeout; pasif kalma davranışı ayrıca değerlendirilsin. | Paylaşılan cihaz riskini azaltır. | Çok kısa timeout çalışma akışını bölebilir. | Evet; süre kullanıcı tercihi gerektirir. | Auth hardening sprint'i |
-| Remember me | İlk güvenlik fazında kapalı veya sınırlı süreli olsun. | Saldırı yüzeyini azaltır. | Sık giriş deneyimi yorucu olabilir. | Evet; mobil/desktop kullanım alışkanlığına göre karar verilmeli. | Auth hardening sprint'i |
-| Recovery flow | Şifre sıfırlama + MFA recovery code planı ayrı yazılsın; gerçek ekranlar sonra eklensin. | Kilitlenme durumunda kontrollü çıkış yolu sağlar. | Recovery zayıf tasarlanırsa MFA etkisi azalır. | Evet; recovery code saklama ve manuel müdahale kararı gerekir. | Recovery sprint'i |
-| Admin-only owner allowlist | Auth user id veya doğrulanmış owner e-posta allowlist'i server tarafında kontrol edilsin. | Tek owner sınırı netleşir, yanlış hesap erişimi engellenir. | E-posta bazlı kontrol tek başına yeterli olmayabilir; user id tercih edilmeli. | Evet; owner hesabı kesinleşmeli. | Faz 3 Auth sprint'i |
-| Route guard stratejisi | Middleware + server-side session/MFA check kombinasyonu değerlendirilsin; public route'lar ayrık kalsın. | `/studio/**` sınırı merkezi yönetilir, server component kontrolleriyle güçlenir. | Yanlış middleware matcher public siteyi bozabilir. | Evet; guard noktası entegrasyonla seçilmeli. | Faz 3 Auth sprint'i |
-| MFA tamamlanmamış ara durum | Şifre doğrulandı ama MFA yoksa Studio yerine MFA challenge/enrollment adımına yönlendirilsin. | Eksik MFA ile Studio erişimi engellenir. | Ara route ve session state yönetimi dikkat ister. | Evet; enrollment mı challenge mı önce gelecek kararı gerekir. | MFA sprint'i |
-| Public/private veri sınırı | Studio private tabloları public route tarafından doğrudan okunmasın; publish edilen içerik public-safe kaynağa dönüştürülsün. | Private veri sızıntısı riski azalır. | Çift kaynak/publish queue tasarımı daha fazla iş gerektirir. | Kısmen; teknik karar gerekir. | Publish/data sprint'i |
+| Hesap modeli | Tek owner hesabı | Gelecekte kontrollü admin hesabı | Yanlışlıkla çok kullanıcıya yetki verilmesi | Evet | `USER_APPROVAL_REQUIRED` — Sprint 06 öncesi |
+| Auth provider | Supabase Auth | Harici OAuth provider | Provider callback/account linking karmaşıklığı | Evet | `USER_APPROVAL_REQUIRED` |
+| Ana giriş yöntemi | Email/password + TOTP MFA | Magic link + TOTP | Şifre yönetimi gerekir; magic link e-posta hesabını kritik faktör yapar | Evet | `USER_APPROVAL_REQUIRED` |
+| Public sign-up | Kapalı | Before User Created Hook ile allowlist | Yanlış Dashboard ayarı veya hook hatası yeni hesap açabilir | Evet | Öneri: kapalı |
+| Magic link | İlk fazda kapalı | Recovery veya ana giriş yöntemi | Link yönlendirme ve e-posta hesabı ele geçirilmesi riski | Evet | `USER_APPROVAL_REQUIRED` |
+| MFA | Authenticator uyumlu TOTP zorunlu | MFA’sız tek faktör veya farklı yöntem | Cihaz kaybında recovery olmadan kilitlenme | Evet | Öneri: zorunlu TOTP |
+| MFA enrollment | Owner hesabı oluşturulduktan sonra ilk güvenli oturumda zorunlu enrollment | Önceden manuel enrollment | Enrollment tamamlanmadan Studio erişimi sızabilir | Evet | Sprint 06/07 |
+| MFA challenge | Şifre doğrulandıktan sonra AAL2 doğrulanmadan `/studio/**` erişimi yok | Sadece kritik işlemlerde MFA | MFA’nın private veri koruması zayıflar | Evet | Öneri: Studio’nun tamamında AAL2 |
+| Owner allowlist | `owner_profiles.user_id = auth.uid()` + aktif owner/admin rolü | Doğrulanmış e-posta allowlist’i | E-posta değişimi/metadata güveni yanlış yetki verebilir | Evet | SQL baseline hazır, kullanıcı UUID’si bekleniyor |
+| Owner aktivasyonu | Trusted SQL Editor/Dashboard işlemi | Otomatik role assignment | Her yeni Auth kullanıcısının owner olması kritik açık oluşturur | Evet | Öneri: kontrollü manuel aktivasyon |
+| Session timeout | 8 saat mutlak oturum + 30 dakika pasiflik sonrası yeniden doğrulama değerlendirmesi | Daha kısa veya daha uzun süre | Kısa süre UX’i bozar; uzun süre cihaz riskini artırır | Evet | `USER_APPROVAL_REQUIRED` |
+| Remember me | İlk fazda kapalı veya Supabase güvenli session varsayılanıyla sınırlı | Uzun kalıcı session | Kayıp/paylaşılan cihazda erişim süresi uzar | Evet | `USER_APPROVAL_REQUIRED` |
+| Recovery | Şifre reset + tek kullanımlık MFA recovery prosedürü; manuel owner doğrulaması | Sadece e-posta reset | Zayıf recovery MFA’yı etkisizleştirir; yetersiz recovery kilitlenme yaratır | Evet | `USER_APPROVAL_REQUIRED` |
+| Başarısız login | Genel hata mesajı, rate limit/CAPTCHA değerlendirmesi, kullanıcı varlığını açıklamama | Ayrıntılı hata mesajı | Account enumeration ve brute force | Evet | Sprint 06 Auth UX |
+| Route guard | Server-side session + owner + MFA kontrolü; middleware yalnız erken yönlendirme yardımcı katmanı | Sadece middleware | Middleware tek başına veri güvenliği sağlamaz | Teknik onay | Sprint 06 |
+| RLS | Tüm private tablolarda aktif; owner-only write | Server/service role üzerinden bypass CRUD | Client bug’ı private veriyi açabilir; service role kötüye kullanılabilir | Teknik onay | Sprint 05 SQL hazır, uygulanmadı |
+| Storage | `public-assets` ve `private-files` ayrımı; owner UUID path prefix | Tek bucket | Private object yanlışlıkla public olabilir | Evet | Limit/MIME kararı bekliyor |
 
-## Admin-only erişim modeli taslağı
+## Önerilen owner aktivasyon modeli
 
-1. Public sign-up kapalı tutulur.
-2. Supabase içinde yalnız önceden oluşturulmuş owner hesabı kabul edilir.
-3. Owner doğrulaması sadece client UI mesajıyla değil, server tarafında yapılır.
-4. `/studio/**` route'ları session + owner allowlist + MFA tamamlanma durumunu geçmeden private veri okumaz.
-5. Public site, Studio session bilgisine ihtiyaç duymaz ve Studio auth kontrolünden etkilenmez.
-6. Service role key client bundle'a asla konmaz.
+Sprint 05 SQL paketi şu modeli kullanır:
 
-Bu maddeler uygulanmış değildir; gerçek sprintte ayrı test ve güvenlik kabul kriteri gerektirir.
+1. Supabase Auth üzerinde gerçek kullanıcı oluşturulur.
+2. Auth trigger yalnız `pending`, rolesüz bir `owner_profiles` satırı oluşturur.
+3. Gerçek UUID ve e-posta kullanıcı tarafından doğrulanır.
+4. Trusted SQL Editor oturumunda yalnız o UUID `role = owner`, `status = active` yapılır.
+5. RLS helper `auth.uid()` ile aktif owner/admin satırını kontrol eder.
+6. Client herhangi bir role veya owner UUID seçemez.
 
-## Karar bekleyen açık sorular
+Her yeni Auth kullanıcısı otomatik owner yapılmaz.
 
-- Owner allowlist `auth.uid()` ile mi, doğrulanmış e-posta ile mi, yoksa ikisinin kombinasyonuyla mı yapılacak?
-- MFA enrollment ilk girişte zorunlu mu olacak, yoksa owner hesabı önceden MFA kurulmuş şekilde mi hazırlanacak?
-- Recovery code gösterimi ve saklama sorumluluğu nasıl anlatılacak?
-- Session timeout süresi desktop ve mobil için aynı mı olacak?
-- Route guard middleware matcher kapsamı sadece `/studio/:path*` ve gerekli auth callback route'larıyla mı sınırlanacak?
-- Publish edilecek public-safe içerik ayrı tablo/view içinde mi tutulacak, yoksa build-time/static içerik üretimi mi tercih edilecek?
+## Önerilen login ve MFA akışı
 
-## Uygulama dışı bırakılanlar
+1. Kullanıcı `/login` üzerinden seçilen Supabase Auth yöntemiyle kimliğini doğrular.
+2. Session yoksa Studio’ya geçiş yapılmaz.
+3. Session var fakat allowlist profili aktif değilse erişim reddedilir.
+4. Owner doğrulanmış fakat MFA enrollment yoksa enrollment ekranına yönlendirilir.
+5. MFA enrollment var fakat mevcut session AAL2 değilse challenge ekranına yönlendirilir.
+6. Session + owner + gerekli MFA seviyesi doğrulandıktan sonra `/studio/**` render edilir.
+7. Server-side kontroller ve RLS birlikte uygulanır.
 
-Bu sprintte özellikle yapılmayacaklar:
+Bu akış plan durumundadır; route veya kod eklenmemiştir.
 
-- Supabase client oluşturma.
-- `.env.example` veya `.env.local` değiştirme.
-- Middleware ekleme.
-- Route guard yazma.
-- Auth callback route'u ekleme.
-- MFA doğrulama veya enrollment akışı oluşturma.
-- Session veya cookie yönetimi ekleme.
-- RLS policy veya SQL migration yazma.
-- Storage bucket oluşturma.
-- Gerçek publish, upload, delete veya CRUD işlemi ekleme.
+## Recovery önerisi
+
+Kullanıcı kararından sonra recovery planı ayrıca kabul edilmelidir:
+
+- Owner e-posta hesabının güvenliği ön koşuldur.
+- Şifre reset linkleri kısa ömürlü ve tek kullanımlık olmalıdır.
+- MFA cihazı kaybında ikinci doğrulama/recovery adımı tanımlanmalıdır.
+- Recovery işlemi owner allowlist rolünü otomatik değiştirmemelidir.
+- Yeni cihaz veya MFA reset sonrası mevcut session’ların iptal edilmesi değerlendirilmelidir.
+- Recovery code/backup yöntemi düz metin repository veya not tablosunda tutulmamalıdır.
+
+## Başarısız giriş davranışı
+
+Önerilen UX ve güvenlik sınırı:
+
+- “E-posta bulunamadı” gibi account enumeration mesajı gösterme.
+- Genel “Giriş bilgileri doğrulanamadı” mesajı kullan.
+- Art arda denemelerde Supabase rate limit ve gerekirse CAPTCHA ayarını değerlendir.
+- Başarısız giriş nedeniyle owner role/status değiştirme.
+- Login denemelerini application log’a secret/şifre içerecek şekilde yazma.
+- MFA hatasını şifre hatasından ayrıştırırken hesap varlığını ifşa etme.
+
+## Kullanıcıdan beklenen kararlar
+
+Sprint 06 başlamadan önce en az şu cevaplar alınmalıdır:
+
+- [ ] Ana giriş email/password mı, magic link mi?
+- [ ] TOTP MFA zorunlu mu?
+- [ ] Owner hesabının doğrulanmış e-posta adresi nedir?
+- [ ] Owner UUID aktivasyonu için SQL paketi çalıştırılmasına onay var mı?
+- [ ] Session timeout ve remember-me tercihi nedir?
+- [ ] Recovery yöntemi nedir?
+- [ ] Public/private bucket boyut ve MIME baseline’ı onaylandı mı?
+- [ ] Development seed çalıştırılacak mı?
+- [ ] Sprint 06 Auth + route guard implementasyonuna onay var mı?
+
+## Bu sprintte uygulanmayanlar
+
+- Supabase projesi veya Auth provider ayarı yapılmadı.
+- Auth client/server paketi eklenmedi.
+- `/login` gerçek forma dönüştürülmedi.
+- Middleware, callback route veya route guard eklenmedi.
+- MFA enrollment/challenge uygulanmadı.
+- Session timeout veya recovery uygulanmadı.
+- Gerçek owner UUID commit edilmedi.
+- SQL gerçek Supabase projesine uygulanmadı.
 
 ## İlgili dokümanlar
 
+- `supabase/README.md`
+- `supabase/migrations/202607100001_initial_schema.sql`
+- `supabase/migrations/202607100002_database_functions.sql`
+- `supabase/migrations/202607100003_rls_policies.sql`
+- `supabase/migrations/202607100004_storage_setup.sql`
 - `docs/studio/STUDIO_DATA_MODEL_DRAFT.md`
 - `docs/studio/STUDIO_SECURITY_RLS_PLAN.md`
 - `docs/studio/STUDIO_PUBLISH_FLOW.md`
-- `docs/content/PUBLIC_CONTENT_MODEL.md` — Public content contract ile uyum için referans alınacak; bu belge Studio sprintinde değiştirilmez.
-
-## Sonraki faz için önerilen kontrol listesi
-
-- [ ] Supabase project ve Auth provider ayarları doğrulanacak.
-- [ ] Tek owner hesabı ve allowlist yöntemi netleşecek.
-- [ ] MFA yöntemi, enrollment ve recovery davranışı seçilecek.
-- [ ] Route guard uygulama noktası belirlenecek.
-- [ ] RLS policy taslakları migration öncesi gözden geçirilecek.
-- [ ] Storage bucket ayrımı ve public/private dosya stratejisi onaylanacak.
-- [ ] Public/private data boundary test edilecek.

@@ -97,3 +97,13 @@ Notlar:
 - Production Deployment main push sonrasında doğrulanacak.
 - Public publish ve Studio Auth/RLS/Publish Flow karar hazırlıkları tamamlandı.
 - Gerçek Supabase/Auth/Storage/CRUD implementasyonu Sprint 04 kapsamında yapılmadı.
+
+## Studio Sprint 05
+
+- Branch: `feat/studio-supabase-schema-s05`
+- Durum: `[x]`
+- Sahiplik: Çalıştırılabilir schema, function/trigger, RLS, Storage, development seed, rollback ve Supabase runbook
+- SQL paketi hazırlanması: `[x]`
+- SQL'in gerçek Supabase projesine uygulanması: `[ ]`
+- Gerçek Auth/MFA/CRUD/upload/publish implementasyonu: `[ ]`
+- Not: Owner UUID, Auth yöntemi, TOTP, session/recovery ve Storage limitleri kullanıcı karar kapısını bekliyor.
