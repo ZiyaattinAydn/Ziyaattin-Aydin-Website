@@ -96,3 +96,42 @@ Bu başlıklar karar verilmiş maddeler değildir. Supabase/Auth/Storage impleme
 - Faz 2 tamamen kapanmadan önce gerçek Preview URL ve Production URL doğrulanmalı.
 - Vercel Dashboard/CLI erişimi yoksa deployment tamamlandı işaretlenmemeli.
 - Supabase/Auth/Storage secret'ları, kullanıcı onayı ve Faz 3 implementasyon kapsamı olmadan eklenmemeli.
+
+## Sprint 05 — Supabase Mimari Baseline Önerileri
+
+Bu maddeler implementasyon kararı değildir. `docs/supabase/SPRINT_06_APPROVAL_GATE.md` içindeki kullanıcı onayı tamamlanmadan gerçek Supabase/Auth/SQL çalışması başlamaz.
+
+### Environment ayrımı
+- Öneri: Ayrı Production ve Non-production Supabase project.
+- Local ve Vercel Preview başlangıçta Non-production project'i paylaşabilir.
+- Production secret ve verisi Preview ortamına verilmez.
+- Durum: `USER_APPROVAL_REQUIRED`.
+
+### Auth ve owner modeli
+- Öneri: Public signup kapalı tek owner hesabı.
+- Owner yetkisi e-posta string'inden değil `auth.uid()` ile bağlı owner profile kaydından gelir.
+- İlk owner ataması review edilmiş tek seferlik SQL/admin işlemiyle yapılır; her yeni kullanıcı otomatik owner olmaz.
+- Durum: `USER_APPROVAL_REQUIRED`.
+
+### Session ve route guard
+- Öneri: Cookie tabanlı Supabase SSR session.
+- Next.js 16 Proxy yalnız session yenileme ve erken redirect için kullanılır.
+- Studio server layout, mutation katmanı ve RLS authorization'ı tekrar doğrular.
+- Proxy veya client redirect tek güvenlik katmanı değildir.
+- Durum: `USER_APPROVAL_REQUIRED`.
+
+### MFA
+- Öneri: Production Studio için TOTP MFA ve `aal2` zorunluluğu.
+- Recovery için verified email reset ve backup TOTP factor yaklaşımı değerlendirilir.
+- Durum: `USER_APPROVAL_REQUIRED`.
+
+### Service role
+- Service role/secret key yalnız açıkça onaylanmış server-only administrative işlerde kullanılabilir.
+- Normal Public/Studio CRUD user session + RLS ile yürütülür.
+- Service role hiçbir koşulda browser bundle veya `NEXT_PUBLIC_*` değişkenine girmez.
+
+### Migration kapısı
+- SQL önce review edilir, sonra Non-production project'te dosya sırasıyla çalıştırılır.
+- Her adım ayrı stop point'tir; başarısız adım sonrası ilerlenmez.
+- Preview kabulü, backup ve kullanıcı onayı olmadan Production migration çalıştırılmaz.
+- Uygulanmış migration sessizce değiştirilmez; düzeltme yeni migration dosyasıdır.

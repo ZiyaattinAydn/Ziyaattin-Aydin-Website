@@ -42,3 +42,14 @@
 - Auth ve MFA gerçek implementasyonu: `[ ]`
 - PostgreSQL, Storage, RLS ve route guard implementasyonu: `[ ]`
 - Production URL doğrulaması başarısız veya erişilemezse Faz 2 tamamen kapanmış sayılmamalıdır.
+
+## Sprint 05 — Faz 3 Mimari Hazırlık Notu
+
+- [x] Supabase mimari/environment/server-client/session-guard/runbook sözleşmeleri branch içinde hazırlandı.
+- [x] Sprint 06 kullanıcı karar kapısı hazırlandı.
+- [ ] Supabase project oluşturma ve gerçek env değerleri kullanıcı onayı bekliyor.
+- [ ] Auth/MFA/Proxy/route guard implementasyonu başlamadı.
+- [ ] Studio SQL paketi gerçek Supabase project'inde uygulanmadı.
+- [ ] Public ve Studio mock veri geçişi başlamadı.
+
+Faz 3 yalnız mimari hazırlık düzeyinde `[~]` kabul edilmelidir; gerçek Auth ve güvenlik implementasyonu tamamlanmış sayılmaz.
