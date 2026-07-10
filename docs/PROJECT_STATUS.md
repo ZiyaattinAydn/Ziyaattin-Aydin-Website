@@ -1,6 +1,6 @@
 # Proje Durumu
 
-Son güncelleme: 2026-07-07
+Son güncelleme: 2026-07-10
 
 ## İşaretler
 - `[ ]` Başlamadı
@@ -116,3 +116,19 @@ Sprint 02 Core branch entegrasyonundan sonra Public ve Studio Sprint 02 çalış
 - [!] `npm audit` 2 moderate vulnerability göstermeye devam ediyor.
 - [ ] Supabase/Auth/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
 - [!] Hakkımda portresi ve gerçek linkler kullanıcı onayı bekliyor.
+
+## Sprint 05 — Core Supabase Architecture
+
+- [x] Sprint 05 başlangıç main commit'i `cf2d3ab` olarak kayda geçirildi.
+- [x] Supabase mimari sözleşmesi oluşturuldu: `docs/supabase/SUPABASE_ARCHITECTURE.md`.
+- [x] Supabase environment matrisi oluşturuldu: `docs/supabase/SUPABASE_ENVIRONMENT.md`.
+- [x] Server/Client Component, Server Action, Route Handler ve service-role sınırları oluşturuldu: `docs/supabase/SERVER_CLIENT_BOUNDARY.md`.
+- [x] Cookie tabanlı session, Next.js 16 Proxy, server guard, owner kontrolü ve RLS sorumlulukları öneri olarak dokümante edildi: `docs/supabase/AUTH_SESSION_AND_GUARD.md`.
+- [x] SQL review, non-production uygulama, stop point, backup ve rollback sırası oluşturuldu: `docs/supabase/MIGRATION_RUNBOOK.md`.
+- [x] Sprint 06 kullanıcı karar kapısı oluşturuldu: `docs/supabase/SPRINT_06_APPROVAL_GATE.md`.
+- [x] `.env.example` incelendi; gerekli dört placeholder zaten bulunduğu için gerçek değer veya yeni env değişkeni eklenmedi.
+- [!] Supabase region, Auth provider, MFA, owner allowlist, session, recovery, Storage limitleri, seed ve SQL uygulama onayı `USER_APPROVAL_REQUIRED` durumunda.
+- [ ] Gerçek Supabase project/client kurulumu yapılmadı.
+- [ ] Auth, MFA, Proxy/route guard ve CRUD implementasyonu yapılmadı.
+- [ ] SQL migration veya Storage policy çalıştırılmadı.
+- [!] `npm audit` iki moderate uyarıyı izlemeye devam ediyor; `npm audit fix --force` çalıştırılmamalı.

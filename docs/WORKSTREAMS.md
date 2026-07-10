@@ -97,3 +97,26 @@ Notlar:
 - Production Deployment main push sonrasında doğrulanacak.
 - Public publish ve Studio Auth/RLS/Publish Flow karar hazırlıkları tamamlandı.
 - Gerçek Supabase/Auth/Storage/CRUD implementasyonu Sprint 04 kapsamında yapılmadı.
+
+## Sprint 05 — Supabase Hazırlık Çalışma Hatları
+
+### Pencere 1 — Core Foundation / Supabase Architecture
+- Branch: `feat/core-supabase-architecture-s05`
+- Durum: `[x]`
+- Sahiplik: Supabase mimari sözleşmesi, environment stratejisi, server/client sınırı, Auth/session/guard önerisi, migration runbook ve Sprint 06 karar kapısı
+- Not: Gerçek Supabase client, Auth, Proxy/route guard, SQL veya secret implementasyonu yapılmadı.
+
+### Pencere 2 — Public Data Transition
+- Branch: `feat/public-data-transition-s05`
+- Durum: `[ ]`
+- Sahiplik: Public mock → database geçiş sözleşmesi; Core Supabase belgelerini veya gerçek client kodunu değiştirmemeli.
+
+### Pencere 3 — Studio / Supabase SQL
+- Branch: `feat/studio-supabase-schema-s05`
+- Durum: `[ ]`
+- Sahiplik: Review edilebilir schema, RLS, Storage, seed ve rollback SQL paketi; SQL gerçek projede çalıştırılmayacak.
+
+### Pencere 4 — Entegrasyon
+- Branch: `integration/sprint-05`
+- Durum: `[ ]`
+- Sorumluluk: Core/Public/Studio sözleşmelerini karşılaştırma, SQL güvenlik denetimi, kullanıcı karar kapısı ve kalite kontrolleri.

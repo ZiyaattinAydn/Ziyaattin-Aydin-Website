@@ -77,6 +77,25 @@
 
 ## Unreleased
 
+### Sprint 05 — Core Supabase Architecture
+
+#### Added
+- Supabase mimari sözleşmesi: `docs/supabase/SUPABASE_ARCHITECTURE.md`
+- Supabase environment matrisi: `docs/supabase/SUPABASE_ENVIRONMENT.md`
+- Server/client sınır sözleşmesi: `docs/supabase/SERVER_CLIENT_BOUNDARY.md`
+- Auth session ve route guard mimarisi: `docs/supabase/AUTH_SESSION_AND_GUARD.md`
+- Migration ve rollback runbook: `docs/supabase/MIGRATION_RUNBOOK.md`
+- Sprint 06 kullanıcı karar kapısı: `docs/supabase/SPRINT_06_APPROVAL_GATE.md`
+
+#### Changed
+- Core tracking ve karar belgeleri Sprint 05 Supabase hazırlık durumuna göre güncellendi.
+- `.env.example` contract'ı incelendi; mevcut dört placeholder yeterli olduğu için yeni değişken veya gerçek değer eklenmedi.
+
+#### Security
+- Service role key'in browser ve normal CRUD yolundan tamamen ayrılması dokümante edildi.
+- Next.js 16 Proxy'nin nihai authorization katmanı olmadığı; server guard ve RLS'nin zorunlu olduğu netleştirildi.
+- Gerçek secret, client kodu, Auth, Proxy, SQL veya Storage implementasyonu eklenmedi.
+
 ### Added
 - Vercel Preview / Production doğrulama checklist'i eklendi: `docs/deployment/VERCEL_CHECKLIST.md`
 - Environment değişken sözleşmesi eklendi: `docs/deployment/ENVIRONMENT.md`
