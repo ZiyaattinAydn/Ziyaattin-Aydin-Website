@@ -97,3 +97,20 @@ Notlar:
 - Production Deployment main push sonrasında doğrulanacak.
 - Public publish ve Studio Auth/RLS/Publish Flow karar hazırlıkları tamamlandı.
 - Gerçek Supabase/Auth/Storage/CRUD implementasyonu Sprint 04 kapsamında yapılmadı.
+
+## Sprint 05 Entegrasyon Sonucu
+
+- Core Sprint 05 — `feat/core-supabase-architecture-s05`: `[m]`
+- Public Sprint 05 — `feat/public-data-transition-s05`: `[m]`
+- Studio Sprint 05 — `feat/studio-supabase-schema-s05`: `[m]`
+- Entegrasyon Sprint 05 — `integration/sprint-05`: `[m]`
+- SQL package prepared: `[m]`
+- Gerçek Supabase implementasyonu: `[ ]`
+- Kullanıcı karar kapısı: `[!]`
+
+Notlar:
+
+- SQL paketi repository içinde hazırlandı fakat gerçek Supabase projesinde çalıştırılmadı.
+- Auth, MFA, middleware, route guard, CRUD, Storage upload ve gerçek publish implementasyonu başlamadı.
+- Anonymous erişim yalnız published/public project, writing ve journey kayıtlarıyla sınırlandı.
+- Sprint 06, `SPRINT_05_FINAL_DECISION_GATE.md` cevaplanmadan başlatılmamalıdır.

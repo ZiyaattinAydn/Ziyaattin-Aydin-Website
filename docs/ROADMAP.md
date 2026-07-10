@@ -53,3 +53,15 @@
 - [ ] Public ve Studio mock veri geçişi başlamadı.
 
 Faz 3 yalnız mimari hazırlık düzeyinde `[~]` kabul edilmelidir; gerçek Auth ve güvenlik implementasyonu tamamlanmış sayılmaz.
+
+## Sprint 05 Sonrası Durum
+
+- Faz 4 mimari hazırlık: `[m]`
+- Public database transition sözleşmesi: `[m]`
+- Supabase SQL schema/RLS/Storage tasarımı: `[m]`
+- SQL gerçek Supabase projesine uygulanması: `[ ]`
+- Auth ve MFA implementasyonu: `[ ]`
+- RLS gerçek proje testi: `[ ]`
+- Storage bucket oluşturma: `[ ]`
+- Studio route guard ve CRUD: `[ ]`
+- Sprint 06 başlangıcı: `[!] USER_APPROVAL_REQUIRED`

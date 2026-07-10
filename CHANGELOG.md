@@ -1,3 +1,41 @@
+## Sprint 05 Integration — 2026-07-10
+
+### Added
+
+- Supabase mimari, environment, server/client boundary, session/guard ve migration runbook belgeleri.
+- Public database mapping, visibility, query, fallback, approval ve mock migration sözleşmeleri.
+- Initial schema, database function/trigger, RLS ve Storage migration paketi.
+- Development seed template ve veri kaybı uyarılı destructive rollback.
+- Sprint 05 final kullanıcı karar kapısı ve integration handoff kaydı.
+
+### Changed
+
+- Canonical visibility değerleri `private`, `hidden`, `public` olarak hizalandı.
+- Canonical publish state değerleri `draft`, `review`, `approved`, `published`, `unpublished`, `archived` olarak hizalandı.
+- Eski `unlisted` public davranışı `hidden` olarak normalize edildi.
+- Anonymous public read sözleşmesi yalnız `published + public` kayıtlarla sınırlandı.
+
+### Security
+
+- Tüm application tabloları için RLS tasarlandı.
+- Anonymous write yetkisi oluşturulmadı.
+- Owner erişimi `auth.uid()` ve active allowlist ile sınırlandı.
+- Yeni Auth kullanıcılarının otomatik owner yapılması engellendi.
+- Service role normal CRUD kapsamı dışında bırakıldı.
+- Seed gerçek owner UUID veya Auth user oluşturmaz.
+- Normal migration destructive SQL içermez.
+
+### Not Applied
+
+- Supabase projesi oluşturulmadı.
+- SQL gerçek Supabase projesinde çalıştırılmadı.
+- Auth, MFA, middleware, route guard, CRUD ve Storage implementasyonu başlatılmadı.
+- Gerçek secret veya environment değeri eklenmedi.
+
+### Blocked
+
+- SQL uygulama ve Sprint 06 başlangıcı kullanıcı karar kapısını bekliyor.
+
 ## Sprint 04 Integration — 2026-07-07
 
 ### Added
