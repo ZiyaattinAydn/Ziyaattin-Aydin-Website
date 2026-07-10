@@ -33,6 +33,8 @@ export function ProjectExplorer({ projects }: { projects: ProjectSummary[] }) {
               project.summary,
               project.sourceNote,
               project.publishState,
+              project.publishFlowState,
+              project.approvalNote,
               ...project.technologies,
             ]
               .join(" ")

@@ -37,7 +37,7 @@ export default function JourneyPage() {
             <h2 className="text-2xl font-semibold">Kapsam notu</h2>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-[var(--muted)]">
               <li>• Yaş, okul, iş veya kişisel başarı gibi doğrulanmamış yeni bilgi eklenmedi.</li>
-              <li>• Aşamalar gerçek kronoloji değil; publishState, visibility ve sourceNote alanlarını test eden geçici içeriktir.</li>
+              <li>• Aşamalar gerçek kronoloji değil; publishState, publishFlowState, visibility ve sourceNote alanlarını test eden geçici içeriktir.</li>
               <li>• İlgili proje/yazı bağlantıları yalnız mevcut mock sluglara gider.</li>
             </ul>
           </Panel>

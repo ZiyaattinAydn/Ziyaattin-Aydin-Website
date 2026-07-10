@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Panel } from "@/components/ui/panel";
+import { PublishStatusNote } from "@/components/public/publish-status-note";
 import { profileContent } from "@/data/mock-content";
 
 export default function AboutPage() {
@@ -75,6 +76,18 @@ export default function AboutPage() {
         </Panel>
 
         <Panel className="p-5 sm:p-6">
+          <h2 className="text-2xl font-semibold">Onay durumu</h2>
+          <div className="mt-4">
+            <PublishStatusNote
+              publishFlowState={profileContent.publishFlowState}
+              visibility="public"
+              sourceNote={profileContent.portrait.note}
+              approvalNote={profileContent.approvalNote}
+            />
+          </div>
+        </Panel>
+
+        <Panel className="p-5 sm:p-6 lg:col-span-3">
           <h2 className="text-2xl font-semibold">İletişim</h2>
           <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
             {profileContent.contactNote}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Panel } from "@/components/ui/panel";
+import { PublishStatusNote } from "@/components/public/publish-status-note";
 import { WritingExplorer } from "@/components/public/writing-explorer";
 import { publishStateLabels, visibilityLabels, writings } from "@/data/mock-content";
 
@@ -52,9 +53,15 @@ export default function WritingsPage() {
             <p className="text-sm text-[var(--accent)]">{featured.category}</p>
             <h2 className="mt-2 text-2xl font-semibold sm:text-3xl">{featured.title}</h2>
             <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)] sm:text-base">{featured.excerpt}</p>
-            <p className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
-              {featured.sourceNote}
-            </p>
+            <div className="mt-4">
+              <PublishStatusNote
+                publishFlowState={featured.publishFlowState}
+                visibility={featured.visibility}
+                sourceNote={featured.sourceNote}
+                approvalNote={featured.approvalNote}
+                compact
+              />
+            </div>
             <div className="mt-4 flex flex-wrap gap-2">
               {featured.tags.map((tag) => (
                 <span key={tag} className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-2.5 py-1 text-xs text-[var(--muted)]">

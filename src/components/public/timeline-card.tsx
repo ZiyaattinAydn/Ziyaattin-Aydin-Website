@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { JourneyItem } from "@/data/mock-content";
-import { publishStateLabels, visibilityLabels } from "@/data/mock-content";
+import { publishStateLabels } from "@/data/mock-content";
 import { Panel } from "@/components/ui/panel";
+import { PublishStatusNote } from "@/components/public/publish-status-note";
 
 type TimelineCardProps = {
   item: JourneyItem;
@@ -28,9 +29,15 @@ export function TimelineCard({ item, compact = false }: TimelineCardProps) {
       </div>
       <h2 className="mt-3 text-xl font-semibold leading-snug">{item.title}</h2>
       <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{item.detail}</p>
-      <p className="mt-3 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-3 text-xs leading-5 text-[var(--muted)]">
-        {visibilityLabels[item.visibility]} · {item.sourceNote}
-      </p>
+      <div className="mt-3">
+        <PublishStatusNote
+          publishFlowState={item.publishFlowState}
+          visibility={item.visibility}
+          sourceNote={item.sourceNote}
+          approvalNote={item.approvalNote}
+          compact={compact}
+        />
+      </div>
       {!compact ? (
         <div className="mt-4 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[var(--muted)]">Öğrenilen not</p>
