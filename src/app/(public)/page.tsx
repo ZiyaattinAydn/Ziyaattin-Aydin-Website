@@ -22,7 +22,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(18,217,120,.12),transparent_28rem)]" />
         <div className="relative z-10 max-w-2xl space-y-6">
           <div className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-            Public site · Sprint 03 yayın sözleşmesi
+            Public site · Sprint 04 publish planı
           </div>
           <div>
             <p className="text-base text-[var(--accent)] sm:text-lg">Merhaba, ben</p>
@@ -34,7 +34,7 @@ export default function HomePage() {
             Öğrenme, üretme ve dijital sistem kurma yolculuğunu sade bir public yüzeyde topluyorum.
           </h2>
           <p className="max-w-xl text-base leading-7 text-[var(--muted)] sm:text-lg">
-            Bu public sürüm; proje, yazı ve yolculuk alanlarını ileride Studio publish akışına bağlanacak güvenli mock içerik sözleşmesiyle gösterir. Gerçek bağlantılar ve kişisel detaylar kullanıcı onayından sonra eklenecek.
+            Bu public sürüm; proje, yazı ve yolculuk alanlarını ileride Studio publish akışına bağlanacak güvenli mock içerik sözleşmesiyle gösterir. Gerçek bağlantılar, iletişim bilgileri ve portre kararı kullanıcı onayı olmadan aktifleşmeyecek.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
             <Link
@@ -77,7 +77,7 @@ export default function HomePage() {
       <PublicSection
         eyebrow="Projeler"
         title="Öne çıkan public proje kayıtları"
-        description="Kartlar; durum, ilerleme, kategori ve teknoloji etiketlerini gerçek link uydurmadan gösterir. Link yoksa detay sayfasında pasif bilgi görünür."
+        description="Kartlar; durum, publish akışı, ilerleme, kategori ve teknoloji etiketlerini gerçek link uydurmadan gösterir. Link yoksa detay sayfasında pasif bilgi görünür."
         href="/projects"
         linkLabel="Tüm projeler"
       >
@@ -113,7 +113,7 @@ export default function HomePage() {
           </p>
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <MiniStat label="Aktif kategori" value="Mock" />
-            <MiniStat label="Yayın modu" value="Public-safe" />
+            <MiniStat label="Yayın modu" value="Onay bekliyor" />
             <MiniStat label="Veri kaynağı" value="Mock" />
             <MiniStat label="Link durumu" value="Pasif" />
           </div>

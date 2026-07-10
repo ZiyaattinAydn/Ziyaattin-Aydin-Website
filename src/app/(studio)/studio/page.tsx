@@ -35,8 +35,8 @@ export default function StudioPage() {
       <StudioPageHeader
         eyebrow="Özel Çalışma Alanı"
         title="Studio Ana Paneli"
-        description="Proje, görev, not, dosya ve publish workflow ilişkilerinin gerçek backend olmadan veri modeli taslağına hizalandığı hazırlık paneli. Buradaki sayılar ve listeler mock veridir; Auth, database, Storage veya gerçek publish tamamlandı anlamına gelmez."
-        status="Sprint 03 data draft"
+        description="Proje, görev, not, dosya, auth sınırı ve publish workflow ilişkilerinin gerçek backend olmadan karar matrisine hizalandığı hazırlık paneli. Buradaki sayılar ve listeler mock veridir; Auth, database, Storage veya gerçek publish tamamlandı anlamına gelmez."
+        status="Sprint 04 auth/RLS plan"
       />
 
       <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-4" aria-label="Studio durum kartları">
@@ -63,7 +63,7 @@ export default function StudioPage() {
         />
 
         <StudioMockList
-          title="Data contract notları"
+          title="Data/security contract notları"
           description="Gerçek migration değil; Studio mock verisinin gelecek DB karşılığıdır."
           items={studioDataContractSummary}
         />

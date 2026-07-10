@@ -2,12 +2,15 @@ export type ProjectStatus = "Devam Ediyor" | "Tamamlandı" | "Planlandı";
 
 export type PublicVisibility = "public" | "unlisted" | "private";
 export type PublishState = "draft" | "review" | "published";
+export type PublishFlowState = "content-draft" | "review-required" | "approved" | "published" | "archived";
+export type LinkApprovalState = "missing" | "pending" | "approved";
 
 export type ProjectLinkTarget = {
   label: string;
   href: string | null;
   note: string;
   disabledLabel: string;
+  approvalState: LinkApprovalState;
 };
 
 export type ProjectLinks = {
@@ -19,6 +22,7 @@ export type WritingExternalLink = {
   label: string;
   href: string | null;
   note: string;
+  approvalState: LinkApprovalState;
 };
 
 export type ProjectMilestone = {
@@ -38,8 +42,10 @@ export type ProjectSummary = {
   contentState: string;
   visibility: PublicVisibility;
   publishState: PublishState;
+  publishFlowState: PublishFlowState;
   isFeatured: boolean;
   sourceNote: string;
+  approvalNote: string;
   visibilityNote: string;
   technologies: string[];
   summary: string;
@@ -76,9 +82,11 @@ export type WritingSummary = {
   coverLabel: string;
   visibility: PublicVisibility;
   publishState: PublishState;
+  publishFlowState: PublishFlowState;
   isFeatured: boolean;
   isDraft: boolean;
   sourceNote: string;
+  approvalNote: string;
   placeholderNote: string;
   sections: WritingSection[];
   relatedSlugs: string[];
@@ -93,8 +101,10 @@ export type JourneyItem = {
   statusNote: string;
   visibility: PublicVisibility;
   publishState: PublishState;
+  publishFlowState: PublishFlowState;
   isFeatured: boolean;
   sourceNote: string;
+  approvalNote: string;
   relatedProjectSlug?: string;
   relatedWritingSlug?: string;
 };
@@ -113,6 +123,8 @@ export type ProfileContent = {
   focusAreas: Array<{ title: string; text: string }>;
   values: string[];
   technologies: string[];
+  publishFlowState: PublishFlowState;
+  approvalNote: string;
   contactNote: string;
   contactStateLabel: string;
 };
@@ -127,6 +139,20 @@ export const visibilityLabels: Record<PublicVisibility, string> = {
   public: "Public görünür",
   unlisted: "Liste dışı",
   private: "Private",
+};
+
+export const publishFlowStateLabels: Record<PublishFlowState, string> = {
+  "content-draft": "Mock içerik",
+  "review-required": "Kullanıcı onayı bekliyor",
+  approved: "Yayın hazırlığı",
+  published: "Yayında",
+  archived: "Arşiv",
+};
+
+export const linkApprovalLabels: Record<LinkApprovalState, string> = {
+  missing: "Link yok",
+  pending: "Onay bekliyor",
+  approved: "Onaylı link",
 };
 
 export function getProjectActions(project: ProjectSummary): ProjectLinkTarget[] {
@@ -146,8 +172,10 @@ export const projects: ProjectSummary[] = [
     contentState: "Public taslak",
     visibility: "public",
     publishState: "draft",
+    publishFlowState: "review-required",
     isFeatured: true,
     sourceNote: "Mock içerik; Studio publish akışı hazır olduğunda database kaydıyla eşlenecek.",
+    approvalNote: "Kullanıcı metin, link ve görsel onayı verilmeden production public içerik kabul edilmeyecek.",
     visibilityNote: "Gerçek demo, GitHub veya ürün bağlantısı kullanıcı onayından sonra aktifleşecek.",
     technologies: ["Next.js", "TypeScript", "Tailwind CSS"],
     summary:
@@ -190,12 +218,14 @@ export const projects: ProjectSummary[] = [
         href: null,
         note: "Henüz public/demo bağlantısı tanımlanmadı.",
         disabledLabel: "Yakında",
+        approvalState: "missing",
       },
       github: {
         label: "GitHub",
         href: null,
         note: "Repository bağlantısı kullanıcı onayından sonra eklenecek.",
         disabledLabel: "Doğrulama bekliyor",
+        approvalState: "pending",
       },
     },
   },
@@ -211,8 +241,10 @@ export const projects: ProjectSummary[] = [
     contentState: "Fikir taslağı",
     visibility: "public",
     publishState: "draft",
+    publishFlowState: "content-draft",
     isFeatured: true,
     sourceNote: "Mock plan kaydı; gerçek ürün linkleri ve mağaza bilgisi henüz yok.",
+    approvalNote: "Fikir ve kapsam kullanıcı tarafından netleşene kadar yalnız public-safe taslak olarak kalacak.",
     visibilityNote: "Mağaza, demo veya kaynak kod bağlantısı gerçek ürün olmadan eklenmeyecek.",
     technologies: ["React Native", "Supabase", "TypeScript"],
     summary:
@@ -251,12 +283,14 @@ export const projects: ProjectSummary[] = [
         href: null,
         note: "Henüz yayınlanmış public ürün bağlantısı yok.",
         disabledLabel: "Yayınlanmadı",
+        approvalState: "missing",
       },
       github: {
         label: "Kaynak Kod",
         href: null,
         note: "Public repository bilgisi tanımlanmadı.",
         disabledLabel: "Beklemede",
+        approvalState: "pending",
       },
     },
   },
@@ -272,8 +306,10 @@ export const projects: ProjectSummary[] = [
     contentState: "Public-safe anlatım",
     visibility: "public",
     publishState: "review",
+    publishFlowState: "review-required",
     isFeatured: true,
     sourceNote: "Mock arayüz kaydı; gerçek log, sistem metriği veya private veri içermez.",
+    approvalNote: "Public metrik, ekran görüntüsü veya canlı link eklenmeden önce kullanıcı onayı gerektirir.",
     visibilityNote: "Gerçek sistem metrikleri, loglar veya private veri public sayfaya taşınmayacak.",
     technologies: ["Next.js", "PostgreSQL", "WebSocket"],
     summary:
@@ -312,12 +348,14 @@ export const projects: ProjectSummary[] = [
         href: null,
         note: "Demo URL henüz paylaşılmadı.",
         disabledLabel: "Yakında",
+        approvalState: "missing",
       },
       github: {
         label: "GitHub",
         href: null,
         note: "Public kaynak bağlantısı henüz yok.",
         disabledLabel: "Doğrulama bekliyor",
+        approvalState: "pending",
       },
     },
   },
@@ -333,8 +371,10 @@ export const projects: ProjectSummary[] = [
     contentState: "Örnek sunum",
     visibility: "public",
     publishState: "review",
+    publishFlowState: "approved",
     isFeatured: false,
     sourceNote: "Mock tamamlandı kaydı; gerçek müşteri işi, canlı ürün veya başarı iddiası değildir.",
+    approvalNote: "Tamamlandı etiketi yalnız mock sunum durumudur; link veya başarı iddiası ayrı onay olmadan aktifleşmez.",
     visibilityNote: "Tamamlandı etiketi gerçek müşteri işi veya canlı ürün iddiası değildir.",
     technologies: ["React", "Tailwind CSS", "Chart.js"],
     summary:
@@ -373,12 +413,14 @@ export const projects: ProjectSummary[] = [
         href: null,
         note: "Doğrulanmış link bulunmuyor.",
         disabledLabel: "Pasif",
+        approvalState: "missing",
       },
       github: {
         label: "Kaynak",
         href: null,
         note: "Public kaynak kod bağlantısı eklenmedi.",
         disabledLabel: "Beklemede",
+        approvalState: "pending",
       },
     },
   },
@@ -398,8 +440,10 @@ export const writings: WritingSummary[] = [
     coverLabel: "AI / DEV",
     visibility: "public",
     publishState: "draft",
+    publishFlowState: "review-required",
     isFeatured: true,
     isDraft: true,
+    approvalNote: "Yazı metni, yayın tarihi ve dış kaynaklar kullanıcı onayı olmadan gerçek yayın gibi sunulmayacak.",
     sourceNote: "Mock yazı kaydı; gerçek yayın tarihi ve kaynak linkleri Studio publish sonrası netleşecek.",
     placeholderNote: "Bu yazı gerçek yayınlanmış blog içeriği değil; makale düzenini test eden mock taslaktır.",
     sections: [
@@ -446,8 +490,10 @@ export const writings: WritingSummary[] = [
     coverLabel: "WEB / PERF",
     visibility: "public",
     publishState: "draft",
+    publishFlowState: "content-draft",
     isFeatured: false,
     isDraft: true,
+    approvalNote: "Gerçek ölçüm, kaynak veya performans iddiası eklenmeden önce review gerekecek.",
     sourceNote: "Mock yazı kaydı; ölçüm sonucu veya dış kaynak bağlantısı henüz tanımlanmadı.",
     placeholderNote: "Performans örnekleri gerçek ölçüm sonucu değil, yazı detay sayfasının yapısını test eden geçici içeriktir.",
     sections: [
@@ -490,8 +536,10 @@ export const writings: WritingSummary[] = [
     coverLabel: "UX / MIN",
     visibility: "public",
     publishState: "draft",
+    publishFlowState: "content-draft",
     isFeatured: false,
     isDraft: true,
+    approvalNote: "Gerçek kişisel deneyim veya dış referans bağlantısı eklenmeden önce kullanıcı onayı gerekecek.",
     sourceNote: "Mock ürün yazısı; gerçek kişisel deneyim veya dış referans iddiası taşımaz.",
     placeholderNote: "Bu içerik gerçek kişisel deneyim iddiası taşımaz; ürün yazısı düzenini test eden mock metindir.",
     sections: [
@@ -528,8 +576,10 @@ export const journeyItems: JourneyItem[] = [
     lesson: "Öğrenme yolculuğunu küçük ve takip edilebilir parçalara bölmek.",
     statusNote: "Gerçek tarih bekliyor",
     visibility: "public",
+    publishFlowState: "content-draft",
     publishState: "draft",
     isFeatured: true,
+    approvalNote: "Gerçek tarih ve kişisel detay kullanıcı tarafından doğrulanana kadar mock aşama olarak kalır.",
     sourceNote: "Mock journey kaydı; gerçek tarih alanı Studio publish sonrası eklenecek.",
     relatedWritingSlug: "minimal-tasarimin-gucu",
   },
@@ -540,8 +590,10 @@ export const journeyItems: JourneyItem[] = [
     lesson: "İskelet doğru kurulursa gerçek içerik eklemek daha güvenli olur.",
     statusNote: "Mock kayıt",
     visibility: "public",
+    publishFlowState: "content-draft",
     publishState: "draft",
     isFeatured: true,
+    approvalNote: "İlgili proje bağlantısı yalnız var olan public slug ile sınırlı kalır.",
     sourceNote: "Mock journey kaydı; ilgili proje bağlantısı yalnız mevcut public slug'a gider.",
     relatedProjectSlug: "orbit-dashboard",
   },
@@ -552,8 +604,10 @@ export const journeyItems: JourneyItem[] = [
     lesson: "Public görünen bilgi ile private çalışma notlarını ayırmak gerekir.",
     statusNote: "Yayın akışı planı",
     visibility: "public",
+    publishFlowState: "review-required",
     publishState: "review",
     isFeatured: true,
+    approvalNote: "Studio notundan public journey kaydına dönüşüm için ayrıca kullanıcı onayı gerekir.",
     sourceNote: "Mock journey kaydı; Studio publish ilişkisini göstermek için tutulur.",
     relatedProjectSlug: "next-ai-dashboard",
   },
@@ -564,8 +618,10 @@ export const journeyItems: JourneyItem[] = [
     lesson: "Eksik bilgiyi gizlemek yerine placeholder olduğunu açıkça söylemek güven verir.",
     statusNote: "Doğrulama bekliyor",
     visibility: "public",
+    publishFlowState: "review-required",
     publishState: "review",
     isFeatured: false,
+    approvalNote: "Gerçek yayın akışı başlamadan kesin kronoloji veya başarı anlatımı yapılmaz.",
     sourceNote: "Mock journey kaydı; gerçek yayın akışı başlamadı.",
     relatedWritingSlug: "yapay-zeka-caginda-yazilim-gelistirici-olmak",
   },
@@ -591,6 +647,8 @@ export const profileContent: ProfileContent = {
   ],
   values: ["Sadelik", "Dürüst placeholder", "Erişilebilirlik", "Sürdürülebilirlik", "Kontrollü yayın"],
   technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Supabase", "PostgreSQL", "Git"],
+  publishFlowState: "review-required",
+  approvalNote: "Hakkımda metni, portre ve iletişim linkleri kullanıcı tarafından açıkça doğrulanmadan final public profil kabul edilmeyecek.",
   contactNote:
     "E-posta, GitHub, LinkedIn veya diğer sosyal bağlantılar kullanıcı tarafından onaylandığında eklenecek. Bu sprintte gerçek iletişim bilgisi uydurulmadı.",
   contactStateLabel: "İletişim bilgisi beklemede",

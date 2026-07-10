@@ -2,6 +2,17 @@
 
 > Bu belge Sprint 03 hazırlık çıktısıdır. SQL migration, Supabase schema veya gerçek production veri modeli değildir. Amaç Studio mock workflow'unun ileride Supabase tablolarına taşınırken hangi kavramları koruması gerektiğini görünür kılmaktır.
 
+## Sprint 04 bağlantılı güvenlik ve publish dokümanları
+
+Bu veri modeli hâlâ draft statüsündedir. Gerçek migration değildir ve aşağıdaki Sprint 04 karar dokümanlarıyla birlikte değerlendirilmelidir:
+
+- `docs/studio/STUDIO_AUTH_DECISIONS.md` — Auth, MFA, owner allowlist ve route guard karar matrisi.
+- `docs/studio/STUDIO_SECURITY_RLS_PLAN.md` — RLS, Storage, service role ve public/private veri sınırı planı.
+- `docs/studio/STUDIO_PUBLISH_FLOW.md` — Studio'dan public-safe içeriğe geçiş workflow'u.
+- `docs/content/PUBLIC_CONTENT_MODEL.md` — Public içerik sözleşmesi; Studio sprintinde değiştirilmez.
+
+Model alanları kesinleşmiş migration alanları değildir. Auth, RLS ve publish kararları onaylanmadan tablo, policy veya Storage bucket oluşturulmamalıdır.
+
 ## Genel ilkeler
 
 - Studio yalnız Ziyaattin'in private çalışma alanıdır.

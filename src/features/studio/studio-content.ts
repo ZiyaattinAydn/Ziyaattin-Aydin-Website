@@ -29,9 +29,9 @@ export const studioPublishStateLabels: Record<StudioPublishState, string> = {
 
 export const studioDataContractSummary = [
   {
-    title: "Mock veri sözleşmesi",
-    meta: "Sprint 03",
-    description: "Projeler, görevler, notlar, dosyalar ve publish kuyruğu ileride Supabase tablolarına taşınabilecek alan adlarıyla hizalandı.",
+    title: "Mock veri ve güvenlik sözleşmesi",
+    meta: "Sprint 04",
+    description: "Projeler, görevler, notlar, dosyalar ve publish kuyruğu ileride Supabase tablolarına, RLS planına ve admin-only Studio sınırlarına hizalanacak şekilde işaretlendi.",
   },
   {
     title: "Gerçek backend yok",
@@ -39,9 +39,9 @@ export const studioDataContractSummary = [
     description: "Bu dosya yalnız UI hazırlık verisi taşır; Supabase client, API route, migration, RLS veya Storage işlemi eklenmedi.",
   },
   {
-    title: "Publish ilişkisi taslak",
+    title: "Publish ve RLS ilişkisi taslak",
     meta: "Karar bekliyor",
-    description: "Public siteye aktarılabilecek kayıtlar yalnız mock publishState ve visibility alanlarıyla işaretlenir; gerçek yayın yoktur.",
+    description: "Public siteye aktarılabilecek kayıtlar yalnız mock publishState ve visibility alanlarıyla işaretlenir; RLS/Storage/publish flow gerçek implementasyon değildir.",
   },
 ] as const;
 
@@ -73,7 +73,7 @@ export const mockStudioProjects = [
     publishState: "privateDraft" satisfies StudioPublishState,
     dataModelKey: "studio_projects",
     relatedPublication: "none",
-    nextAction: "Auth, MFA, RLS ve owner settings kararları kesinleşince gerçek modül akışlarına geç.",
+    nextAction: "Auth, MFA, route guard, RLS ve owner settings kararları kesinleşince gerçek modül akışlarına geç.",
     summary: "Projeler, görevler, notlar ve dosyalar için mock workflow seviyesindeki özel çalışma alanı.",
   },
   {
@@ -95,28 +95,28 @@ export const mockStudioProjects = [
 
 export const mockStudioTasks = [
   {
-    id: "task-s03-data-model-draft",
-    title: "Studio veri modeli taslağını dokümante et",
+    id: "task-s04-auth-rls-plan",
+    title: "Studio Auth/RLS karar matrisini dokümante et",
     status: "Bugün" satisfies StudioTaskStatus,
     priority: "Yüksek" satisfies StudioPriority,
     tone: "success" satisfies StudioStatusTone,
-    dueLabel: "Sprint 03",
+    dueLabel: "Sprint 04",
     owner: "Pencere 3",
     workstream: "Studio",
     relatedProjectId: "project-studio-core",
     visibility: "ownerOnly" satisfies StudioVisibility,
     publishState: "privateDraft" satisfies StudioPublishState,
     dataModelKey: "studio_tasks",
-    nextAction: "STUDIO_DATA_MODEL_DRAFT.md ve Auth karar notunu entegrasyon için hazırla.",
-    description: "Mock projeler, görevler, notlar, dosyalar ve yayın kuyruğunun ileride hangi tablolara taşınacağını netleştir.",
+    nextAction: "Auth decision matrix, RLS/Storage planı ve Studio publish flow dokümanlarını entegrasyon için hazırla.",
+    description: "Admin-only erişim, owner allowlist, RLS/Storage sınırları ve publish flow adımlarını gerçek implementasyon yapmadan netleştir.",
   },
   {
-    id: "task-s03-disabled-actions",
+    id: "task-s04-disabled-actions",
     title: "Sonraki faz aksiyonlarını güvenli göster",
     status: "Bugün" satisfies StudioTaskStatus,
     priority: "Orta" satisfies StudioPriority,
     tone: "success" satisfies StudioStatusTone,
-    dueLabel: "Sprint 03",
+    dueLabel: "Sprint 04",
     owner: "Pencere 3",
     workstream: "Studio UI",
     relatedProjectId: "project-studio-core",
@@ -127,7 +127,7 @@ export const mockStudioTasks = [
     description: "Oluştur, düzenle, sil, yükle ve yayınla aksiyonlarının sonraki fazda bağlanacağını kullanıcıya açıkça göster.",
   },
   {
-    id: "task-s03-auth-decisions",
+    id: "task-s04-auth-decisions",
     title: "Supabase Auth + MFA kararlarını bekle",
     status: "Yakında" satisfies StudioTaskStatus,
     priority: "Yüksek" satisfies StudioPriority,
@@ -185,7 +185,7 @@ export const mockStudioNotes = [
     visibility: "ownerOnly" satisfies StudioVisibility,
     publishState: "blocked" satisfies StudioPublishState,
     dataModelKey: "studio_notes",
-    sourceTarget: "STUDIO_AUTH_DECISIONS.md",
+    sourceTarget: "STUDIO_AUTH_DECISIONS.md / STUDIO_SECURITY_RLS_PLAN.md",
     summary: "Studio şu an yalnız UI kabuğudur; gizli URL güvenlik değildir ve gerçek koruma Auth + MFA + RLS ile sağlanacak.",
     tags: ["auth", "mfa", "rls"],
   },
@@ -305,7 +305,7 @@ export const mockStudioActivities = [
     description: "S03 çalışması mock workflow'u veri modeli taslağına ve Supabase hazırlık kararlarına hizalamak için başlatıldı.",
   },
   {
-    title: "Mock veri sözleşmesi genişletildi",
+    title: "Mock veri ve güvenlik sözleşmesi genişletildi",
     meta: "Future DB mapping",
     description: "id, visibility, publishState, dataModelKey ve ilişki alanları gerçek DB implementasyonu olmadan eklendi.",
   },

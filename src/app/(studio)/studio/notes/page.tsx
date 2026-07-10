@@ -15,9 +15,9 @@ const noteWorkflowNotes = [
     description: "Markdown veya rich text kararından önce gerçek not oluşturma ve kaydetme akışı eklenmez.",
   },
   {
-    title: "Public yazıya dönüşüm",
+    title: "Public yazıya dönüşüm ve approval",
     meta: "publish_queue",
-    description: "Seçili notların public yazı taslağına dönüşmesi ileride ayrı yayın workflow'u olarak tasarlanacak.",
+    description: "Seçili notların public yazı taslağına dönüşmesi ileride ayrı yayın ve approval workflow'u olarak tasarlanacak.",
   },
 ] as const;
 

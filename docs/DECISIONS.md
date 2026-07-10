@@ -78,3 +78,21 @@ Bu başlıklar karar verilmiş maddeler değildir. Supabase/Auth/Storage impleme
   - Public site mock veriden database-backed içeriğe ne zaman geçecek?
   - Yayınlanan içerik statik render mı, dinamik render mı, yoksa cache/revalidate akışıyla mı sunulacak?
 - Kullanıcı onayı: Gerekli
+
+## Sprint 04 — Deployment Modeli ve Doğrulama Kapısı
+
+### GitHub → Vercel otomatik deployment modeli
+- Durum: Uygulama modeli olarak benimsendi; gerçek Vercel bağlantısı ayrıca doğrulanmalı
+- Ana akış:
+  1. Feature branch GitHub'a pushlanır ve Preview Deployment beklenir.
+  2. Integration branch kalite kontrollerinden geçer.
+  3. Integration branch `main`e merge edilir.
+  4. `main` push sonrası Production Deployment beklenir.
+- Manuel `vercel --prod` ana akış değildir; Vercel CLI yalnız inspect/debug için opsiyonel kullanılabilir.
+- Kullanıcı/Vercel erişimi gerektiren kontrol: GitHub repository bağlantısı, production branch `main`, automatic preview/production deployment ayarları, gerçek Preview ve Production URL'leri.
+
+### Deployment tamamlandı kapısı
+- Durum: Karar gerektiriyor / doğrulama bekliyor
+- Faz 2 tamamen kapanmadan önce gerçek Preview URL ve Production URL doğrulanmalı.
+- Vercel Dashboard/CLI erişimi yoksa deployment tamamlandı işaretlenmemeli.
+- Supabase/Auth/Storage secret'ları, kullanıcı onayı ve Faz 3 implementasyon kapsamı olmadan eklenmemeli.
