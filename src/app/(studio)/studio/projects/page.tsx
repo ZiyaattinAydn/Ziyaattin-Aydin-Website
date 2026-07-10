@@ -38,7 +38,7 @@ export default function ProjectsPage() {
         <div>
           <h2 className="text-2xl font-semibold">Mock proje listesi</h2>
           <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-            Aşağıdaki kayıtlar migration veya database modeli değildir; Studio proje ekranının public publish ilişkisini, görünürlük kararını ve gelecek aksiyon alanlarını test eder.
+            Aşağıdaki kayıtlar migration veya database modeli değildir; Studio proje ekranının public publish ve approval ilişkisini, görünürlük kararını ve gelecek aksiyon alanlarını test eder.
           </p>
         </div>
 

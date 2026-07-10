@@ -36,7 +36,7 @@ export default function TasksPage() {
       status="studio_tasks mock"
       aside={
         <StudioMockList
-          title="Görev workflow notları"
+          title="Görev ve güvenlik workflow notları"
           description="Bu liste gerçek task CRUD yerine ekran ve veri ilişkisini anlatır."
           items={taskWorkflowNotes}
         />
