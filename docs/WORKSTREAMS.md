@@ -123,3 +123,17 @@ Notlar:
 =======
 - `docs/deployment/**`
 >>>>>>> Stashed changes
+
+## Sprint 03 Entegrasyon Sonucu
+
+- Core Sprint 03 — `feat/core-deployment-s03`: `[m]`
+- Public Sprint 03 — `feat/public-content-s03`: `[m]`
+- Studio Sprint 03 — `feat/studio-data-s03`: `[m]`
+- Entegrasyon Sprint 03 — `integration/sprint-03`: `[m]`
+- Orkestrasyon: `[~]`
+
+Notlar:
+- Core deployment checklist, environment contract ve deployment readiness dokümantasyonu main'e alınmaya hazırlandı.
+- Public content contract ve mock publish hazırlıkları main'e alınmaya hazırlandı.
+- Studio data model draft ve auth decision dokümanları main'e alınmaya hazırlandı.
+- Gerçek Auth/Supabase/Storage/CRUD kapsamı Sprint 03'te bilinçli olarak başlatılmadı.

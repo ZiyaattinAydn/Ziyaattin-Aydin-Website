@@ -1,3 +1,23 @@
+## Sprint 03 Integration — 2026-07-07
+
+### Added
+- Core Sprint 03: Vercel checklist ve environment contract dokümanları eklendi.
+- Public Sprint 03: public content contract dokümanı eklendi.
+- Studio Sprint 03: Studio data model draft ve auth decision dokümanları eklendi.
+- Sprint 03 entegrasyon handoff kaydı eklendi: `docs/handoffs/2026-07-07-integration-sprint-03.md`.
+
+### Changed
+- Public mock içerikler publish/görünürlük/link güvenliği kararlarına hazırlanacak şekilde genişletildi.
+- Studio mock workflow verisi future DB mapping ve publish queue hazırlığına daha uygun hâle getirildi.
+- Deployment, environment, public publish ve Studio workflow kararları gerçek implementasyon başlamadan önce dokümante edildi.
+
+### Verified
+- `npm run lint`, `npm run typecheck` ve `npm run build` Sprint 03 integration branch üzerinde başarılı tamamlandı.
+- `npm audit` çalıştırıldı; 2 moderate vulnerability bilinen izleme notu olarak kaldı.
+- Yeni bağımlılık ve yeni environment değişkeni eklenmedi.
+- Gerçek secret, middleware, SQL migration, Supabase/Auth/Storage/CRUD implementasyonu eklenmedi.
+- `npm audit fix --force` çalıştırılmadı.
+
 ## Sprint 02 Integration — 2026-07-07
 
 ### Added

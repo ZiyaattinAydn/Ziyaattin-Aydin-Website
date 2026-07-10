@@ -164,3 +164,15 @@ Sprint 02 öncesinde orkestrasyon penceresi güncel `main`, bu durum dosyası, `
 =======
 Sprint 03 Core branch entegrasyonundan sonra Public Content ve Studio Data Sprint 03 çalışma hatları güncel `main` üzerinden başlatılacak. Vercel gerçek Preview / Production doğrulaması tamamlanmadan Faz 2 tamamen kapanmış sayılmamalı. Faz 3 Auth/Supabase kararları kullanıcı onayı sonrası başlatılmalı.
 >>>>>>> Stashed changes
+
+## Sprint 03 Entegrasyon Özeti
+
+- [m] Sprint 03 Core deployment readiness çalışması `integration/sprint-03` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 03 Public content contract çalışması `integration/sprint-03` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 03 Studio data planning çalışması `integration/sprint-03` üzerinden main'e alınmaya hazırlandı.
+- [m] Sprint 03 entegrasyonunda `npm run lint`, `npm run typecheck` ve `npm run build` kontrolleri başarılı tamamlandı.
+- [x] Vercel checklist ve environment contract dokümanları hazırlandı.
+- [!] Vercel preview / production gerçek doğrulaması henüz tamamlanmadıysa tamamlandı sayılmamalı.
+- [!] `npm audit` çıktısında 2 moderate vulnerability izlenmeye devam ediyor; `npm audit fix --force` çalıştırılmadı ve çalıştırılmamalı.
+- [ ] Faz 3 Auth/Supabase/MFA/PostgreSQL/Storage/RLS gerçek implementasyonu henüz başlamadı.
+- [!] Hakkımda portresi kullanıcı doğrulaması bekleyen aday portre olarak kalmalı.

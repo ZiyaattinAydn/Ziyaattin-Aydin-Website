@@ -27,3 +27,9 @@
 - Faz 2: `[~]` — Teknik temel ve public/studio mock kabukları ilerledi; Vercel doğrulaması yapılmadıysa faz tamamen kapanmış sayılmamalı.
 - Faz 3: `[ ]` — Supabase Auth, MFA, PostgreSQL, Storage, RLS ve route guard kararları henüz başlatılmadı.
 - Workspace root uyarısı: `[m]` — `turbopack.root: process.cwd()` sonrası integration build çıktısında multiple lockfile uyarısı görünmedi.
+
+## Sprint 03 Sonrası Durum Notu
+
+- Faz 2: `[~]` — Deployment readiness dokümantasyonu hazırlandı; Vercel gerçek preview / production doğrulaması yapılmadıysa faz tamamen kapanmış sayılmamalı.
+- Faz 3: `[ ]` — Supabase Auth, MFA, PostgreSQL, Storage, RLS ve route guard gerçek implementasyonu henüz başlatılmadı.
+- Faz 3 karar hazırlığı: `[x]` — Environment contract, public content contract, Studio data model draft ve auth decision başlıkları dokümante edildi.
