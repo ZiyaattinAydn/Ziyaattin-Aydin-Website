@@ -126,3 +126,18 @@ Sonraki sprint adayları:
 - Geniş Studio CRUD
 - PWA
 - Audit advisory için güvenli upstream güncelleme
+
+## Sprint 07 Projects Dikey Dilimi
+
+Marker: `S07_PROJECTS_ROADMAP`
+
+- Core Project domain ve server mutation sözleşmesi: `[x]`
+- Studio Project liste/create/edit: `[ ]`
+- Draft save: `[ ]`
+- Server-side publish transition entegrasyonu: `[ ]`
+- Archive UI: `[ ]`
+- Development Public Supabase Project read doğrulaması: `[ ]`
+- Production Public database cutover: `[!] kapsam dışı`
+- Publish queue UI: `[!] kapsam dışı`
+- Hard delete: `[!] kapsam dışı`
+- Slug history/redirect: `[!] kapsam dışı`

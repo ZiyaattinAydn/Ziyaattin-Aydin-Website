@@ -143,3 +143,26 @@ Service role gerekiyorsa:
 | Redirect doğrulama | `src/lib/auth/safe-redirect.ts` |
 
 Server Component içinde cookie yazma desteklenmediğinde client factory yazma hatasını yutar; writable session refresh Proxy, Server Function veya Route Handler katmanında yapılır.
+
+## Sprint 07 Project Mutation Boundary
+
+Marker: `S07_PROJECT_MUTATION_BOUNDARY`
+
+Project server servisi `src/features/projects/server/project-mutations.ts`
+içindedir. Her operation canonical `getStudioAuthorization()` sonucunu kullanır;
+yalnız active owner/admin ve current AAL2 sonrasında request-scoped Supabase
+client oluşturulur.
+
+Servisler:
+
+- `listOwnerProjects`
+- `getOwnerProject`
+- `createProjectDraft`
+- `updateProject`
+- `transitionProjectPublishState`
+- `archiveProject`
+
+Client payload'ı explicit allowlist ile normalize edilir. `owner_id`, approval
+sonuçları, publish state ve timestamp'ler client'tan alınmaz. Query ve update
+owner ID ile daraltılır; RLS son güvenlik otoritesidir. Service role ve hard
+delete yolu yoktur.

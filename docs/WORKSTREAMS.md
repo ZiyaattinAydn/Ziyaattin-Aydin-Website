@@ -183,3 +183,30 @@ Notlar:
 - Integration branch push: bu kapanış commit'inden sonra
 - Main merge: kullanıcı onayı bekliyor
 - Production doğrulaması: main push sonrasında
+
+## Sprint 07 — Aktif Çalışma Hatları
+
+Marker: `S07_WORKSTREAMS`
+
+### Pencere 1 — Core Project Domain
+- Branch: `feat/core-project-domain-s07`
+- Base: `main@a870f02`
+- Durum: `[x]` — ortak domain, validation, transition ve mutation sınırı branch içinde tamamlandı
+- Sahiplik: `src/features/projects/**`, Project verifier, Core domain belgesi ve handoff
+
+### Pencere 2 — Public Project Read
+- Branch: `feat/public-project-read-s07`
+- Base: `main@a870f02`
+- Durum: `[~]`
+- Sahiplik: Development Supabase Project read doğrulaması; Production source mock kalır
+
+### Pencere 3 — Studio Project CRUD
+- Branch: `feat/studio-project-crud-s07`
+- Base: `main@a870f02`
+- Durum: `[ ]` — Core tamamlandıktan sonra Core branch merge edilerek başlamalı
+- Sahiplik: liste/create/edit UI, Server Actions ve mutation result feedback
+
+### Pencere 4 — Integration
+- Branch: `integration/sprint-07`
+- Merge sırası: Core → Public → Studio → Integration
+- Main merge/push öncesi açık kullanıcı onayı zorunlu
