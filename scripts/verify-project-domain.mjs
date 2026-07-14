@@ -90,7 +90,7 @@ function loadTypeScriptModule(relativeOrAbsolutePath) {
   return commonJsModule.exports;
 }
 
-const domain = loadTypeScriptModule(
+loadTypeScriptModule(
   "src/features/projects/domain.ts",
 );
 const validation = loadTypeScriptModule(
