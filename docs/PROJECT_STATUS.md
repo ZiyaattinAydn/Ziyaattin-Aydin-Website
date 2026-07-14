@@ -206,3 +206,21 @@ Durum: `READY_FOR_MAIN_APPROVAL`
 Core, Public ve Studio Sprint 06 feature branch'leri `integration/sprint-06` üzerinde birleşmiştir. Birleşik statik testler, lint, typecheck, env'siz build ve security source taramaları başarılıdır.
 
 Main merge ve Production deployment henüz yapılmamıştır.
+
+## Sprint 07 — Core Project Domain
+
+Marker: `S07_CORE_PROJECT_DOMAIN_STATUS`
+
+- [x] Branch `feat/core-project-domain-s07`, `main@a870f02` tabanından açıldı.
+- [x] Gerçek `projects` migration kolonları doğrulandı; yeni migration gerekmedi.
+- [x] Database row, Project entity, form, create/update input ve result modelleri ayrıldı.
+- [x] Typed server-side validation ve unknown-field rejection eklendi.
+- [x] Canonical publish-state ve visibility sözleşmesi eklendi.
+- [x] İzinli state transition graph'ı uygulandı.
+- [x] Published-history slug lock ve archive-only davranışı uygulandı.
+- [x] Owner-session + RLS kullanan list/read/create/update/transition/archive servisleri hazırlandı.
+- [x] Service role, hard delete ve raw database error dönüşü eklenmedi.
+- [x] Deterministic Project domain verifier eklendi.
+- [ ] Studio Projects UI ve Server Actions Studio branch'ine aittir.
+- [ ] Public development adapter doğrulaması Public branch'ine aittir.
+- [ ] Production Supabase ve Public production cutover kapsam dışıdır.

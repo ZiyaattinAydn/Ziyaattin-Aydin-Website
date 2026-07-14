@@ -1,3 +1,38 @@
+## Sprint 07 Core Project Domain — 2026-07-14
+
+Marker: `S07_CORE_PROJECT_DOMAIN_CHANGELOG`
+
+### Added
+
+- Migration-backed Project entity, form, create/update input and safe mutation result types.
+- Dependency-free typed validation for project fields, URLs, slug, progress and section arrays.
+- Server-side publish-state transition policy.
+- Published-history slug lock and soft archive policy.
+- Active owner + current AAL2 protected owner-session project read/mutation services.
+- Safe PostgreSQL/Supabase error mapping, including `23505` → `slug_conflict`.
+- Deterministic Sprint 07 Project domain verifier.
+- Project domain contract and Core handoff.
+
+### Security
+
+- Client cannot set `owner_id`, publish metadata, timestamps or approval results.
+- Unknown fields are rejected before database mutation.
+- Normal cookie-backed owner client and RLS are used; service role is absent.
+- Hard delete and `.delete()` are not implemented.
+- Archived state is terminal in Sprint 07.
+- Approved/published/unpublished slug values are locked until slug history exists.
+- Raw database errors are not returned to UI callers.
+
+### Not Applied
+
+- Studio Projects UI or Server Actions
+- Public production database cutover
+- Production Supabase
+- Publish queue UI
+- Hard delete
+- Slug history/redirect
+- New migration or dependency
+
 ## Sprint 06 Integration — 2026-07-10
 
 Marker: `S06_INTEGRATION_CHANGELOG`
