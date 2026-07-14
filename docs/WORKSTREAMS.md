@@ -183,3 +183,16 @@ Notlar:
 - Integration branch push: bu kapanış commit'inden sonra
 - Main merge: kullanıcı onayı bekliyor
 - Production doğrulaması: main push sonrasında
+
+## Sprint 07 — Public Project Read
+
+### Pencere 2 — Public Site
+
+- Branch: `feat/public-project-read-s07`
+- Başlangıç: `main@a870f02`
+- Core önkoşulu: `origin/feat/core-project-domain-s07@3a6cd87` — `S07_CORE_OK`
+- Durum: `[~]` — implementation, hosted development kabulü ve yerel kalite kapıları tamamlandı; commit/push ve Vercel Preview doğrulaması bekleniyor
+- Sahiplik: Public project read adapter wiring, project list/detail, policy/repository tests, development verification runbook ve Public handoff
+- Production source: zorunlu `mock`
+- Non-production source: yalnız `PUBLIC_CONTENT_SOURCE=supabase` ve iki mevcut public Supabase env değeri tam ise development project
+- Kapsam dışı: mutation, Studio UI, writings/journey cutover, Storage, hard delete, slug history ve production database

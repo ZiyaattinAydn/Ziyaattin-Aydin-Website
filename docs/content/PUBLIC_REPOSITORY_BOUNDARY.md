@@ -94,3 +94,17 @@ Node 22 built-in test runner ile policy testleri şunları kapsar:
 - production default mock ve explicit preview Supabase seçimi.
 
 Yeni test framework'ü veya npm bağımlılığı eklenmemiştir.
+
+## Sprint 07 project-only runtime wiring
+
+Sprint 07'de repository sınırı ilk kez yalnız project read vertical slice için
+gerçek Core runtime'a bağlanır:
+
+- `getPublicProjectContentRepository()` yalnız project list/detail route'larında kullanılır.
+- Production source resolver tarafından her koşulda mock'a zorlanır.
+- Local development ve Vercel Preview, `PUBLIC_CONTENT_SOURCE=supabase` ile
+  development Supabase project'ini seçebilir.
+- İki mevcut public environment değeri eksikse configuration-level warning
+  sonrası mock korunur.
+- Reader aktif olduktan sonraki database/query hataları mock ile maskelenmez.
+- Writings, journey ve profile/about repository metotları bu sprintte mock kalır.

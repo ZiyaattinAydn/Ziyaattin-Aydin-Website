@@ -11,11 +11,13 @@ import {
   publishFlowStateLabels,
   publishStateLabels,
 } from "@/features/public/content/model";
-import { getPublicContentRepository } from "@/features/public/content/source-selection";
+import { getPublicProjectContentRepository } from "@/features/public/content/source-selection";
 
+
+export const dynamic = "force-dynamic";
 export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const repository = getPublicContentRepository();
+  const repository = getPublicProjectContentRepository();
   const project = await repository.getProjectBySlug(slug);
 
   if (!project) notFound();

@@ -210,3 +210,13 @@ runbook’u kullanılır.
 - Auth ve Studio env yokken fail closed kalır.
 - TOTP ve current AAL2 zorunluluğu korunmuştur.
 - Main merge ve push için açık kullanıcı onayı zorunludur.
+
+## Sprint 07 — Geçici Public Project Read Kararları
+
+- Production Public project source Sprint 07 boyunca zorunlu `mock` kalır.
+- Local development ve Vercel Preview, mevcut `PUBLIC_CONTENT_SOURCE=supabase` seçimiyle development Supabase project'i kullanabilir.
+- Bu aktivasyon yalnız `NEXT_PUBLIC_SUPABASE_URL` ve `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` birlikte mevcutsa yapılır.
+- Public project query normal publishable/anonymous session ve RLS kullanır; service role kullanılmaz.
+- Yalnız projects list/detail vertical slice database-backed olabilir; writings, journey ve profile/about mock kalır.
+- Supabase query hatası aktif reader sonrasında sessiz mock fallback yapmaz; generic unavailable sınırına gider.
+- Bu kararlar production cutover veya kalıcı bütün-content source kararı değildir.

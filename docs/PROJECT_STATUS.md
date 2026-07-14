@@ -206,3 +206,21 @@ Durum: `READY_FOR_MAIN_APPROVAL`
 Core, Public ve Studio Sprint 06 feature branch'leri `integration/sprint-06` üzerinde birleşmiştir. Birleşik statik testler, lint, typecheck, env'siz build ve security source taramaları başarılıdır.
 
 Main merge ve Production deployment henüz yapılmamıştır.
+
+## Sprint 07 — Public Development Project Reads
+
+- [x] Branch `feat/public-project-read-s07`, `main@a870f02` tabanından açıldı.
+- [x] Core Sprint 07 `origin/feat/core-project-domain-s07@3a6cd87` teslimi doğrulandı; Public branch Core mutation kodunu merge etmedi.
+- [x] Existing `PublicQueryReader`, Core `createServerSupabaseClient()` factory'sine server-only adapter ile bağlandı.
+- [x] Yalnız `/projects` list/detail vertical slice local development ve Vercel Preview'da kontrollü Supabase source kullanabilir.
+- [x] Production source her koşulda mock kalır.
+- [x] Writings, journey, profile/about ve ana sayfadaki genel repository akışı mock-first kalır.
+- [x] Project list/detail anonymous sınırı `published + public + published_at IS NOT NULL` olarak request ve mapper katmanında korunur.
+- [x] Draft, review, approved, unpublished, archived, hidden, private ve `published_at = null` detail kayıtları public için aynı null/notFound sınırına gider.
+- [x] Service role, `select *`, private project kolonları, gerçek URL/key/JWT ve yeni environment adı eklenmedi.
+- [x] Hosted development anonymous read doğrulaması başarılı: 1 published/public kayıt list/detail içinde görünürken draft/private kayıt public read sınırının dışında kaldı.
+- [x] Verification kaydı hard delete edilmeden `archived + private` durumuna getirildi; cleanup sonrası anonymous project sorgusu boş döndü.
+- [x] Public policy testleri 8/8, project repository testleri 14/14, lint, typecheck ve gerçek env'siz production build başarılı.
+- [x] Secret/select/scope taramaları temiz; yalnız mevcut placeholder, dokümantasyon ve test fixture eşleşmeleri bulundu.
+- [~] Vercel Preview sonucu branch push sonrasında doğrulanacak.
+- [!] Production Supabase ve Public production cutover Sprint 07 kapsamı dışındadır.
