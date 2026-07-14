@@ -191,7 +191,7 @@ Notlar:
 - Branch: `feat/public-project-read-s07`
 - Başlangıç: `main@a870f02`
 - Core önkoşulu: `origin/feat/core-project-domain-s07@3a6cd87` — `S07_CORE_OK`
-- Durum: `[~]` — implementation, hosted development kabulü ve yerel kalite kapıları tamamlandı; commit/push ve Vercel Preview doğrulaması bekleniyor
+- Durum: `[x]` — implementation, hosted development kabulü, kalite kapıları, commit ve push tamamlandı; Preview doğrulaması Integration aşamasına devredildi
 - Sahiplik: Public project read adapter wiring, project list/detail, policy/repository tests, development verification runbook ve Public handoff
 - Production source: zorunlu `mock`
 - Non-production source: yalnız `PUBLIC_CONTENT_SOURCE=supabase` ve iki mevcut public Supabase env değeri tam ise development project

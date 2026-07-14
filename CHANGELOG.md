@@ -38,10 +38,10 @@
 - Audit sonucu bilinen 2 moderate `next` / dolaylı `postcss` advisory'sidir; force fix uygulanmadı.
 - Secret, tracked env, `select *` ve scope taramaları temiz.
 
-### Pending Verification
+### Deferred to Integration
 
-- Vercel Preview Supabase source ve project list/detail kabul sonucu
-- Final commit/push
+- Vercel Preview Supabase source ve project list/detail kabulü, branch'ler birleştirildikten sonra Integration aşamasında çalıştırılacak.
+- Public implementation commit'i origin branch'e pushlandı.
 
 ### Not Applied
 

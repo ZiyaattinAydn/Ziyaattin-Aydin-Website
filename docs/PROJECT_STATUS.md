@@ -222,5 +222,5 @@ Main merge ve Production deployment henüz yapılmamıştır.
 - [x] Verification kaydı hard delete edilmeden `archived + private` durumuna getirildi; cleanup sonrası anonymous project sorgusu boş döndü.
 - [x] Public policy testleri 8/8, project repository testleri 14/14, lint, typecheck ve gerçek env'siz production build başarılı.
 - [x] Secret/select/scope taramaları temiz; yalnız mevcut placeholder, dokümantasyon ve test fixture eşleşmeleri bulundu.
-- [~] Vercel Preview sonucu branch push sonrasında doğrulanacak.
+- [x] Branch origin'e pushlandı; Vercel Preview kabulü deployment akışı nedeniyle Integration aşamasına devredildi.
 - [!] Production Supabase ve Public production cutover Sprint 07 kapsamı dışındadır.

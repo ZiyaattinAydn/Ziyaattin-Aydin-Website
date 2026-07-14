@@ -136,6 +136,6 @@ Sonraki sprint adayları:
 - [x] Generic database unavailable UI sınırı
 - [x] Development verification runbook ve hosted verifier
 - [x] Local development hosted Supabase kabul sonucu
-- [ ] Vercel Preview project list/detail kabul sonucu
+- [ ] Vercel Preview project list/detail kabul sonucu — Integration aşamasına devredildi
 - [ ] Production Public database cutover — kapsam dışı
 - [ ] Writings/journey/profile database cutover — kapsam dışı

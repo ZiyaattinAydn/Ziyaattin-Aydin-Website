@@ -5,9 +5,10 @@
 - Branch: `feat/public-project-read-s07`
 - Base main: `a870f02`
 - Core önkoşulu: `origin/feat/core-project-domain-s07@3a6cd87`
-- Final commit: commit sonrası `git rev-parse --short HEAD` ile doğrulanacak
-- Push: bekliyor
-- Durum: `LOCAL_AND_HOSTED_ACCEPTANCE_COMPLETE_PUSH_PENDING`
+- Implementation commit: `fc78b41`
+- Final commit: bu kapanış commit'i; teslim çıktısında `git rev-parse --short HEAD` ile doğrulanacak
+- Push: başarılı; origin branch ile senkron
+- Durum: `S07_PUBLIC_OK`
 
 ## Değişen ana dosyalar
 
@@ -99,13 +100,13 @@ Gerçek değerler bu belgeye veya Git'e eklenmez.
 - `npm audit`: bilinen 2 moderate advisory; force fix uygulanmadı
 - Secret/select/tracked-env/scope taramaları: temiz
 
-## Bekleyen kabul
+## Integration'a devredilen kabul
 
-- Vercel Preview sonucu
-- Final commit/push
+- Vercel Preview project list/detail doğrulaması, Core → Public → Studio birleşiminden sonra Integration tarafından yapılacak.
+- Public branch için kalan blocker yok.
 
 ## Başarı etiketi
 
-Yerel kod, repository policy ve hosted development kabulü başarılıdır.
+`S07_PUBLIC_OK`
 
-Vercel Preview doğrulaması ve push senkronu sonrasında: `S07_PUBLIC_OK`
+Yerel kalite kapıları, repository policy testleri, hosted development read kabulü, archive cleanup ve push senkronu başarılıdır. Vercel Preview kabulü Integration aşamasına devredilmiştir.
