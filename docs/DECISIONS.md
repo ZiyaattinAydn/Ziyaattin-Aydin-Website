@@ -210,3 +210,25 @@ runbook’u kullanılır.
 - Auth ve Studio env yokken fail closed kalır.
 - TOTP ve current AAL2 zorunluluğu korunmuştur.
 - Main merge ve push için açık kullanıcı onayı zorunludur.
+
+## Sprint 07 — Projects Dikey Dilim Geçici Güvenlik Kararları
+
+Marker: `S07_PROJECT_SECURITY_DECISIONS`
+
+Bu maddeler kalıcı ürün kararı değil, eksik history/queue özellikleri tamamlanana
+kadar Sprint 07 güvenlik sınırıdır.
+
+- Hard delete yoktur; yalnız `publish_state = archived` soft archive kullanılır.
+- Archive visibility değerini `private` yapar ve mevcut database trigger'ı
+  `archived_at` değerini yönetir.
+- Restore bu sprintte yoktur.
+- Slug yalnız `draft` ve `review` durumlarında değiştirilebilir.
+- `approved`, `published` ve `unpublished` slug değerleri slug history gelene
+  kadar kilitlidir.
+- Publish-state client tarafından doğrudan database'e yazılmaz; server izinli
+  current-state → target-state geçişini doğrular.
+- Publish queue UI bu sprintte yoktur.
+- Production Public source mock kalır.
+- Project mutation normal owner session + RLS kullanır; service role yasaktır.
+- Studio mutation için trusted user + active owner/admin + current AAL2 birlikte
+  zorunludur.
