@@ -10,7 +10,8 @@
     "typecheck": "next typegen && tsc --noEmit",
     "check": "npm run lint && npm run typecheck && npm run build",
     "test:supabase": "node scripts/verify-supabase-runtime.mjs",
-    "test:projects": "node scripts/verify-project-domain.mjs"
+    "test:projects": "node scripts/verify-project-domain.mjs",
+    "test:studio-projects": "node scripts/verify-studio-project-crud.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.0",
