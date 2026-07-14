@@ -160,6 +160,8 @@ Notlar:
 - Preview Auth/MFA/RLS kabul testi: development env sonrasında bekliyor.
 - Geniş CRUD ve production cutover kapsam dışı.
 
+
+
 ## Studio Sprint 06 — S06_STUDIO_WORKSTREAM_OK
 
 - Branch: feat/studio-auth-mfa-s06
@@ -209,8 +211,6 @@ Marker: `S07_WORKSTREAMS`
 - Merge sırası: Core → Public → Studio → Integration
 - Main merge/push öncesi açık kullanıcı onayı zorunlu
 
-<!-- S07_STUDIO_PROJECTS_WORKSTREAM -->
-
 ## Sprint 07 — Public Project Read
 
 ### Pencere 2 — Public Site
@@ -223,25 +223,3 @@ Marker: `S07_WORKSTREAMS`
 - Production source: zorunlu `mock`
 - Non-production source: yalnız `PUBLIC_CONTENT_SOURCE=supabase` ve iki mevcut public Supabase env değeri tam ise development project
 - Kapsam dışı: mutation, Studio UI, writings/journey cutover, Storage, hard delete, slug history ve production database
-
-## Studio Workstream — Sprint 07 Projects
-
-- Branch: `feat/studio-project-crud-s07`
-- Base: `a870f02`
-- Core merge: `ffbe5fb`
-- Implementation: `729e556`
-- Durum: `[x] Branch içinde tamamlandı`
-- Başarı: `S07_STUDIO_OK`
-
-Tamamlanan:
-
-- Project list
-- Create draft
-- Edit
-- State transition controls
-- Published slug lock
-- Archive confirmation ve soft archive
-- Local + Preview acceptance
-- Secret ve hard-delete taraması
-
-Integration merge sırası Core → Public → Studio olarak korunmalıdır.

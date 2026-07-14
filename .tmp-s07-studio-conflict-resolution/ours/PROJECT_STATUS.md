@@ -180,6 +180,8 @@ TOTP enrollment/challenge, current AAL2 Studio guard, güvenli logout ve recover
 runbook. Development Supabase project, migration, seed, owner activation ve Preview
 runtime kabul testleri dış ortam adımı olarak bekliyor.
 
+
+
 ## Sprint 06 Studio Auth/MFA — S06_STUDIO_OK
 
 - [x] Development Supabase project Singapore region'da oluşturuldu.
@@ -223,8 +225,6 @@ Marker: `S07_CORE_PROJECT_DOMAIN_STATUS`
 - [ ] Public development adapter doğrulaması Public branch'ine aittir.
 - [ ] Production Supabase ve Public production cutover kapsam dışıdır.
 
-<!-- S07_STUDIO_PROJECT_CRUD -->
-
 ## Sprint 07 — Public Development Project Reads
 
 - [x] Branch `feat/public-project-read-s07`, `main@a870f02` tabanından açıldı.
@@ -242,16 +242,3 @@ Marker: `S07_CORE_PROJECT_DOMAIN_STATUS`
 - [x] Secret/select/scope taramaları temiz; yalnız mevcut placeholder, dokümantasyon ve test fixture eşleşmeleri bulundu.
 - [x] Branch origin'e pushlandı; Vercel Preview kabulü deployment akışı nedeniyle Integration aşamasına devredildi.
 - [!] Production Supabase ve Public production cutover Sprint 07 kapsamı dışındadır.
-
-## Sprint 07 Studio Projects CRUD — `S07_STUDIO_OK`
-
-- [x] Core project domain branch'i Studio branch'ine merge edildi.
-- [x] Gerçek development Supabase Projects listesi bağlandı.
-- [x] Draft create ve project edit akışları tamamlandı.
-- [x] Publish-state geçişleri Core policy ile server-side doğrulandı.
-- [x] Published/unpublished slug kilidi uygulandı.
-- [x] Hard delete yerine archive uygulandı.
-- [x] Active owner + current AAL2 ve RLS sınırları korundu.
-- [x] Local ve Vercel Preview kabul testleri geçti.
-- [x] Production environment değiştirilmedi.
-- [ ] Integration Sprint 07 merge kapısı bekleniyor.

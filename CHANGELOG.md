@@ -398,3 +398,35 @@ Marker: `S06_INTEGRATION_CHANGELOG`
 - Production Supabase project/env/migration uygulanmadı.
 - Free plan/Dashboard yaklaşık 8 saat session time-box sağlamadı.
 - npm audit iki moderate GHSA-qx2v-qp2m-jg93 uyarısını sürdürüyor.
+
+<!-- S07_STUDIO_PROJECTS_CHANGELOG -->
+## Sprint 07 — Studio Projects CRUD
+
+### Added
+
+- Gerçek Supabase-backed Studio Projects listesi.
+- Draft project oluşturma ekranı.
+- Project düzenleme ekranı.
+- Typed form ve güvenli Server Actions.
+- Publish-state kontrol bileşenleri.
+- Archive confirmation.
+- Sprint 07 Studio Projects verifier.
+- Studio Projects CRUD runbook ve handoff.
+
+### Security
+
+- Her project operation için active owner + current AAL2.
+- Normal owner session + RLS.
+- Client `owner_id` reddi.
+- Service role kullanılmaması.
+- Published/unpublished slug kilidi.
+- Hard delete yerine archive.
+- Raw database hata ayrıntılarının gizlenmesi.
+
+### Validation
+
+- Supabase runtime testleri geçti.
+- Core Projects domain 43 assertion geçti.
+- Studio Projects 25 assertion geçti.
+- Local ve Preview acceptance geçti.
+- Production environment değiştirilmedi.

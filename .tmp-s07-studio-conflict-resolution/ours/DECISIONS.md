@@ -186,6 +186,8 @@ ve erken redirect sağlar; nihai karar server layout/helper ve RLS tarafından t
 verilir. Recovery code yerine ikinci TOTP faktörü ve kontrollü Dashboard reset
 runbook’u kullanılır.
 
+
+
 ## Sprint 06 Studio doğrulanan operasyon kararları — S06_STUDIO_VALIDATED
 
 - Hosted Supabase storage.objects managed relation olduğu için bucket DDL ve
@@ -231,8 +233,6 @@ kadar Sprint 07 güvenlik sınırıdır.
 - Studio mutation için trusted user + active owner/admin + current AAL2 birlikte
   zorunludur.
 
-<!-- S07_STUDIO_PROJECTS_DECISIONS -->
-
 ## Sprint 07 — Geçici Public Project Read Kararları
 
 - Production Public project source Sprint 07 boyunca zorunlu `mock` kalır.
@@ -242,16 +242,3 @@ kadar Sprint 07 güvenlik sınırıdır.
 - Yalnız projects list/detail vertical slice database-backed olabilir; writings, journey ve profile/about mock kalır.
 - Supabase query hatası aktif reader sonrasında sessiz mock fallback yapmaz; generic unavailable sınırına gider.
 - Bu kararlar production cutover veya kalıcı bütün-content source kararı değildir.
-
-## Sprint 07 Studio Projects kararları
-
-- Studio Project UI yalnız Core server mutation sınırını kullanır.
-- Her read ve mutation active owner + current AAL2 doğrular.
-- Normal owner session ve RLS kullanılır; service role kullanılmaz.
-- Client `owner_id`, publish metadata veya managed timestamp gönderemez.
-- Hard delete yoktur; archive terminal Sprint 07 davranışıdır.
-- Approved, published ve unpublished project slug'ı değiştirilemez.
-- Publish-state yalnız belgelenmiş server-side geçişlerle değiştirilebilir.
-- Publish queue UI kullanılmaz.
-- Production Public source mock kalır.
-- Production Supabase ve Production environment değiştirilmez.

@@ -103,3 +103,23 @@ Mevcut Studio UI'da:
 - Public içerik tablosu veya route üretimi yapılmadı.
 - Upload, image approval veya link approval UI akışı uygulanmadı.
 - Migration, API route, server action veya Supabase client eklenmedi.
+
+<!-- S07_STUDIO_PROJECT_PUBLISH_FLOW -->
+## Sprint 07 Projects publish-state implementasyonu
+
+Sprint 07 içinde yalnız Projects publish-state geçişleri gerçek mutation
+akışına bağlanmıştır.
+
+İzinli geçişler Core domain policy tarafından belirlenir ve server-side
+doğrulanır.
+
+Published için gerekli içerik, public visibility ve approval koşulları
+korunur.
+
+Published ve unpublished kayıtların slug'ı slug history gelene kadar
+kilitlidir.
+
+Publish queue UI eklenmemiştir.
+
+Production Public database cutover yapılmamış; production source mock
+kalmıştır.

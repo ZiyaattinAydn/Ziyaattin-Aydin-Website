@@ -98,6 +98,8 @@ Auth/MFA kodu hazır. Sprint kapanışı için development Supabase migration + 
 owner activation, RLS matrisi ve Vercel Preview login/TOTP/logout testleri gerekir.
 Production Supabase ve geniş Studio CRUD sonraki onaylı fazlara bırakılmıştır.
 
+
+
 ## Sprint 06 Studio Auth/MFA sonucu — S06_STUDIO_OK
 
 - [x] Development Supabase project, schema, RLS ve Storage baseline
@@ -141,20 +143,6 @@ Marker: `S07_PROJECTS_ROADMAP`
 - Slug history/redirect: `[!] kapsam dışı`
 
 <!-- S07_STUDIO_PROJECTS_ROADMAP -->
-
-## Sprint 07 — Public Project Read Doğrulaması
-
-- [x] Core project domain teslim önkoşulu
-- [x] Core server Supabase client → PublicQueryReader wiring
-- [x] Project-only non-production source activation
-- [x] Explicit project list/detail query ve public-safe mapper testleri
-- [x] Generic database unavailable UI sınırı
-- [x] Development verification runbook ve hosted verifier
-- [x] Local development hosted Supabase kabul sonucu
-- [ ] Vercel Preview project list/detail kabul sonucu — Integration aşamasına devredildi
-- [ ] Production Public database cutover — kapsam dışı
-- [ ] Writings/journey/profile database cutover — kapsam dışı
-
 ## Sprint 07 Studio Projects teslimi
 
 - [x] Core Projects domain entegrasyonu
