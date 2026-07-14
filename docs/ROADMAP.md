@@ -180,3 +180,23 @@ Sonraki sprintlere kalanlar:
 - Restore
 - Slug history
 - PWA
+
+
+## Sprint 07 Integration Sonrası — S07_INTEGRATION_ROADMAP
+
+Zorunlu sıradaki adımlar:
+
+1. Kullanıcı main merge onayı
+2. Integration branch'in main'e kontrollü merge'i
+3. Main final kalite kapıları
+4. Main push
+5. Production deployment doğrulaması
+
+Sonraki sprint adayları:
+
+- Files ve Storage UI
+- Publish queue
+- Public database cutover hazırlığı
+- Production Supabase hazırlık kapısı
+- Diğer Studio CRUD alanları
+- PWA

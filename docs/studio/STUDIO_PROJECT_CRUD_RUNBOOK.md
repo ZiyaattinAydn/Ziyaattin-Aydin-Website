@@ -295,3 +295,10 @@ Integration merge sırası:
 3. Studio
 
 Integration, main merge ve push öncesinde kullanıcıdan açık onay istemelidir.
+
+
+## Integration Preview Kabulü — S07_INTEGRATION_PREVIEW_ACCEPTANCE
+
+Vercel Preview ve Development Supabase üzerinde Projects list/create/edit, transition, duplicate slug, published slug lock, archive, logout, AAL1 guard ve non-owner guard senaryoları kullanıcı tarafından başarıyla doğrulandı.
+
+Production environment'a Development Supabase değerleri eklenmedi.

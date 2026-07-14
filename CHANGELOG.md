@@ -1,3 +1,15 @@
+## Sprint 07 Integration — 2026-07-14
+
+Marker: `S07_INTEGRATION_CHANGELOG`
+
+- Core Project domain, Public Project read ve Studio Project CRUD branch'leri birleştirildi.
+- Owner+AAL2, archive-only, published slug lock ve server-side transition sınırları korundu.
+- Project domain 43 assertion, Public 22 test, Studio CRUD 25 assertion ve Studio final 26 assertion geçti.
+- Manuel Development Supabase ve Vercel Preview kabul testleri tamamlandı.
+- Public Production source mock olarak korundu.
+- Main merge açık kullanıcı onayı bekliyor.
+
+
 ## Sprint 07 Public Project Reads — 2026-07-14
 
 ### Added

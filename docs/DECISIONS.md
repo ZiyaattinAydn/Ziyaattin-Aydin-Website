@@ -255,3 +255,14 @@ kadar Sprint 07 güvenlik sınırıdır.
 - Publish queue UI kullanılmaz.
 - Production Public source mock kalır.
 - Production Supabase ve Production environment değiştirilmez.
+
+
+## Sprint 07 Integration Kararı — S07_INTEGRATION_DECISION
+
+- Merge sırası Core → Public → Studio olarak uygulandı.
+- Hard delete eklenmedi; archive-only yaklaşımı korundu.
+- Published project slug değiştirilemez.
+- Mutations active owner ve current AAL2 gerektirir.
+- Service role normal CRUD için kullanılmaz.
+- Production Public source mock kalır.
+- Main merge ve push açık kullanıcı onayı gerektirir.

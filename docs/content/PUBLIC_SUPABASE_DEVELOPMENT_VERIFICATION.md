@@ -161,3 +161,10 @@ Studio UI veya kontrollü SQL ile döndürülür.
 Bu doğrulama yalnız development/Preview project read kabulüdür. Production
 source hâlâ mock'tur. Writings, journey, profile/about ve geniş Public database
 cutover tamamlanmış sayılmaz.
+
+
+## Integration Public Kabulü — S07_INTEGRATION_PUBLIC_ACCEPTANCE
+
+Vercel Preview üzerinde archived project'in Public list/detail akışından gizlendiği doğrulandı.
+
+Production source mock olarak korunmuştur ve Production Supabase cutover yapılmamıştır.

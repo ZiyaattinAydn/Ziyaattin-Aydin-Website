@@ -304,3 +304,17 @@ Bağlam dolarsa:
 Son integration handoff:
 
 `docs/handoffs/2026-07-10-integration-sprint-06.md`
+
+
+## Sprint 07 Continuity Güncellemesi — S07_CONTINUITY_UPDATE
+
+- Base main: `a870f02`
+- Integration branch: `integration/sprint-07`
+- Core: `3a6cd87`
+- Public: `ca613c8`
+- Studio: `84bf4ac`
+- Project domain, Public read ve Studio Projects CRUD birleşti.
+- Development Supabase ve Vercel Preview kabulü başarılıdır.
+- Production Public source mock kalır.
+- Main merge açık kullanıcı onayı bekler.
+- Son integration handoff: `docs/handoffs/2026-07-14-integration-sprint-07.md`

@@ -255,3 +255,12 @@ Marker: `S07_CORE_PROJECT_DOMAIN_STATUS`
 - [x] Local ve Vercel Preview kabul testleri geçti.
 - [x] Production environment değiştirilmedi.
 - [ ] Integration Sprint 07 merge kapısı bekleniyor.
+
+
+## Sprint 07 Integration — S07_INTEGRATION_STATUS
+
+Durum: `READY_FOR_MAIN_APPROVAL`
+
+Core Project domain, Public development read doğrulaması ve Studio Projects CRUD akışı integration branch üzerinde birleşmiştir.
+
+Otomatik kalite kapıları ile manuel Development Supabase ve Vercel Preview kabulü başarılıdır. Main merge henüz yapılmamıştır.
