@@ -141,3 +141,30 @@ Marker: `S07_PROJECTS_ROADMAP`
 - Publish queue UI: `[!] kapsam dışı`
 - Hard delete: `[!] kapsam dışı`
 - Slug history/redirect: `[!] kapsam dışı`
+
+<!-- S07_STUDIO_PROJECTS_ROADMAP -->
+## Sprint 07 Studio Projects teslimi
+
+- [x] Core Projects domain entegrasyonu
+- [x] Studio Projects gerçek list
+- [x] Draft create
+- [x] Edit
+- [x] Publish-state transition
+- [x] Published slug lock
+- [x] Archive
+- [x] Local acceptance
+- [x] Preview acceptance
+- [ ] Sprint 07 Integration
+- [ ] Main merge kullanıcı onayı
+
+Sonraki sprintlere kalanlar:
+
+- Production Supabase
+- Public production database cutover
+- Files/Storage UI
+- Tasks, notes ve writings CRUD
+- Publish queue UI
+- Hard delete
+- Restore
+- Slug history
+- PWA

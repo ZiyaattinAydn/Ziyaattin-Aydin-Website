@@ -232,3 +232,17 @@ kadar Sprint 07 güvenlik sınırıdır.
 - Project mutation normal owner session + RLS kullanır; service role yasaktır.
 - Studio mutation için trusted user + active owner/admin + current AAL2 birlikte
   zorunludur.
+
+<!-- S07_STUDIO_PROJECTS_DECISIONS -->
+## Sprint 07 Studio Projects kararları
+
+- Studio Project UI yalnız Core server mutation sınırını kullanır.
+- Her read ve mutation active owner + current AAL2 doğrular.
+- Normal owner session ve RLS kullanılır; service role kullanılmaz.
+- Client `owner_id`, publish metadata veya managed timestamp gönderemez.
+- Hard delete yoktur; archive terminal Sprint 07 davranışıdır.
+- Approved, published ve unpublished project slug'ı değiştirilemez.
+- Publish-state yalnız belgelenmiş server-side geçişlerle değiştirilebilir.
+- Publish queue UI kullanılmaz.
+- Production Public source mock kalır.
+- Production Supabase ve Production environment değiştirilmez.

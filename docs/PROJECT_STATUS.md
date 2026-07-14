@@ -224,3 +224,17 @@ Marker: `S07_CORE_PROJECT_DOMAIN_STATUS`
 - [ ] Studio Projects UI ve Server Actions Studio branch'ine aittir.
 - [ ] Public development adapter doğrulaması Public branch'ine aittir.
 - [ ] Production Supabase ve Public production cutover kapsam dışıdır.
+
+<!-- S07_STUDIO_PROJECT_CRUD -->
+## Sprint 07 Studio Projects CRUD — `S07_STUDIO_OK`
+
+- [x] Core project domain branch'i Studio branch'ine merge edildi.
+- [x] Gerçek development Supabase Projects listesi bağlandı.
+- [x] Draft create ve project edit akışları tamamlandı.
+- [x] Publish-state geçişleri Core policy ile server-side doğrulandı.
+- [x] Published/unpublished slug kilidi uygulandı.
+- [x] Hard delete yerine archive uygulandı.
+- [x] Active owner + current AAL2 ve RLS sınırları korundu.
+- [x] Local ve Vercel Preview kabul testleri geçti.
+- [x] Production environment değiştirilmedi.
+- [ ] Integration Sprint 07 merge kapısı bekleniyor.
