@@ -310,3 +310,30 @@ Studio owner ayarları, kimlik doğrulama tercihleri, public profil kararları v
 - Destructive rollback: `supabase/rollback/202607100001_rollback_sprint_05.sql`
 
 Sprint 05 SQL isimleri, bu draft'taki `studio_*` kavramsal adlarını uygulama tarafında daha kısa public schema tablo adlarına (`projects`, `tasks`, `notes`, `files`) dönüştürür. Entegrasyon sırasında Core/Public content mapping ile kolon isimleri ayrıca karşılaştırılmalıdır.
+
+<!-- S07_STUDIO_PROJECT_MODEL_STATUS -->
+## Sprint 07 Projects uygulama durumu
+
+Bu belgedeki eski `studio_projects` taslağının Projects bölümü Sprint 07
+itibarıyla gerçek `public.projects` migration şemasına bağlanmıştır.
+
+Kullanılan gerçek içerik kolonları:
+
+- title
+- slug
+- summary
+- problem
+- approach
+- highlights
+- next_steps
+- status
+- visibility
+- publish_state
+- progress
+- is_featured
+- github_url
+- demo_url
+- image_url
+
+Tasks, notes, files ve publish queue bölümleri hâlâ gelecekteki geliştirme
+kapsamındadır.

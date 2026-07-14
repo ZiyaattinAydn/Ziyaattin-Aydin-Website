@@ -160,8 +160,6 @@ Notlar:
 - Preview Auth/MFA/RLS kabul testi: development env sonrasında bekliyor.
 - Geniş CRUD ve production cutover kapsam dışı.
 
-
-
 ## Studio Sprint 06 — S06_STUDIO_WORKSTREAM_OK
 
 - Branch: feat/studio-auth-mfa-s06
@@ -183,3 +181,80 @@ Notlar:
 - Integration branch push: bu kapanış commit'inden sonra
 - Main merge: kullanıcı onayı bekliyor
 - Production doğrulaması: main push sonrasında
+
+## Sprint 07 — Aktif Çalışma Hatları
+
+Marker: `S07_WORKSTREAMS`
+
+### Pencere 1 — Core Project Domain
+- Branch: `feat/core-project-domain-s07`
+- Base: `main@a870f02`
+- Durum: `[x]` — ortak domain, validation, transition ve mutation sınırı branch içinde tamamlandı
+- Sahiplik: `src/features/projects/**`, Project verifier, Core domain belgesi ve handoff
+
+### Pencere 2 — Public Project Read
+- Branch: `feat/public-project-read-s07`
+- Base: `main@a870f02`
+- Durum: `[~]`
+- Sahiplik: Development Supabase Project read doğrulaması; Production source mock kalır
+
+### Pencere 3 — Studio Project CRUD
+- Branch: `feat/studio-project-crud-s07`
+- Base: `main@a870f02`
+- Durum: `[ ]` — Core tamamlandıktan sonra Core branch merge edilerek başlamalı
+- Sahiplik: liste/create/edit UI, Server Actions ve mutation result feedback
+
+### Pencere 4 — Integration
+- Branch: `integration/sprint-07`
+- Merge sırası: Core → Public → Studio → Integration
+- Main merge/push öncesi açık kullanıcı onayı zorunlu
+
+<!-- S07_STUDIO_PROJECTS_WORKSTREAM -->
+
+## Sprint 07 — Public Project Read
+
+### Pencere 2 — Public Site
+
+- Branch: `feat/public-project-read-s07`
+- Başlangıç: `main@a870f02`
+- Core önkoşulu: `origin/feat/core-project-domain-s07@3a6cd87` — `S07_CORE_OK`
+- Durum: `[x]` — implementation, hosted development kabulü, kalite kapıları, commit ve push tamamlandı; Preview doğrulaması Integration aşamasına devredildi
+- Sahiplik: Public project read adapter wiring, project list/detail, policy/repository tests, development verification runbook ve Public handoff
+- Production source: zorunlu `mock`
+- Non-production source: yalnız `PUBLIC_CONTENT_SOURCE=supabase` ve iki mevcut public Supabase env değeri tam ise development project
+- Kapsam dışı: mutation, Studio UI, writings/journey cutover, Storage, hard delete, slug history ve production database
+
+## Studio Workstream — Sprint 07 Projects
+
+- Branch: `feat/studio-project-crud-s07`
+- Base: `a870f02`
+- Core merge: `ffbe5fb`
+- Implementation: `729e556`
+- Durum: `[x] Branch içinde tamamlandı`
+- Başarı: `S07_STUDIO_OK`
+
+Tamamlanan:
+
+- Project list
+- Create draft
+- Edit
+- State transition controls
+- Published slug lock
+- Archive confirmation ve soft archive
+- Local + Preview acceptance
+- Secret ve hard-delete taraması
+
+Integration merge sırası Core → Public → Studio olarak korunmalıdır.
+
+
+## Sprint 07 Integration — S07_INTEGRATION_WORKSTREAM
+
+- Core merge: tamamlandı
+- Public merge: tamamlandı
+- Studio merge: tamamlandı
+- Conflict çözümü: tamamlandı
+- Otomatik kalite kapıları: tamamlandı
+- Hosted development kabulü: tamamlandı
+- Preview kabulü: tamamlandı
+- Integration handoff: tamamlandı
+- Main merge: kullanıcı onayı bekliyor

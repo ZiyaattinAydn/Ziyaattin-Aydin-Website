@@ -6,6 +6,8 @@ export type PublicSourceEnvironment = {
   NODE_ENV?: string;
   VERCEL_ENV?: string;
   PUBLIC_CONTENT_SOURCE?: string;
+  NEXT_PUBLIC_SUPABASE_URL?: string;
+  NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?: string;
 };
 
 export function resolvePublicContentSource(
@@ -23,4 +25,13 @@ export function resolvePublicContentSource(
   return environment.PUBLIC_CONTENT_SOURCE === "supabase"
     ? "supabase"
     : "mock";
+}
+
+export function hasPublicSupabaseConfiguration(
+  environment: PublicSourceEnvironment = process.env,
+): boolean {
+  return Boolean(
+    environment.NEXT_PUBLIC_SUPABASE_URL?.trim() &&
+      environment.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim(),
+  );
 }

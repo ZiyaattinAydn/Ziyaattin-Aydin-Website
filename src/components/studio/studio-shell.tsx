@@ -25,7 +25,7 @@ export function StudioShell({ children }: PropsWithChildren) {
           </Link>
           <p className="mt-3 text-xs uppercase tracking-[0.18em] text-[var(--muted)]">Özel Studio</p>
           <p className="mt-4 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4 text-xs leading-6 text-[var(--muted)]">
-            Bu kabuk gerçek auth uygulaması değildir. Supabase Auth ve MFA sonraki güvenlik fazında bağlanacak.
+            Studio, active owner ve current AAL2 doğrulamasıyla korunur. Private veriler normal owner session ve RLS üzerinden okunur.
           </p>
           <nav className="mt-8 space-y-2" aria-label="Studio masaüstü navigasyonu">
             {studioNavItems.map((item) => {

@@ -38,3 +38,18 @@
 Production'ın bu sprintte mock repository kullanması database kesintisinde yapılan otomatik fallback değildir; gerçek cutover öncesinde bilinçli ve sabitlenmiş kaynak seçimidir.
 
 Non-production ortamında `PUBLIC_CONTENT_SOURCE=supabase` seçilmiş fakat Core query reader henüz bağlanmamışsa configuration-level warning ile mock'a dönülebilir. Reader bağlandıktan ve Supabase repository gerçekten aktive edildikten sonra query/database hataları mock içerikle maskelenmez; kontrollü unavailable error davranışına gider.
+
+## Sprint 07 runtime fallback matrisi
+
+| Durum | Project list/detail davranışı |
+| --- | --- |
+| Production | Zorunlu mock |
+| Local/Preview, source mock veya env yok | Mock |
+| Local/Preview, source supabase ve env tam | Development Supabase reader |
+| Aktif reader, boş published/public sonuç | Güvenli empty state |
+| Aktif reader, görünmeyen detail | Null → ortak notFound |
+| Aktif reader, query/database hatası | Mock'a dönmez; generic unavailable |
+| Writings/journey/profile | Mock; Sprint 07 project-only sınırı |
+
+Unavailable UI Supabase message, table adı, policy detayı veya görünmeyen kayıt
+varlığı göstermez.

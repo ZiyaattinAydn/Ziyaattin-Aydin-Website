@@ -98,8 +98,6 @@ Auth/MFA kodu hazır. Sprint kapanışı için development Supabase migration + 
 owner activation, RLS matrisi ve Vercel Preview login/TOTP/logout testleri gerekir.
 Production Supabase ve geniş Studio CRUD sonraki onaylı fazlara bırakılmıştır.
 
-
-
 ## Sprint 06 Studio Auth/MFA sonucu — S06_STUDIO_OK
 
 - [x] Development Supabase project, schema, RLS ve Storage baseline
@@ -126,3 +124,79 @@ Sonraki sprint adayları:
 - Geniş Studio CRUD
 - PWA
 - Audit advisory için güvenli upstream güncelleme
+
+## Sprint 07 Projects Dikey Dilimi
+
+Marker: `S07_PROJECTS_ROADMAP`
+
+- Core Project domain ve server mutation sözleşmesi: `[x]`
+- Studio Project liste/create/edit: `[ ]`
+- Draft save: `[ ]`
+- Server-side publish transition entegrasyonu: `[ ]`
+- Archive UI: `[ ]`
+- Development Public Supabase Project read doğrulaması: `[ ]`
+- Production Public database cutover: `[!] kapsam dışı`
+- Publish queue UI: `[!] kapsam dışı`
+- Hard delete: `[!] kapsam dışı`
+- Slug history/redirect: `[!] kapsam dışı`
+
+<!-- S07_STUDIO_PROJECTS_ROADMAP -->
+
+## Sprint 07 — Public Project Read Doğrulaması
+
+- [x] Core project domain teslim önkoşulu
+- [x] Core server Supabase client → PublicQueryReader wiring
+- [x] Project-only non-production source activation
+- [x] Explicit project list/detail query ve public-safe mapper testleri
+- [x] Generic database unavailable UI sınırı
+- [x] Development verification runbook ve hosted verifier
+- [x] Local development hosted Supabase kabul sonucu
+- [ ] Vercel Preview project list/detail kabul sonucu — Integration aşamasına devredildi
+- [ ] Production Public database cutover — kapsam dışı
+- [ ] Writings/journey/profile database cutover — kapsam dışı
+
+## Sprint 07 Studio Projects teslimi
+
+- [x] Core Projects domain entegrasyonu
+- [x] Studio Projects gerçek list
+- [x] Draft create
+- [x] Edit
+- [x] Publish-state transition
+- [x] Published slug lock
+- [x] Archive
+- [x] Local acceptance
+- [x] Preview acceptance
+- [ ] Sprint 07 Integration
+- [ ] Main merge kullanıcı onayı
+
+Sonraki sprintlere kalanlar:
+
+- Production Supabase
+- Public production database cutover
+- Files/Storage UI
+- Tasks, notes ve writings CRUD
+- Publish queue UI
+- Hard delete
+- Restore
+- Slug history
+- PWA
+
+
+## Sprint 07 Integration Sonrası — S07_INTEGRATION_ROADMAP
+
+Zorunlu sıradaki adımlar:
+
+1. Kullanıcı main merge onayı
+2. Integration branch'in main'e kontrollü merge'i
+3. Main final kalite kapıları
+4. Main push
+5. Production deployment doğrulaması
+
+Sonraki sprint adayları:
+
+- Files ve Storage UI
+- Publish queue
+- Public database cutover hazırlığı
+- Production Supabase hazırlık kapısı
+- Diğer Studio CRUD alanları
+- PWA

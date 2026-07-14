@@ -144,3 +144,18 @@ Sprint 06 başlamadan önce en az şu cevaplar alınmalıdır:
 - Recovery code eklenmedi; Dashboard reset runbook'u geçerlidir.
 - Yaklaşık 8 saat mutlak time-box plan sınırlaması nedeniyle uygulanmadı;
   AAL1 15 dakika ve per-request AAL2 guard kullanılır.
+
+<!-- S07_STUDIO_PROJECT_AUTHORIZATION -->
+## Sprint 07 Projects authorization sonucu
+
+Studio Projects list, create, edit, transition ve archive işlemleri gerçek
+development Supabase üzerinde uygulanmıştır.
+
+Studio layout korumasına ek olarak her server operation Core mutation guard
+içinde trusted user, active owner/admin ve current AAL2 doğrular.
+
+Proxy tek güvenlik katmanı değildir.
+
+Normal owner session ve RLS kullanılır. Service role kullanılmaz.
+
+AAL1 ve allowlist dışı kullanıcı Project UI/verisine erişemez.

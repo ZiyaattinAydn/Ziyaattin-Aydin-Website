@@ -186,8 +186,6 @@ ve erken redirect sağlar; nihai karar server layout/helper ve RLS tarafından t
 verilir. Recovery code yerine ikinci TOTP faktörü ve kontrollü Dashboard reset
 runbook’u kullanılır.
 
-
-
 ## Sprint 06 Studio doğrulanan operasyon kararları — S06_STUDIO_VALIDATED
 
 - Hosted Supabase storage.objects managed relation olduğu için bucket DDL ve
@@ -210,3 +208,61 @@ runbook’u kullanılır.
 - Auth ve Studio env yokken fail closed kalır.
 - TOTP ve current AAL2 zorunluluğu korunmuştur.
 - Main merge ve push için açık kullanıcı onayı zorunludur.
+
+## Sprint 07 — Projects Dikey Dilim Geçici Güvenlik Kararları
+
+Marker: `S07_PROJECT_SECURITY_DECISIONS`
+
+Bu maddeler kalıcı ürün kararı değil, eksik history/queue özellikleri tamamlanana
+kadar Sprint 07 güvenlik sınırıdır.
+
+- Hard delete yoktur; yalnız `publish_state = archived` soft archive kullanılır.
+- Archive visibility değerini `private` yapar ve mevcut database trigger'ı
+  `archived_at` değerini yönetir.
+- Restore bu sprintte yoktur.
+- Slug yalnız `draft` ve `review` durumlarında değiştirilebilir.
+- `approved`, `published` ve `unpublished` slug değerleri slug history gelene
+  kadar kilitlidir.
+- Publish-state client tarafından doğrudan database'e yazılmaz; server izinli
+  current-state → target-state geçişini doğrular.
+- Publish queue UI bu sprintte yoktur.
+- Production Public source mock kalır.
+- Project mutation normal owner session + RLS kullanır; service role yasaktır.
+- Studio mutation için trusted user + active owner/admin + current AAL2 birlikte
+  zorunludur.
+
+<!-- S07_STUDIO_PROJECTS_DECISIONS -->
+
+## Sprint 07 — Geçici Public Project Read Kararları
+
+- Production Public project source Sprint 07 boyunca zorunlu `mock` kalır.
+- Local development ve Vercel Preview, mevcut `PUBLIC_CONTENT_SOURCE=supabase` seçimiyle development Supabase project'i kullanabilir.
+- Bu aktivasyon yalnız `NEXT_PUBLIC_SUPABASE_URL` ve `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` birlikte mevcutsa yapılır.
+- Public project query normal publishable/anonymous session ve RLS kullanır; service role kullanılmaz.
+- Yalnız projects list/detail vertical slice database-backed olabilir; writings, journey ve profile/about mock kalır.
+- Supabase query hatası aktif reader sonrasında sessiz mock fallback yapmaz; generic unavailable sınırına gider.
+- Bu kararlar production cutover veya kalıcı bütün-content source kararı değildir.
+
+## Sprint 07 Studio Projects kararları
+
+- Studio Project UI yalnız Core server mutation sınırını kullanır.
+- Her read ve mutation active owner + current AAL2 doğrular.
+- Normal owner session ve RLS kullanılır; service role kullanılmaz.
+- Client `owner_id`, publish metadata veya managed timestamp gönderemez.
+- Hard delete yoktur; archive terminal Sprint 07 davranışıdır.
+- Approved, published ve unpublished project slug'ı değiştirilemez.
+- Publish-state yalnız belgelenmiş server-side geçişlerle değiştirilebilir.
+- Publish queue UI kullanılmaz.
+- Production Public source mock kalır.
+- Production Supabase ve Production environment değiştirilmez.
+
+
+## Sprint 07 Integration Kararı — S07_INTEGRATION_DECISION
+
+- Merge sırası Core → Public → Studio olarak uygulandı.
+- Hard delete eklenmedi; archive-only yaklaşımı korundu.
+- Published project slug değiştirilemez.
+- Mutations active owner ve current AAL2 gerektirir.
+- Service role normal CRUD için kullanılmaz.
+- Production Public source mock kalır.
+- Main merge ve push açık kullanıcı onayı gerektirir.
