@@ -4,9 +4,9 @@
 - Çalışma hattı: Pencere 1 — Core Foundation
 - Branch: `feat/core-project-domain-s07`
 - Başlangıç main commit'i: `a870f02`
-- Implementation commit: `__IMPLEMENTATION_COMMIT__`
-- Push durumu: `__PUSH_STATUS__`
-- Preview sonucu: `__PREVIEW_STATUS__`
+- Implementation commit: `47525fd`
+- Push durumu: `origin/feat/core-project-domain-s07 üzerine ilk push başarılı`
+- Preview sonucu: `Feature branch push tetiklendi; Vercel Dashboard sonucu henüz doğrulanmadı`
 - Başarı etiketi: `S07_CORE_OK`
 
 ## Değişen dosyalar
@@ -105,17 +105,17 @@ fail-closed davranışı korunur.
 
 ## Test sonuçları
 
-- `npm ci`: `__NPM_CI__`
-- `npm run test:supabase`: `__TEST_SUPABASE__`
-- `npm run test:projects`: `__TEST_PROJECTS__`
-- `npm run lint`: `__LINT__`
-- `npm run typecheck`: `__TYPECHECK__`
-- Env'siz `npm run build`: `__BUILD__`
-- Secret scan: `__SECRET_SCAN__`
+- `npm ci`: `başarılı`
+- `npm run test:supabase`: `başarılı`
+- `npm run test:projects`: `başarılı — 43 assertion`
+- `npm run lint`: `başarılı`
+- `npm run typecheck`: `başarılı`
+- Env'siz `npm run build`: `başarılı`
+- Secret scan: `başarılı; gerçek secret/owner UUID/.env.local/hard delete yok`
 
 ## Audit
 
-`__AUDIT__`
+`2 moderate — postcss <8.5.10 / GHSA-qx2v-qp2m-jg93; breaking npm audit fix --force uygulanmadı.`
 
 `npm audit fix --force` çalıştırılmadı.
 
