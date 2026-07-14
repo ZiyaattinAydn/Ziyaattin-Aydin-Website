@@ -232,3 +232,13 @@ kadar Sprint 07 güvenlik sınırıdır.
 - Project mutation normal owner session + RLS kullanır; service role yasaktır.
 - Studio mutation için trusted user + active owner/admin + current AAL2 birlikte
   zorunludur.
+
+## Sprint 07 — Geçici Public Project Read Kararları
+
+- Production Public project source Sprint 07 boyunca zorunlu `mock` kalır.
+- Local development ve Vercel Preview, mevcut `PUBLIC_CONTENT_SOURCE=supabase` seçimiyle development Supabase project'i kullanabilir.
+- Bu aktivasyon yalnız `NEXT_PUBLIC_SUPABASE_URL` ve `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` birlikte mevcutsa yapılır.
+- Public project query normal publishable/anonymous session ve RLS kullanır; service role kullanılmaz.
+- Yalnız projects list/detail vertical slice database-backed olabilir; writings, journey ve profile/about mock kalır.
+- Supabase query hatası aktif reader sonrasında sessiz mock fallback yapmaz; generic unavailable sınırına gider.
+- Bu kararlar production cutover veya kalıcı bütün-content source kararı değildir.

@@ -1,3 +1,56 @@
+## Sprint 07 Public Project Reads — 2026-07-14
+
+### Added
+
+- Core server Supabase client'ını mevcut `PublicQueryReader` sözleşmesine bağlayan server-only reader.
+- Project repository request/mapping/visibility/unavailable testleri.
+- Hosted development Supabase anonymous read verifier.
+- Project route generic unavailable error boundary.
+- Development Supabase verification runbook ve Sprint 07 Public handoff.
+
+### Changed
+
+- `/projects` ve `/projects/[slug]` local development/Preview için kontrollü project-only Supabase source kullanabilir.
+- Projects list route request-time dynamic çalışır ve database unavailable durumunda ayrıntı sızdırmayan nötr state gösterir.
+- Production source ve project env eksikliği mock davranışını korur.
+- General Public repository; writings, journey, profile/about ve production için mock-first kalır.
+
+### Security
+
+- Anonymous project read `visibility = public`, `publish_state = published` ve `published_at IS NOT NULL` filtrelerini korur.
+- Explicit project kolon listeleri kullanılır; `owner_id`, internal timestamps/notes ve `select *` yoktur.
+- Service role kullanılmaz.
+- Link URL'leri yalnız approved ve HTTP/HTTPS ise DTO'ya girer.
+- Project image alt/public approval şeması tamamlanmadığı için image render edilmez.
+- Query/database hata ayrıntıları Public UI'ya taşınmaz.
+
+### Verified
+
+- Hosted development anonymous project verifier: `PUBLIC_PROJECT_HOSTED_READ_OK`.
+- Published/public project list ve detail okunabildi.
+- Draft/private negative slug public read sınırının dışında kaldı.
+- Verification kaydı hard delete edilmeden `archived + private` durumuna getirildi.
+- Cleanup sonrası anonymous project sorgusu boş döndü.
+- Public policy tests: 8/8.
+- Project repository tests: 14/14.
+- `npm run test:supabase`, lint ve typecheck başarılı.
+- Gerçek `.env.local` geçici olarak kaldırılarak env'siz production build başarılı.
+- Audit sonucu bilinen 2 moderate `next` / dolaylı `postcss` advisory'sidir; force fix uygulanmadı.
+- Secret, tracked env, `select *` ve scope taramaları temiz.
+
+### Deferred to Integration
+
+- Vercel Preview Supabase source ve project list/detail kabulü, branch'ler birleştirildikten sonra Integration aşamasında çalıştırılacak.
+- Public implementation commit'i origin branch'e pushlandı.
+
+### Not Applied
+
+- Production Supabase veya Public production cutover
+- Project mutation veya Studio UI
+- Writings/journey/profile cutover
+- Storage, hard delete, slug history, PWA veya package upgrade
+
+
 ## Sprint 07 Core Project Domain — 2026-07-14
 
 Marker: `S07_CORE_PROJECT_DOMAIN_CHANGELOG`

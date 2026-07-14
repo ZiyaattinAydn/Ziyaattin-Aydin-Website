@@ -5,6 +5,7 @@ import {
   getApprovedPublicUrl,
 } from "./approvals.ts";
 import {
+  hasPublicSupabaseConfiguration,
   resolvePublicContentSource,
 } from "./source-policy.ts";
 import {
@@ -148,5 +149,37 @@ test("non-production Supabase source must be explicitly requested", () => {
       PUBLIC_CONTENT_SOURCE: "unexpected",
     }),
     "mock",
+  );
+});
+
+test("Supabase project configuration requires both public values", () => {
+  assert.equal(
+    hasPublicSupabaseConfiguration({
+      NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "public-key",
+    }),
+    true,
+  );
+
+  assert.equal(
+    hasPublicSupabaseConfiguration({
+      NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co",
+    }),
+    false,
+  );
+
+  assert.equal(
+    hasPublicSupabaseConfiguration({
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "public-key",
+    }),
+    false,
+  );
+
+  assert.equal(
+    hasPublicSupabaseConfiguration({
+      NEXT_PUBLIC_SUPABASE_URL: " ",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: " ",
+    }),
+    false,
   );
 });

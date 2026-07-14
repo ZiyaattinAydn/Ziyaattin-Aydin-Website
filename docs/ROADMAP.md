@@ -141,3 +141,16 @@ Marker: `S07_PROJECTS_ROADMAP`
 - Publish queue UI: `[!] kapsam dışı`
 - Hard delete: `[!] kapsam dışı`
 - Slug history/redirect: `[!] kapsam dışı`
+
+## Sprint 07 — Public Project Read Doğrulaması
+
+- [x] Core project domain teslim önkoşulu
+- [x] Core server Supabase client → PublicQueryReader wiring
+- [x] Project-only non-production source activation
+- [x] Explicit project list/detail query ve public-safe mapper testleri
+- [x] Generic database unavailable UI sınırı
+- [x] Development verification runbook ve hosted verifier
+- [x] Local development hosted Supabase kabul sonucu
+- [ ] Vercel Preview project list/detail kabul sonucu — Integration aşamasına devredildi
+- [ ] Production Public database cutover — kapsam dışı
+- [ ] Writings/journey/profile database cutover — kapsam dışı

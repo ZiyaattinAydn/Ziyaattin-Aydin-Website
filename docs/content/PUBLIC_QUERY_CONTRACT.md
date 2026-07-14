@@ -146,3 +146,23 @@ Sprint 05 kapsamında mapper kodu yazılmamıştı. Sprint 06 implementasyon dur
 - Public profile şeması eksik olduğu için Supabase About/profile read aktive edilmedi.
 
 Ayrıntılı implementasyon kaydı: `docs/content/PUBLIC_REPOSITORY_BOUNDARY.md`.
+
+## Sprint 07 project query implementation
+
+Project list/detail request'leri artık non-production ortamında gerçek
+`PublicQueryReader` üzerinden çalıştırılabilir.
+
+Project list explicit kolonları:
+
+- `id`, `slug`, `title`, `summary`, `status`, `progress`
+- `is_featured`
+- `github_url`, `demo_url`, `link_approval_state`
+- `visibility`, `publish_state`, `published_at`, `updated_at`
+
+Detail sorgusu bunlara `problem`, `approach`, `highlights` ve `next_steps`
+alanlarını ekler.
+
+`owner_id`, internal approval note, private Studio alanı veya `select *`
+kullanılmaz. Detail slug filtresi, üç anonymous access filtresine eklenir.
+Mapper request/RLS sonucuna güvenmekle yetinmez; visibility, publish state ve
+published_at koşullarını tekrar doğrular.
