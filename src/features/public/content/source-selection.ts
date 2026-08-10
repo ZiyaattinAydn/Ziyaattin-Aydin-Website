@@ -84,6 +84,31 @@ export function getPublicProjectContentRepository(): PublicContentRepository {
   });
 }
 
+/**
+ * Writing vertical slice — same strategy as projects:
+ * dev/preview reads from Supabase, production stays on mock.
+ */
+export function getPublicWritingContentRepository(): PublicContentRepository {
+  const environment = process.env;
+  const source = resolvePublicContentSource(environment);
+
+  if (source === "mock") {
+    return mockPublicContentRepository;
+  }
+
+  if (!hasPublicSupabaseConfiguration(environment)) {
+    console.warn(
+      "[public-content] Supabase writing reads requested without complete public configuration; using mock content.",
+    );
+    return mockPublicContentRepository;
+  }
+
+  return createPublicContentRepository({
+    environment,
+    supabaseReader: createSupabaseServerPublicQueryReader(),
+  });
+}
+
 export {
   hasPublicSupabaseConfiguration,
   resolvePublicContentSource,
