@@ -4,10 +4,10 @@ import { Panel } from "@/components/ui/panel";
 import { PublishStatusNote } from "@/components/public/publish-status-note";
 import { WritingExplorer } from "@/components/public/writing-explorer";
 import { publishStateLabels, visibilityLabels } from "@/features/public/content/model";
-import { getPublicContentRepository } from "@/features/public/content/source-selection";
+import { getPublicWritingContentRepository } from "@/features/public/content/source-selection";
 
 export default async function WritingsPage() {
-  const repository = getPublicContentRepository();
+  const repository = getPublicWritingContentRepository();
   const writings = await repository.listWritings();
   const featured = (await repository.listFeaturedWritings(1))[0] ?? writings[0];
 
