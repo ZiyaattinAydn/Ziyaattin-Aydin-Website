@@ -1,3 +1,46 @@
+## Sprint 08 Writings Vertical Slice — 2026-08-10
+
+Marker: `S08_WRITINGS_CHANGELOG`
+
+### Added
+
+- Core Writing domain: types, validation, state machine, database error mapping, mutation guard, server mutations.
+- Studio Writing CRUD: Server Actions, WritingForm, WritingCard, WritingWorkflowActions, WritingSubmitButton.
+- Studio sayfaları: `/studio/writings`, `/studio/writings/new`, `/studio/writings/[writingId]/edit`.
+- Studio nav'a "Yazılar" menü öğesi eklendi (Projeler ile Görevler arasında).
+- `getPublicWritingContentRepository()` — Projects patterniyle aynı source-selection stratejisi.
+- Sprint 08 handoff dokümanı.
+
+### Changed
+
+- `/writings` ve `/writings/[slug]` public sayfaları `getPublicWritingContentRepository()` kullanır (dev/preview Supabase, production mock).
+
+### Security
+
+- Owner+AAL2 guard her mutasyonda zorunlu.
+- Service role CRUD'da kullanılmıyor.
+- RLS politikaları (Sprint 05) aktif.
+- `select *` kullanılmıyor, explicit column listeler.
+- Secret taraması temiz.
+- Hard delete yok, sadece archive.
+- Published slug kilitlenir.
+
+### Verified
+
+- ESLint, TypeScript `tsc --noEmit` ve `next build` başarılı.
+- Tüm Studio writing ve public writing route'ları build çıktısında doğru listelendi.
+- Secret/credential taraması temiz.
+- Main merge açık kullanıcı onayı bekliyor.
+
+### Deferred
+
+- Vercel Preview kabul testi — merge sonrası.
+- Production Supabase cutover.
+- Writing image upload / cover image yönetimi.
+- Rich text editor / MDX body.
+- Slug history / redirect.
+
+
 ## Sprint 07 Integration — 2026-07-14
 
 Marker: `S07_INTEGRATION_CHANGELOG`
