@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { Panel } from "@/components/ui/panel";
 import { publicProfile } from "@/features/public/content/profile";
+import { readPublishedSiteProfile } from "@/features/public/content/published-profile";
 import { publicMetadata } from "@/lib/public-metadata";
 export const metadata = publicMetadata(
   "Hakkımda",
   "Ziyaattin Aydın’ın kişisel web sitesi ve Kişisel Sistemim hakkında.",
   "/about",
 );
-export default function AboutPage() {
+export const dynamic = "force-dynamic";
+export default async function AboutPage() {
+  const approved = await readPublishedSiteProfile();
   return (
     <div className="space-y-10 lg:space-y-14">
       <section className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-10 lg:p-12">
@@ -23,10 +26,10 @@ export default function AboutPage() {
             {publicProfile.displayName}
           </h1>
           <p className="mt-6 max-w-2xl text-xl leading-8 sm:text-2xl">
-            {publicProfile.headline}
+            {approved?.headline ?? publicProfile.headline}
           </p>
           <p className="mt-5 max-w-2xl text-base leading-8 text-[var(--muted)]">
-            {publicProfile.description}
+            {approved?.description ?? publicProfile.description}
           </p>
         </div>
       </section>
