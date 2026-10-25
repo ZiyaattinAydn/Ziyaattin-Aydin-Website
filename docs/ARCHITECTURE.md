@@ -10,6 +10,8 @@ Next.js App Router kullanıyorum. Herkese açık site ve özel çalışma alanı
 | `src/features/projects` | Proje veri modeli ve işlemleri |
 | `src/features/writings` | Yazı yönetimi |
 | `src/features/studio/tasks` | Görev takibi |
+| `src/features/studio/journey` | Yolculuğum kayıtları, taslak/yayın yönetimi |
+| `src/features/studio/library` | Özel not, dosya ve medya araçları |
 | `src/features/public/content` | Public içerik okuma ve filtreleme |
 | `src/lib/auth`, `src/lib/supabase` | Oturum, yetki ve veritabanı bağlantısı |
 | `supabase/migrations` | Veritabanı şeması, fonksiyonlar, RLS, Storage |

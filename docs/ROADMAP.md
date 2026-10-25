@@ -1,20 +1,25 @@
 # Yapılacaklar
 
-## Studio 1.0 yayın kapısı
+## Teknik teslim
 
-- [x] Preview’da gerçek hesapla giriş, TOTP, Studio ve çıkış (kullanıcı doğruladı).
-- [ ] Uzun süreli oturum yenilemeyi gerçek cihazda gözlemle.
-- [x] Panel, görev listesi/formu ve proje detayını 390/768/1440 pikselde izole görsel testten geçir.
-- [ ] Android Chrome ve iOS Safari'de ana ekrana eklemeyi gerçek cihazda dene.
-- [ ] Supabase Auth sızdırılmış parola korumasını mevcut planın desteklediği ölçüde aç.
-- [ ] PR’ı birleştir, Production’ı doğrula ve geçici branch’i temizle.
+- [x] Studio görev/proje/yazı/not/dosya ve yayın araçları Production'da.
+- [x] Public 1.0 sayfaları, içerik güvenliği ve SEO altyapısı.
+- [x] Studio Yolculuğum için taslak, düzenleme, yayın ve arşiv akışı geliştirildi.
+- [x] GitHub Actions kalite kontrol iş akışı eklendi.
+- [ ] Yeni Journey akışı ve CI için Preview/GitHub Actions doğrulaması, ardından Production.
+- [ ] CI kontrolünün zorunlu merge şartı yapılması (GitHub repo kurallarına bağlı).
+- [ ] Auth, MFA, PWA, dosya ve notları gerçek hesapla/telefonla son kabul testleri.
+- [ ] Supabase sızdırılmış parola koruması plan desteğine göre ayrıca değerlendirilecek.
 
-Görev düzenleme/filtreler, proje detayları, dashboard ve PWA manifesti bu geliştirmede eklendi. Teknik testlerin kapsamı [proje durumunda](PROJECT_STATUS.md).
+## Final — kişisel içerikler (kullanıcı katılımı gerektirir)
 
-## Sonraki çalışmalar
+- Doğrulanmış biyografi ve uygun iletişim bağlantıları (halen kod tabanlı profil yapılandırmasından yayınlanır).
+- Gerçek projeler, portföy görselleri ve yazıların Studio üzerinden girilmesi.
+- Yolculuğum kayıtlarının Studio üzerinden oluşturulup bilinçli olarak yayınlanması.
+- Gerçek içerikler tamamlanınca son Public kabul ve lansman kontrolü.
 
-- Not alma sistemini ayrıca planlayıp geliştirmek.
-- Dosya yükleme, listeleme ve indirmeyi ayrıca planlamak.
-- Public portföydeki örnek içerikleri gerçek içeriklerle değiştirmek.
-- Yazı ve medya yayın incelemesini geliştirmek.
-- Gerekirse veri tabanı ortamlarını ayırmayı ayrıca değerlendirmek; mevcut çalışma ortak Supabase'i kullanır.
+## Bilerek ertelenenler
+
+- Ücretli ikinci Supabase projesi ve ücretli özelliklere geçiş.
+- Özel kullanıcı verileri için çevrimdışı PWA önbelleği.
+- Küçük veri hacmi için gereksiz mikro-optimizasyonlar; Supabase performans linter'ı gerektiğinde yeniden değerlendirilir.

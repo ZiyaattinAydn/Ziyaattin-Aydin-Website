@@ -37,3 +37,10 @@ Notlar ve dosyalar ayrı çalışma kapsamında.
 ## Public 1.0
 
 Public sayfalardaki geliştirme notları ve örnek içerikler kaldırıldı. Mevcut portre dosyaları korundu. Proje/yazı detayları, mobil menü, metadata, paylaşım görseli, robots ve sitemap düzenlendi. Public okumalar anonim ve yalnız yayınlanan kayıtlarla sınırlı; Supabase kayıtları değiştirilmedi. Doğrulanmış biyografi, iletişim bağlantıları ve gerçek portföy içerikleri kullanıcıdan bekleniyor.
+
+## Teknik hazırlık (26 Ekim 2026)
+
+- PR #11 ile notlar, dosyalar ve içerik yayın araçları `main` üzerinden Production'a alındı; Supabase `20261025211818` migration kayıtlı.
+- Studio Yolculuğum editörü eklendi: taslak oluşturma/düzenleme, kontrollü yayınlama, yayından kaldırma ve arşivleme. Gerçek kariyer kaydı oluşturulmadı.
+- GitHub Actions kalite kontrolü PR ve `main` push'larında `npm test`, `npm run check` ve yüksek önem seviyeli `npm audit` çalıştıracak. İş akışının ilk gerçek yürütmesi ayrıca doğrulanmalı; kural zorunlu değilse GitHub branch protection bağımsız ayar gerektirir.
+- Preview ve Production hâlâ aynı Supabase veritabanını kullanır. Yeni migration eklenmedi.
