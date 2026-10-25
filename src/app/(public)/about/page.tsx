@@ -41,8 +41,7 @@ export default function AboutPage() {
             ise proje ve görev takibim yer alıyor.
           </p>
           <p className="mt-4 text-base leading-8 text-[var(--muted)]">
-            Burada tamamlanmış bir özgeçmiş yerine, zamanla büyüyen bir çalışma
-            ve paylaşım alanı var.
+            Bu alan, paylaştığım çalışmalarla birlikte zamanla büyüyor.
           </p>
         </Panel>
         <Panel className="p-6 sm:p-8">

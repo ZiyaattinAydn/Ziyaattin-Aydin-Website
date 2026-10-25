@@ -97,6 +97,7 @@ export default async function HomePage() {
           </div>
         ) : (
           <PublicEmptyState
+            headingLevel={3}
             title="Projeler için yeni bir sayfa"
             description="Henüz paylaşılmış proje yok. Çalışmalarımın ayrıntılarını bu bölümde bulabileceksin."
             href="/about"
@@ -121,6 +122,7 @@ export default async function HomePage() {
           </div>
         ) : (
           <PublicEmptyState
+            headingLevel={3}
             title="Henüz yazı paylaşmadım"
             description="Yayınladığım yazılar burada yer alacak."
           />

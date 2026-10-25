@@ -4,19 +4,24 @@ export function PublicEmptyState({
   description,
   href,
   linkLabel,
+  headingLevel = 2,
 }: {
   title: string;
   description: string;
   href?: string;
   linkLabel?: string;
+  headingLevel?: 2 | 3;
 }) {
+  const Heading = headingLevel === 3 ? "h3" : "h2";
   return (
     <div className="rounded-2xl border border-dashed border-[var(--border-strong)] bg-[var(--surface)] px-6 py-10 sm:px-8">
       <span
         aria-hidden="true"
         className="mb-5 block h-1 w-9 rounded-full bg-[var(--accent)]"
       />
-      <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+      <Heading className="text-xl font-semibold tracking-tight">
+        {title}
+      </Heading>
       <p className="mt-3 max-w-xl text-sm leading-7 text-[var(--muted)]">
         {description}
       </p>
