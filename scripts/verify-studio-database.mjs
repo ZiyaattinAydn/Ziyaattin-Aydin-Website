@@ -34,6 +34,8 @@ set studio.test_database='isolated';
   );
   await db.exec(fs.readFileSync(path.join(root,"scripts/verify-studio-library.sql"),"utf8"));
   console.log("LIBRARY_DATABASE_OK: notes/files CRUD, archive history, private visibility, project ownership, Storage policies, anonymous/AAL1/pending/other owner denial, isolated snapshot rehearsal");
+  await db.exec(fs.readFileSync(path.join(root,"scripts/verify-studio-profile.sql"),"utf8"));
+  console.log("SITE_PROFILE_DATABASE_OK: owner AAL2, draft private, public publish, owner isolation");
   await db.close();
 } catch (e) {
   console.error(
