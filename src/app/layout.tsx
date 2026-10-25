@@ -4,6 +4,13 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   applicationName: siteConfig.name,
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "Studio",
+    statusBarStyle: "black-translucent",
+  },
+  icons: { apple: "/icons/apple-touch-icon.png" },
   title: {
     default: siteConfig.title,
     template: `%s | ${siteConfig.owner}`,
@@ -25,9 +32,15 @@ export const viewport: Viewport = {
   themeColor: "#03070a",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="tr" data-theme={siteConfig.defaultTheme} className="antialiased">
+    <html
+      lang="tr"
+      data-theme={siteConfig.defaultTheme}
+      className="antialiased"
+    >
       <body>{children}</body>
     </html>
   );

@@ -225,7 +225,10 @@ export async function getStudioAuthorization(): Promise<StudioAuthorizationResul
     };
   }
 
-  if (!hasRequiredStudioAssurance(mfaAccess.currentLevel)) {
+  if (
+    !hasRequiredStudioAssurance(mfaAccess.currentLevel) ||
+    !hasRequiredStudioAssurance(mfaAccess.nextLevel)
+  ) {
     return {
       ok: false,
       reason: "mfa_required",

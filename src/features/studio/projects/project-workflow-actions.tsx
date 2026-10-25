@@ -11,9 +11,7 @@ import {
   INITIAL_PROJECT_ACTION_STATE,
   type ProjectActionState,
 } from "@/features/studio/projects/action-state";
-import {
-  PROJECT_PUBLISH_STATE_LABELS,
-} from "@/features/studio/projects/project-presentation";
+import { PROJECT_PUBLISH_STATE_LABELS } from "@/features/studio/projects/project-presentation";
 import { ProjectSubmitButton } from "@/features/studio/projects/project-submit-button";
 
 type BoundProjectAction = (
@@ -85,19 +83,19 @@ function ArchiveForm({ projectId }: { projectId: string }) {
       <div>
         <h3 className="font-semibold text-[#f0c46b]">Projeyi arşivle</h3>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          Bu işlem satırı ve ilişkileri korur; hard delete yapmaz. Sprint 07
-          içinde restore yoktur.
+          Proje ve bağlı görevler silinmez. Arşivdeki proje düzenlenemez.
         </p>
       </div>
 
       <label className="flex items-start gap-3 text-sm">
         <input
           type="checkbox"
+          required
           name="archiveConfirmation"
           value="archive"
           className="mt-1 h-4 w-4 accent-[#f0c46b]"
         />
-        <span>Projeyi terminal archived durumuna taşımayı onaylıyorum.</span>
+        <span>Bu projeyi arşivlemek istiyorum.</span>
       </label>
 
       <ProjectSubmitButton
@@ -126,10 +124,9 @@ export function ProjectWorkflowActions({
   if (publishState === "archived") {
     return (
       <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-        <h2 className="text-lg font-semibold">Workflow</h2>
+        <h2 className="text-lg font-semibold">Yayın işlemleri</h2>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          Archived terminal durumudur. Bu sprintte düzenleme, transition veya
-          restore işlemi yoktur.
+          Bu proje arşivlendi. Kayıt ve ilişkili görevler korundu.
         </p>
       </section>
     );
@@ -142,10 +139,9 @@ export function ProjectWorkflowActions({
   return (
     <section className="space-y-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
       <div>
-        <h2 className="text-lg font-semibold">Publish workflow</h2>
+        <h2 className="text-lg font-semibold">Yayın işlemleri</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          Yalnız Core domain sözleşmesinin izin verdiği server-side geçişler
-          gösterilir ve tekrar server-side doğrulanır.
+          Projenin yayın durumunu buradan yönetebilirsin.
         </p>
       </div>
 

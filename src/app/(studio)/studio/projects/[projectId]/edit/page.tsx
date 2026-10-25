@@ -37,8 +37,8 @@ function ProjectReadError() {
           Proje açılamadı
         </h2>
         <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-          Güvenli Studio oturumunu doğrulayın ve tekrar deneyin. Ham database
-          veya authorization ayrıntısı gösterilmez.
+          Güvenli Studio oturumunu doğrulayın ve tekrar deneyin. Bağlantını
+          kontrol edip sayfayı yenile.
         </p>
       </div>
     </Panel>
@@ -62,10 +62,10 @@ export default async function EditStudioProjectPage({
     return (
       <div className="space-y-8">
         <Link
-          href="/studio/projects"
+          href={`/studio/projects/${projectId}`}
           className="inline-flex text-sm text-[var(--muted)] transition hover:text-[var(--accent)]"
         >
-          ← Projelere dön
+          ← Proje detayına dön
         </Link>
         <ProjectReadError />
       </div>
@@ -90,9 +90,7 @@ export default async function EditStudioProjectPage({
     imageUrl: project.imageUrl,
   };
 
-  const allowedTransitions = getAllowedProjectTransitions(
-    project.publishState,
-  );
+  const allowedTransitions = getAllowedProjectTransitions(project.publishState);
 
   return (
     <div className="space-y-8">
@@ -105,9 +103,9 @@ export default async function EditStudioProjectPage({
         </Link>
         <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
           <StudioPageHeader
-            eyebrow="Studio / Projects / Edit"
+            eyebrow="Studio / Proje / Düzenle"
             title={project.title}
-            description="Alan güncellemeleri ve publish workflow yalnız Core domain mutation sınırları üzerinden çalışır."
+            description="Projenin bilgilerini, çalışma durumunu ve yayınını yönet."
             status={project.slug}
           />
           <StudioStatusPill
@@ -138,20 +136,19 @@ export default async function EditStudioProjectPage({
           />
 
           <Panel className="p-5">
-            <h2 className="text-lg font-semibold">Approval görünümü</h2>
+            <h2 className="text-lg font-semibold">Yayın incelemesi</h2>
             <dl className="mt-4 space-y-3 text-sm">
               <div className="flex items-center justify-between gap-4">
-                <dt className="text-[var(--muted)]">Link approval</dt>
+                <dt className="text-[var(--muted)]">Bağlantılar</dt>
                 <dd className="font-mono">{project.linkApprovalState}</dd>
               </div>
               <div className="flex items-center justify-between gap-4">
-                <dt className="text-[var(--muted)]">Image approval</dt>
+                <dt className="text-[var(--muted)]">Görsel</dt>
                 <dd className="font-mono">{project.imageApprovalState}</dd>
               </div>
             </dl>
             <p className="mt-4 text-xs leading-5 text-[var(--muted)]">
-              Approval state düzenleme UI’ı bu sprintte yoktur. Pending link
-              veya görsel publish geçişini server-side engeller.
+              İncelemesi bekleyen bağlantı ve görseller yayınlanamaz.
             </p>
           </Panel>
         </div>

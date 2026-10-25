@@ -53,9 +53,13 @@ export async function refreshSupabaseSession(
   );
 
   const { data, error } = await supabase.auth.getClaims();
+  // A locally valid JWT can outlive a deleted or invalid Auth user.
+  const trusted =
+    !error && data?.claims?.sub ? await supabase.auth.getUser() : null;
 
   return {
     response,
-    hasAuthenticatedClaims: !error && Boolean(data?.claims?.sub),
+    hasAuthenticatedClaims:
+      !error && Boolean(trusted?.data.user) && !trusted?.error,
   };
 }

@@ -2,10 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { Panel } from "@/components/ui/panel";
-import {
-  MfaForm,
-  type StudioMfaMode,
-} from "@/features/studio/auth/mfa-form";
+import { MfaForm, type StudioMfaMode } from "@/features/studio/auth/mfa-form";
 import { getSafeRedirectPath } from "@/lib/auth/safe-redirect";
 import { getStudioMfaAccess } from "@/lib/auth/studio-authorization";
 
@@ -41,12 +38,13 @@ export default async function MfaPage({ searchParams }: MfaPageProps) {
     return (
       <Panel className="w-full max-w-xl p-7 sm:p-9">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-          Studio Security
+          Studio güvenliği
         </p>
-        <h1 className="mt-4 text-3xl font-semibold">Doğrulama kullanılamıyor</h1>
+        <h1 className="mt-4 text-3xl font-semibold">
+          Doğrulama kullanılamıyor
+        </h1>
         <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-          Güvenli doğrulama şu anda tamamlanamıyor. Yapılandırma ayrıntıları
-          gösterilmedi ve Studio kapalı tutuldu.
+          Doğrulama şu anda tamamlanamıyor. Biraz sonra tekrar dene.
         </p>
       </Panel>
     );
@@ -54,7 +52,7 @@ export default async function MfaPage({ searchParams }: MfaPageProps) {
 
   let mode: StudioMfaMode = "enroll";
 
-  if (access.currentLevel === "aal2") {
+  if (access.currentLevel === "aal2" && access.nextLevel === "aal2") {
     mode = "manage";
   } else if (access.nextLevel === "aal2") {
     mode = "challenge";
@@ -65,7 +63,7 @@ export default async function MfaPage({ searchParams }: MfaPageProps) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-            Studio Security
+            Studio güvenliği
           </p>
           <h1 className="mt-4 text-3xl font-semibold">
             {mode === "enroll"
@@ -86,8 +84,8 @@ export default async function MfaPage({ searchParams }: MfaPageProps) {
       </div>
 
       <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-        Studio yalnız server-side active owner doğrulaması ve current AAL2 ile
-        açılır. Recovery code üretilmez.
+        Doğrulama uygulamandaki 6 haneli kodu kullan. Yedek erişim için ikinci
+        bir doğrulama cihazı ekleyebilirsin.
       </p>
 
       <div className="mt-7">
@@ -98,7 +96,7 @@ export default async function MfaPage({ searchParams }: MfaPageProps) {
         href="/"
         className="mt-6 block text-center text-xs text-[var(--muted)] hover:text-[var(--foreground)]"
       >
-        Public siteye dön
+        Web sitesine dön
       </Link>
     </Panel>
   );

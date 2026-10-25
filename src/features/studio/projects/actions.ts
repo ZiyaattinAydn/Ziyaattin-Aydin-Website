@@ -57,6 +57,8 @@ function readProjectInput(formData: FormData) {
 }
 
 function revalidateProjectPaths(projectId: string, slug: string): void {
+  revalidatePath("/studio");
+  revalidatePath(`/studio/projects/${projectId}`);
   revalidatePath("/studio/projects");
   revalidatePath(`/studio/projects/${projectId}/edit`);
   revalidatePath("/projects");
@@ -140,5 +142,7 @@ export async function archiveProjectAction(
   }
 
   revalidateProjectPaths(result.data.id, result.data.slug);
-  return projectActionSuccess("Proje arşivlendi. Hard delete uygulanmadı.");
+  return projectActionSuccess(
+    "Proje arşivlendi. Kayıt ve bağlı görevler korundu.",
+  );
 }

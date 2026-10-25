@@ -20,7 +20,7 @@ function ProjectListError() {
         </h2>
         <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
           Güvenli Studio oturumunu doğrulayın ve daha sonra tekrar deneyin.
-          Veritabanı veya policy ayrıntıları gösterilmez.
+          Bağlantını kontrol edip sayfayı yenile.
         </p>
       </div>
     </Panel>
@@ -33,8 +33,7 @@ function EmptyProjects() {
       <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[rgba(18,217,120,0.03)] p-8">
         <h2 className="text-2xl font-semibold">Henüz proje taslağı yok</h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-          İlk proje taslağını oluşturun. Owner kimliği ve draft publish state
-          server-side atanır.
+          İlk projenle çalışma alanını oluşturmaya başlayabilirsin.
         </p>
         <Link
           href="/studio/projects/new"
@@ -54,10 +53,10 @@ export default async function StudioProjectsPage() {
     <div className="space-y-8">
       <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
         <StudioPageHeader
-          eyebrow="Studio / Projects"
-          title="Gerçek proje yönetimi"
-          description="Development Supabase üzerindeki owner projelerini normal cookie-backed session, current AAL2 ve RLS sınırıyla yönetin."
-          status="Sprint 07 CRUD"
+          eyebrow="Studio / Projeler"
+          title="Projelerim"
+          description="Projelerini takip et, görevlerine ulaş ve yayınlarını yönet."
+          status="Studio 1.0"
         />
         <Link
           href="/studio/projects/new"
@@ -73,13 +72,16 @@ export default async function StudioProjectsPage() {
         <EmptyProjects />
       ) : (
         <>
-          <section className="space-y-4" aria-labelledby="active-projects-title">
+          <section
+            className="space-y-4"
+            aria-labelledby="active-projects-title"
+          >
             <div>
               <h2 id="active-projects-title" className="text-2xl font-semibold">
                 Aktif kayıtlar
               </h2>
               <p className="mt-2 text-sm text-[var(--muted)]">
-                Draft, review, approved, published ve unpublished projeler.
+                Üzerinde çalıştığın ve yayınladığın projeler.
               </p>
             </div>
             <div className="grid gap-5">
@@ -94,7 +96,10 @@ export default async function StudioProjectsPage() {
           {result.data.some(
             (project) => project.publishState === "archived",
           ) ? (
-            <section className="space-y-4" aria-labelledby="archived-projects-title">
+            <section
+              className="space-y-4"
+              aria-labelledby="archived-projects-title"
+            >
               <div>
                 <h2
                   id="archived-projects-title"
@@ -103,7 +108,7 @@ export default async function StudioProjectsPage() {
                   Arşiv
                 </h2>
                 <p className="mt-2 text-sm text-[var(--muted)]">
-                  Hard delete uygulanmamış terminal kayıtlar.
+                  Kayıtları ve ilişkili görevleri korunan projeler.
                 </p>
               </div>
               <div className="grid gap-5">
