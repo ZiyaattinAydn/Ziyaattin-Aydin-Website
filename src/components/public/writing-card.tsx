@@ -1,9 +1,11 @@
+import { ContentImage } from "@/components/public/content-image";
 import Link from "next/link";
 import type { WritingSummary } from "@/features/public/content/model";
 import { Panel } from "@/components/ui/panel";
 export function WritingCard({ writing }: { writing: WritingSummary }) {
   return (
     <Panel className="group flex h-full min-w-0 flex-col p-6 transition duration-200 hover:-translate-y-0.5 hover:border-[var(--accent-dim)]">
+      {writing.coverImage && <div className="mb-5"><ContentImage src={writing.coverImage.src} alt={writing.coverImage.alt}/></div>}
       <p className="font-mono text-xs uppercase tracking-[0.12em] text-[var(--accent)]">
         {writing.category}
       </p>

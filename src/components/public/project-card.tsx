@@ -1,3 +1,4 @@
+import { ContentImage } from "@/components/public/content-image";
 import Link from "next/link";
 import type { ProjectSummary } from "@/features/public/content/model";
 import { Panel } from "@/components/ui/panel";
@@ -5,6 +6,7 @@ import { Tag } from "@/components/ui/tag";
 export function ProjectCard({ project }: { project: ProjectSummary }) {
   return (
     <Panel className="group flex h-full min-w-0 flex-col p-6 transition duration-200 hover:-translate-y-0.5 hover:border-[var(--accent-dim)]">
+      {project.image && <div className="mb-5"><ContentImage src={project.image.src} alt={project.image.alt}/></div>}
       <p className="text-xs font-medium text-[var(--accent)]">
         {project.statusLabel}
       </p>

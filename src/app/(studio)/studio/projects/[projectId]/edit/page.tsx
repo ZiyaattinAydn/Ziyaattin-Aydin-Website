@@ -1,3 +1,4 @@
+import { PublicationReview } from "@/features/studio/library/publication-review";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -119,6 +120,7 @@ export default async function EditStudioProjectPage({
       <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
         <Panel className="p-5 sm:p-7">
           <ProjectForm
+            key={project.updatedAt}
             mode="edit"
             projectId={project.id}
             initialValues={formValues}
@@ -135,22 +137,7 @@ export default async function EditStudioProjectPage({
             allowedTransitions={allowedTransitions}
           />
 
-          <Panel className="p-5">
-            <h2 className="text-lg font-semibold">Yayın incelemesi</h2>
-            <dl className="mt-4 space-y-3 text-sm">
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-[var(--muted)]">Bağlantılar</dt>
-                <dd className="font-mono">{project.linkApprovalState}</dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-[var(--muted)]">Görsel</dt>
-                <dd className="font-mono">{project.imageApprovalState}</dd>
-              </div>
-            </dl>
-            <p className="mt-4 text-xs leading-5 text-[var(--muted)]">
-              İncelemesi bekleyen bağlantı ve görseller yayınlanamaz.
-            </p>
-          </Panel>
+          <PublicationReview kind="projects" id={project.id} version={project.updatedAt} archived={project.publishState === "archived"}/>
         </div>
       </div>
     </div>

@@ -1,6 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { UploadForm } from "@/features/studio/library/upload-form";
+import { useUnsavedChanges } from "@/features/studio/library/unsaved";
 
 import type {
   WritingFormValues,
@@ -85,24 +87,27 @@ export function WritingForm({
   slugEditable,
   readOnly = false,
 }: WritingFormProps) {
+  const [dirty, setDirty] = useState(false);
   const serverAction: WritingFormAction =
     mode === "create"
       ? createWritingAction
       : updateWritingAction.bind(null, writingId ?? "");
 
-  const [state, formAction] = useActionState(
-    serverAction,
+  const [state, formAction, pending] = useActionState(
+    async (previous: WritingActionState, form: FormData) => { const result = await serverAction(previous, form); if(result.status === "success") setDirty(false); return result; },
     INITIAL_WRITING_ACTION_STATE,
   );
 
+  const [imageValue, setImageValue] = useState(initialValues.coverImageUrl ?? "");
+  useUnsavedChanges(dirty && !pending);
   const publishedVisibilityLocked = publishState === "published";
 
   return (
-    <form action={formAction} className="space-y-8">
+    <form data-unsaved-editor action={formAction} onChange={()=>setDirty(true)} className="space-y-8">
       <ActionMessage state={state} />
       <FieldError id="writing-form-error" messages={state.fieldErrors._form} />
 
-      <fieldset disabled={readOnly} className="space-y-8">
+      <fieldset disabled={readOnly || pending} className="space-y-8">
         <div className="grid gap-6 lg:grid-cols-2">
           <label className={labelClassName}>
             Başlık
@@ -144,8 +149,7 @@ export function WritingForm({
               </>
             )}
             <p id="slug-help" className="mt-2 text-xs leading-5 text-[var(--muted)]">
-              Küçük harf, rakam ve tek tire grupları kullanın. Published veya
-              unpublished yazılarda slug server-side olarak kilitlidir.
+              Küçük harf, rakam ve tek tire grupları kullanın. Yayın geçmişi olan yazıların adresi değiştirilemez.
             </p>
             <FieldError id="slug-error" messages={state.fieldErrors.slug} />
           </label>
@@ -181,7 +185,7 @@ export function WritingForm({
             className={inputClassName}
           />
           <p id="content-help" className="mt-2 text-xs leading-5 text-[var(--muted)]">
-            Düz metin veya JSON section formatı kullanılabilir. Publish için içerik zorunludur.
+            Düz metin yazabilirsin. Yayınlamak için içerik gerekli; görünümünü önizlemeden kontrol et.
           </p>
           <FieldError id="content-error" messages={state.fieldErrors.content} />
         </label>
@@ -205,7 +209,7 @@ export function WritingForm({
               <>
                 <input type="hidden" name="visibility" value="public" />
                 <div className={`${inputClassName} opacity-70`}>
-                  Public — published durumda kilitli
+                  Herkese açık — yayında
                 </div>
               </>
             ) : (
@@ -282,19 +286,19 @@ export function WritingForm({
           <div>
             <h2 className="text-lg font-semibold">Kapak görseli</h2>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              Yeni veya değişen görsel approval durumunu pending yapar.
-              Pending görsel publish edilemez.
+              Yeni veya değişen görseli yayınlamadan önce incele.
             </p>
           </div>
 
+          {!readOnly && <UploadForm image onUploaded={url=>{setImageValue(url);setDirty(true);}}/>}
           <label className={labelClassName}>
-            Kapak görsel URL
+            Kapak görsel adresi
             <input
               name="coverImageUrl"
               type="url"
               maxLength={2048}
-              defaultValue={initialValues.coverImageUrl ?? ""}
-              placeholder="https://upcdn.io/12a1y1C/raw/content-submission-form.png"
+              value={imageValue} onChange={e=>setImageValue(e.target.value)}
+              placeholder="Yüklediğin görselin adresi"
               className={inputClassName}
             />
             <FieldError
@@ -313,12 +317,12 @@ export function WritingForm({
             {mode === "create" ? "Taslak oluştur" : "Değişiklikleri kaydet"}
           </WritingSubmitButton>
           <p className="text-xs leading-5 text-[var(--muted)]">
-            Owner kimliği, publish state ve approval alanları formdan alınmaz.
+            Değişikliklerini kaydettikten sonra önizlemeyi kontrol et.
           </p>
         </div>
       ) : (
         <p className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
-          Arşivlenmiş yazı read-only durumundadır. Restore henüz yoktur.
+          Arşivlenmiş yazı yalnız okunabilir.
         </p>
       )}
     </form>

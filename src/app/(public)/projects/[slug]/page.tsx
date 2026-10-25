@@ -1,3 +1,4 @@
+import { ContentImage } from "@/components/public/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Panel } from "@/components/ui/panel";
@@ -86,6 +87,7 @@ export default async function ProjectDetailPage({ params }: Props) {
           </nav>
         )}
       </header>
+      {project.image && <div className="mb-5"><ContentImage src={project.image.src} alt={project.image.alt}/></div>}
       <div className="grid gap-6 md:grid-cols-2">
         {[
           { title: "Problem", text: project.problem },

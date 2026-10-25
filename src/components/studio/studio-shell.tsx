@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { StudioSessionControls } from "./studio-session-controls";
+import { StudioPrivacyGuard } from "./studio-privacy-guard";
 import { usePathname } from "next/navigation";
 import type { PropsWithChildren } from "react";
 import { studioNavItems } from "@/features/studio/studio-content";
@@ -19,6 +20,7 @@ export function StudioShell({ children }: PropsWithChildren) {
 
   return (
     <div className="min-h-screen bg-code-grid text-[var(--foreground)]">
+      <StudioPrivacyGuard />
       <a
         href="#studio-content"
         className="sr-only focus:not-sr-only focus:block focus:p-4"

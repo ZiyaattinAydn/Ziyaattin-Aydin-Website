@@ -1,3 +1,4 @@
+import { publicImageUrl } from "@/lib/public-image";
 import { publicProfile } from "@/features/public/content/profile";
 import { getApprovedPublicUrl } from "@/features/public/content/approvals";
 import type {
@@ -35,6 +36,8 @@ export const PROJECT_LIST_COLUMNS = [
   "github_url",
   "demo_url",
   "link_approval_state",
+  "image_url",
+  "image_approval_state",
   "visibility",
   "publish_state",
   "published_at",
@@ -57,6 +60,8 @@ export const WRITING_LIST_COLUMNS = [
   "category",
   "tags",
   "reading_time",
+  "cover_image_url",
+  "image_approval_state",
   "status",
   "is_featured",
   "visibility",
@@ -101,6 +106,8 @@ type ProjectRow = {
   github_url: string | null;
   demo_url: string | null;
   link_approval_state: string;
+  image_url?: string | null;
+  image_approval_state?: string;
   visibility: string;
   publish_state: string;
   published_at: string | null;
@@ -116,6 +123,8 @@ type WritingRow = {
   category: string | null;
   tags: string[];
   reading_time: number | null;
+  cover_image_url?: string | null;
+  image_approval_state?: string;
   status: string;
   is_featured: boolean;
   visibility: string;
@@ -259,22 +268,23 @@ function mapProjectRow(row: ProjectRow): ProjectSummary | null {
         approvalState,
       },
     },
-    image: null,
+    image: row.image_approval_state === "approved" && publicImageUrl(row.image_url) ? {src:publicImageUrl(row.image_url)!,alt:row.title} : null,
   };
 }
 
-function parseWritingSections(content: string): WritingSection[] | null {
+export function parseWritingSections(content: string): WritingSection[] | null {
   const trimmed = content.trim();
 
   if (!trimmed) {
     return null;
   }
+  const plain = [{id:"content",title:"İçerik",paragraphs:trimmed.split(/\n\s*\n/).map(p=>p.trim()).filter(Boolean)}];
 
   try {
     const parsed: unknown = JSON.parse(trimmed);
 
     if (!Array.isArray(parsed)) {
-      return null;
+      return plain;
     }
 
     const sections = parsed.flatMap((value) => {
@@ -327,7 +337,7 @@ function parseWritingSections(content: string): WritingSection[] | null {
       ];
     });
 
-    return sections.length > 0 ? sections : null;
+    return sections.length === parsed.length && sections.length > 0 ? sections : plain;
   } catch {
     const paragraphs = trimmed
       .split(/\n\s*\n/)
@@ -398,7 +408,7 @@ function mapWritingRow(
     sections: sections ?? [],
     relatedSlugs: [],
     externalLinks: [],
-    coverImage: null,
+    coverImage: row.image_approval_state === "approved" && publicImageUrl(row.cover_image_url) ? {src:publicImageUrl(row.cover_image_url)!,alt:row.title} : null,
   };
 }
 

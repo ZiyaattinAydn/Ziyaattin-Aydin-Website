@@ -20,17 +20,19 @@ function normalizePublicUrl(value: string | null): string | null {
     trimmedValue.startsWith("/") &&
     !trimmedValue.startsWith("//")
   ) {
-    return trimmedValue;
+    return trimmedValue.startsWith("/images/") && !trimmedValue.includes("..") ? trimmedValue : null;
   }
 
   try {
     const parsedUrl = new URL(trimmedValue);
 
     if (
-      (parsedUrl.protocol !== "https:" &&
-        parsedUrl.protocol !== "http:") ||
+      (parsedUrl.protocol !== "https:") ||
       parsedUrl.username ||
-      parsedUrl.password
+      parsedUrl.password ||
+      parsedUrl.hostname === "localhost" ||
+      /^(127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.)/.test(parsedUrl.hostname) ||
+      parsedUrl.hostname.includes(":")
     ) {
       return null;
     }

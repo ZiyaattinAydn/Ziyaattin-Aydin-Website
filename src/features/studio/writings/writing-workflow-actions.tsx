@@ -85,8 +85,7 @@ function ArchiveForm({ writingId }: { writingId: string }) {
       <div>
         <h3 className="font-semibold text-[#f0c46b]">Yazıyı arşivle</h3>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          Bu işlem satırı ve ilişkileri korur; hard delete yapmaz.
-          Restore henüz yoktur.
+          Yazı silinmez; içeriği arşivde korunur ve Public sayfalardan kaldırılır.
         </p>
       </div>
 
@@ -97,7 +96,7 @@ function ArchiveForm({ writingId }: { writingId: string }) {
           value="archive"
           className="mt-1 h-4 w-4 accent-[#f0c46b]"
         />
-        <span>Yazıyı terminal archived durumuna taşımayı onaylıyorum.</span>
+        <span>Bu yazıyı arşivlemek istiyorum.</span>
       </label>
 
       <WritingSubmitButton
@@ -126,10 +125,9 @@ export function WritingWorkflowActions({
   if (publishState === "archived") {
     return (
       <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-        <h2 className="text-lg font-semibold">Workflow</h2>
+        <h2 className="text-lg font-semibold">Yayın durumu</h2>
         <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          Archived terminal durumudur. Düzenleme, transition veya
-          restore işlemi henüz yoktur.
+          Bu yazı arşivde; içeriğini okumaya devam edebilirsin.
         </p>
       </section>
     );
@@ -142,10 +140,9 @@ export function WritingWorkflowActions({
   return (
     <section className="space-y-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
       <div>
-        <h2 className="text-lg font-semibold">Publish workflow</h2>
+        <h2 className="text-lg font-semibold">Yayın durumu</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          Yalnız Core domain sözleşmesinin izin verdiği server-side geçişler
-          gösterilir ve tekrar server-side doğrulanır.
+          Taslağını kaydet, önizle ve incelemeyi tamamladıktan sonra yayınla.
         </p>
       </div>
 

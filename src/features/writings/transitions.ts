@@ -75,7 +75,11 @@ export function validateWritingUpdatePolicy(
 
   const nextTitle = update.title ?? current.title;
   const nextExcerpt = update.excerpt ?? current.excerpt;
+  const nextContent = update.content ?? current.content;
   const nextVisibility = update.visibility ?? current.visibility;
+  if (current.publishState === "published" && !nextContent.trim()) {
+    return writingFailure("validation_failed", "Yayındaki yazının içeriği boş bırakılamaz.", {content:["İçerik zorunlu."]});
+  }
 
   if (!nextTitle.trim()) {
     return writingFailure(

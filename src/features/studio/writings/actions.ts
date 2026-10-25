@@ -55,6 +55,7 @@ function readWritingInput(formData: FormData) {
 }
 
 function revalidateWritingPaths(writingId: string, slug: string): void {
+  revalidatePath("/", "layout");
   revalidatePath("/studio/writings");
   revalidatePath(`/studio/writings/${writingId}/edit`);
   revalidatePath("/writings");
@@ -138,5 +139,5 @@ export async function archiveWritingAction(
   }
 
   revalidateWritingPaths(result.data.id, result.data.slug);
-  return writingActionSuccess("Yazı arşivlendi. Hard delete uygulanmadı.");
+  return writingActionSuccess("Yazı arşivlendi; içeriği korundu.");
 }

@@ -62,6 +62,7 @@ const PROJECT_SELECT = [
 
 type AuthorizedOperationContext = ProjectMutationContext & {
   supabase: SupabaseClient;
+  expectedVersion?: string;
 };
 
 type ProjectInsertPayload = {
@@ -244,6 +245,7 @@ async function updateOwnedProjectRow(
     .update(payload)
     .eq("id", projectId)
     .eq("owner_id", context.ownerId)
+    .eq("updated_at", context.expectedVersion ?? "")
     .select(PROJECT_SELECT)
     .maybeSingle();
 
@@ -294,7 +296,7 @@ async function transitionOwnedProject(
       : {}),
   };
 
-  return updateOwnedProjectRow(context, projectId, payload);
+  return updateOwnedProjectRow({...context, expectedVersion: current.data.updatedAt}, projectId, payload);
 }
 
 export async function listOwnerProjects(): Promise<
@@ -418,7 +420,7 @@ export async function updateProject(
     );
 
     return updateOwnedProjectRow(
-      context,
+      {...context, expectedVersion: current.data.updatedAt},
       projectId.data,
       payload,
     );

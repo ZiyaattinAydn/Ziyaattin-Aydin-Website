@@ -25,3 +25,9 @@ Storage policies bazı barındırılan Supabase kurulumlarında SQL Editor'dan u
 - Normal Studio işlemleri kullanıcı oturumu ve RLS kullanır.
 - Service-role anahtarı normal CRUD için kullanılmaz.
 - `supabase/rollback/` içindeki dosya veri kaybına yol açabilir; Production'da deneme amaçlı çalıştırılmaz.
+
+## Not ve dosya korumaları
+
+`studio_library_guards` migration'ı mevcut kayıtları değiştirmez; özel not yazımını, dosya görünürlüğünü ve arşiv geçmişini koruyan ek policy/trigger'lar kurar. Öncesinde not/dosya satırları ile mevcut policy/trigger tanımları repo dışındaki özel yerel yedeğe alındı. İzole PGlite testinde sentetik not ve dosya metadata'sının yedekten geri kurulması doğrulanır; canlı verilerle restore testi yapılmaz.
+
+Ücretsiz planda düzenli `supabase db dump` çıktısı ve Storage dosyalarının ayrı bir kopyası kullanıcı kontrolünde, repo dışında saklanmalı. Veritabanı yedeği Storage nesnelerinin içeriğini kapsamaz. Bu görevde ücretli yedekleme veya PITR açılmaz. Canlı arşivleri geri almak için veri silen rollback kullanılmaz; gerekirse yeni bir düzeltme migration'ı hazırlanır.
