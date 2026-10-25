@@ -1,46 +1,44 @@
-# Ziyaattin — Kişisel Sistemim
+# Ziyaattin Aydın
 
-Kişisel marka/portföy sitesi ve tek kullanıcıya özel proje-görev çalışma alanı.
+Kişisel web sitem ve proje takip alanım. Yaptığım işleri bir arada tutmak, üzerinde çalıştığım projeleri takip etmek ve zamanla kendi portföyümü oluşturmak için geliştiriyorum.
 
-## Amaç
-- **Public**: Kendimi, deneyimlerimi, projelerimi ve yazılarımı güvenilir içerikle sergilemek.
-- **Studio**: Projelerimi, açık/tamamlanan görevlerimi ve ileride notları/dosyaları takip etmek.
-- **Mobil**: Responsive tasarımdan, telefona kurulabilir bir PWA'ya ilerlemek.
+## Neler var?
 
-## Teknoloji
-Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Supabase (Auth/PostgreSQL/Storage/RLS) ve Vercel.
+**Web sitesi:** Hakkımda, projeler, yazılar ve kariyer yolculuğu sayfaları.
 
-## Gerçek durum (25 Ekim 2026)
-- Public arayüz mevcut; Production'da içerik büyük ölçüde mock. Production Supabase cutover yok.
-- Studio login, TOTP MFA (AAL2), aktif owner denetimi ve RLS altyapısı mevcut.
-- Proje CRUD, yazı CRUD ve görev oluşturma/durum/arşivleme kodu main'de.
-- Not ve dosya sayfaları henüz gerçek CRUD yapmıyor.
-- PWA manifest/service worker/install akışı henüz uygulanmadı.
-- Geliştirme Supabase projesi `atrphakkgpqtoqdigggt` ve Vercel Preview bağlantısı bulunuyor; Production'da ayrı Supabase ortamı kurulmadı.
-- Gerçek kabul testleri ve üretim geçişi için docs/PROJECT_STATUS.md'yi incele.
+**Studio:** Sadece benim giriş yapabildiğim yönetim alanı. Proje ve görev takibi çalışıyor; notlar ve dosya yönetimi sırada.
 
-## Geliştirme
-Node.js 22.x gerekli.
+Site henüz tamamlanmadı. Özellikle portföy içeriklerinin bir kısmı örnek verilerden geliyor. Studio'yu ve kişisel sitemi aynı sistemden yönetmek, daha sonra da telefona kurulabilen bir PWA olarak kullanmak istiyorum.
+
+## Kullandığım teknolojiler
+
+Next.js 16, React 19, TypeScript, Tailwind CSS 4, Supabase ve Vercel.
+
+## Yerel kurulum
+
+Node.js 22.x gerekiyor.
 
 ```bash
+git clone https://github.com/ZiyaattinAydn/Ziyaattin-Aydin-Website.git
+cd Ziyaattin-Aydin-Website
 npm ci
-# .env.example içinden güvenli biçimde .env.local hazırla
+cp .env.example .env.local
 npm run dev
+```
+
+Supabase bağlantısı için `.env.local` içindeki geliştirme ortamı değerlerini doldurmak gerekiyor. Anahtarları repoya eklemeyin.
+
+```bash
 npm run lint
 npm run typecheck
 npm run build
 ```
 
-## Temel rotalar
-- Public: `/`, `/about`, `/projects`, `/projects/[slug]`, `/writings`, `/writings/[slug]`, `/journey`
-- Studio: `/login`, `/mfa`, `/studio`, `/studio/projects`, `/studio/writings`, `/studio/tasks`, `/studio/notes`, `/studio/files`
+## Proje notları
 
-## Belgeler
-- [Durum](docs/PROJECT_STATUS.md)
-- [Yol haritası](docs/ROADMAP.md)
-- [Kararlar](docs/DECISIONS.md)
+- [Şu anki durum](docs/PROJECT_STATUS.md)
+- [Yapılacaklar](docs/ROADMAP.md)
 - [Mimari](docs/ARCHITECTURE.md)
-- [Geliştirme kuralları](CONTRIBUTING.md)
-- [Orijinal proje ana dokümanı](docs/kisisel-sistemim-proje-ana-dokumani.pdf)
+- [Geliştirme düzeni](CONTRIBUTING.md)
 
-Önceki sprint/handoff ayrıntıları silinen dokümanlarla birlikte Git geçmişinde korunur; yeni çalışma modeli tek akışlıdır.
+Tasarım referansları ve başlangıçta hazırladığım [proje dokümanı](docs/kisisel-sistemim-proje-ana-dokumani.pdf) da depoda duruyor.

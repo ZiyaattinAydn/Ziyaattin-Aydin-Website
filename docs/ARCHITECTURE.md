@@ -1,27 +1,28 @@
-# Mimari ve Operasyon Özeti
+# Mimari
 
-## Yerleşim
-- `src/app/(public)`: herkese açık marka/portföy rotaları.
-- `src/app/(auth)`: login, MFA ve çıkış.
-- `src/app/(studio)`: yalnız owner kullanımı için Studio arayüzleri.
-- `src/features/projects`, `src/features/writings`: doğrulama, yayın durumları, server mutation.
-- `src/features/studio/tasks`: özel görev okuma, oluşturma, tamamlama ve arşiv.
-- `src/features/public/content`: Public veri kaynağı seçimi ve güvenli görünürlük filtresi.
-- `src/lib/auth` ve `src/lib/supabase`: tek kullanıcı, AAL2, SSR auth ve güvenli veri istemcileri.
-- `supabase/migrations`: şema, fonksiyon, RLS ve Storage sözleşmesi.
+Next.js App Router kullanıyorum. Herkese açık site ve özel çalışma alanı aynı projede.
 
-## Güvenlik
-Studio her işlemde güvenilir server user, aktif owner profili, current `aal2`, owner filtreleri ve veritabanı RLS ile korunur. Proxy tek başına yetkilendirme değildir. Browser bundle'a secret taşınmaz. Public içerik yalnız onaylanmış ve yayınlanmış alanlardan türetilir.
+| Konum | İçerik |
+| --- | --- |
+| `src/app/(public)` | Portföy, projeler, yazılar, hakkımda |
+| `src/app/(auth)` | Giriş, MFA, çıkış |
+| `src/app/(studio)` | Özel çalışma alanı |
+| `src/features/projects` | Proje veri modeli ve işlemleri |
+| `src/features/writings` | Yazı yönetimi |
+| `src/features/studio/tasks` | Görev takibi |
+| `src/features/public/content` | Public içerik okuma ve filtreleme |
+| `src/lib/auth`, `src/lib/supabase` | Oturum, yetki ve veritabanı bağlantısı |
+| `supabase/migrations` | Veritabanı şeması, fonksiyonlar, RLS, Storage |
 
-## Dağıtım
-GitHub `main` -> Vercel Production; kısa ömürlü PR dalı -> Preview.
-Development Supabase: `atrphakkgpqtoqdigggt`; development/Preview için kullanılır. Production Supabase **ayrı** kurulmalıdır. Vercel'in başarılı build durumu, Studio veya login'in Production'da çalıştığı anlamına gelmez.
+## Veri ve erişim
 
-## Ürün sınırı
-- Görevler yalnız kişisel Studio verisidir.
-- Not ve dosya ekranları hâlâ mock; şema mevcut olsa da CRUD yok.
-- Public site üzerinde örnek içerik üretim anlatısı yerine gerçek içerik geçişi gereklidir.
-- PWA henüz uygulanmadı.
-- Eski handoff belgeleri kod deposundan çıkarılmıştır; gerektiğinde git history üzerinden bulunur.
+Studio işlemleri sunucuda oturum ve TOTP doğrulamasından geçiyor; Supabase RLS de sahiplik kontrolünü uyguluyor. Normal kayıt işlemlerinde service-role anahtarı kullanılmıyor.
 
-Yeni ekip düzeni yok: işi alan tek akış tüm gerekli katmanları birlikte bitirir.
+Public site yalnız yayınlanmış/herkese açık veriyi alabiliyor. Gizli notlar ve görevler public içerik kaynağı değil. Production'da örnek içeriklerden gerçek veriye geçiş henüz tamamlanmadı.
+
+## Ortamlar
+
+- **Yerel ve Preview:** Geliştirme Supabase projesi.
+- **Production:** Vercel'de dağıtım var; ayrı Production Supabase henüz kurulmadı.
+
+Deployment başarılı olması, Production'da Studio girişinin çalıştığı anlamına gelmiyor. Ortam değişkenleri [burada](deployment/ENVIRONMENT.md), veritabanı adımları [burada](../supabase/README.md).
