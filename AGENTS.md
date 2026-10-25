@@ -1,32 +1,22 @@
-<!-- BEGIN:nextjs-agent-rules -->
-# This is NOT the Next.js you know
+# Kişisel Sistemim — Geliştirme Kuralları
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
-<!-- END:nextjs-agent-rules -->
+Bu repo tek bir ürün ve tek bir geliştirme akışıyla yönetilir. Eski Core/Public/Studio/Integration/Orchestration pencere düzeni artık geçerli değildir.
 
-# Kişisel Sistemim — Agent Çalışma Kuralları
+## Her işe başlamadan
+1. README.md, docs/PROJECT_STATUS.md, docs/ROADMAP.md ve docs/DECISIONS.md dosyalarını oku.
+2. Mevcut main, açık PR'lar ve Vercel/Supabase durumunu kontrol et.
+3. Aynı anda bir ürün görevi üzerinde çalış; kısa ömürlü bir feature/fix branch aç.
 
-Her görevden önce sırayla oku:
-1. `docs/PROJECT_STATUS.md`
-2. `docs/WORKSTREAMS.md`
-3. `docs/DECISIONS.md`
-4. `docs/ROADMAP.md`
-5. `CONTRIBUTING.md`
+## Kod ve teslim
+- UI, server, veritabanı, test ve dokümanı aynı iş kapsamında birlikte ele al.
+- Mevcut çalışma mantığını bozmadan değiştir. Güvenlik kontrollerini client'a devretme.
+- Supabase Studio işlemleri current AAL2 + aktif owner + RLS ile korunur.
+- Service-role / DB şifresi / gizli anahtarları repoya, loglara veya tarayıcıya koyma.
+- Public içerik ile private Studio veri sınırını koru.
+- İlgili değişiklikte lint, typecheck, build ve davranış testlerini çalıştır.
+- Önce Preview doğrula, sonra PR'ı main'e birleştir ve Production durumunu kontrol et.
+- Production veritabanı kurulum ve migration'larında hedefi doğrula, önce backup al; geliştirme ve production verilerini istemeden birleştirme.
+- Değişiklik tamamlandığında docs/PROJECT_STATUS.md'yi güncelle; detaylı günlük handoff/prompt dosyası üretme.
+- Kullanıcı onayı olmadan gerçek olmayan başarı, adres, profil fotoğrafı ve iletişim linki yayınlama.
 
-## Zorunlu Kurallar
-- `main` üzerinde doğrudan özellik geliştirme.
-- Yalnız atandığın branch ve dosya kapsamına dokun.
-- Ortak altyapı dosyalarını değiştirmeden önce çalışma hattı sahipliğini kontrol et.
-- Yeni bağımlılık eklemek gerekiyorsa nedenini handoff belgesine yaz.
-- Gizli değerleri repository'ye ekleme; `.env.example` kullan.
-- Onaylanmamış veya kullanıcıya benzemeyen portre üretme/kullanma.
-- İş sonunda `docs/handoffs/YYYY-MM-DD-<branch>.md` oluştur.
-- `docs/PROJECT_STATUS.md`, `docs/WORKSTREAMS.md` ve `CHANGELOG.md` dosyalarını güncelle.
-- Teslimden önce `npm run lint`, `npm run typecheck` ve `npm run build` çalıştır.
-
-## Durum Sembolleri
-- `[ ]` Başlamadı
-- `[~]` Devam ediyor
-- `[x]` Branch içinde tamamlandı
-- `[m]` Main'e merge edildi
-- `[!]` Blocker veya dikkat
+Next.js sürümüne özgü API değişikliklerinde yüklü dokümanları doğrula.
