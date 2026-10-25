@@ -2,11 +2,12 @@
 
 ## Studio 1.0 yayın kapısı
 
-- [ ] Preview'da gerçek hesapla giriş, TOTP, çıkış ve oturum yenilemeyi doğrula.
-- [ ] Yetkili oturumda dashboard, görev/proje detayları ve mobil formları gözden geçir.
+- [x] Preview’da gerçek hesapla giriş, TOTP, Studio ve çıkış (kullanıcı doğruladı).
+- [ ] Uzun süreli oturum yenilemeyi gerçek cihazda gözlemle.
+- [x] Panel, görev listesi/formu ve proje detayını 390/768/1440 pikselde izole görsel testten geçir.
 - [ ] Android Chrome ve iOS Safari'de ana ekrana eklemeyi gerçek cihazda dene.
 - [ ] Supabase Auth sızdırılmış parola korumasını mevcut planın desteklediği ölçüde aç.
-- [ ] Bu kontrollerden sonra PR'ı birleştir, Production'ı doğrula ve geçici branch'i temizle.
+- [ ] PR’ı birleştir, Production’ı doğrula ve geçici branch’i temizle.
 
 Görev düzenleme/filtreler, proje detayları, dashboard ve PWA manifesti bu geliştirmede eklendi. Teknik testlerin kapsamı [proje durumunda](PROJECT_STATUS.md).
 

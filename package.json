@@ -15,7 +15,8 @@
     "test:tasks": "node --test scripts/verify-studio-tasks.test.mjs",
     "test:database": "node scripts/verify-studio-database.mjs",
     "test": "npm run test:tasks && npm run test:database && npm run test:projects && npm run test:studio-projects && npm run test:supabase && node scripts/verify-studio-auth.mjs && npm run test:public",
-    "test:public": "node --experimental-strip-types --loader ./scripts/ts-alias-loader.mjs --test src/features/public/content/public-project-repository.test.mjs src/features/public/content/public-content.policy.test.mjs"
+    "test:public": "node --experimental-strip-types --loader ./scripts/ts-alias-loader.mjs --test src/features/public/content/public-project-repository.test.mjs src/features/public/content/public-content.policy.test.mjs",
+    "test:http": "node scripts/verify-studio-http.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "0.12.0",

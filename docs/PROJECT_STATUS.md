@@ -28,6 +28,8 @@ Uygulama geri alınırsa eklenen sütun korunabilir; veri içeren sütunları ve
 
 `npm run check`: lint, typecheck ve production build. Güvenlik düzeltmeleri için Next.js 16.4.3'e geçildi; npm audit temiz.
 
-Gerçek hesapla Preview giriş → TOTP → Studio → çıkış → korumalı adresin yeniden açılmaması henüz kullanıcı tarafından doğrulanmalı. Oturum yenileme ve Android/iOS ana ekrana ekleme de gerçek cihaz testi bekler. Bu kontroller tamamlanmadan PR birleştirilmez ve Studio 1.0 Production yayını tamamlandı sayılmaz.
+Kullanıcı Preview’da gerçek hesapla giriş → TOTP → Studio → çıkış akışının başarılı olduğunu doğruladı. Yerel production sunucusunda girişsiz/geçersiz çerezli Studio erişimi, no-store başlıkları, manifest/ikonlar ve farklı kaynaktan çıkış isteğinin reddi test edildi. Canlı Supabase tasks ve owner_profiles anonim okumaları HTTP 401 ile reddedildi.
+
+Panel, görev listesi/formu ve proje detayı 390/768/1440 pikselde bağımsız sentetik görsel testte taşma veya etiketsiz form alanı göstermedi. Bu test uygulamanın yetkilendirmesini değiştirmez. Uzun süreli oturum yenileme ve gerçek Android/iOS ana ekrana ekleme henüz cihaz testi bekler. Kullanıcı onaylı Preview akışından sonra Production dağıtımı ayrıca kontrol edilir.
 
 Notlar ve dosyalar ayrı çalışma kapsamında. Public portföy tasarımı ve mevcut içerik kaynağı değiştirilmedi.
