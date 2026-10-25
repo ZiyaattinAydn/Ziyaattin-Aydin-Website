@@ -30,22 +30,21 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             Z.
           </Link>
           <p className="mt-8 font-mono text-xs uppercase tracking-[0.22em] text-[var(--accent)]">
-            Private Studio
+            Özel çalışma alanı
           </p>
           <h1 className="mt-4 text-3xl font-semibold tracking-[-0.04em] sm:text-4xl">
             Studio Girişi
           </h1>
           <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-            E-posta ve şifre yalnız ilk faktördür. Active owner allowlist ve
-            authenticator ile current AAL2 doğrulanmadan Studio içeriği
-            gösterilmez.
+            E-posta ve şifrenle giriş yap, ardından doğrulama uygulamandaki
+            kodla oturumunu tamamla.
           </p>
 
           <div className="mt-8 space-y-3">
             {[
-              "Public signup ve magic link kapalıdır.",
-              "Yetki client metadata veya e-posta sabitiyle verilmez.",
-              "Hatalar owner kaydı veya güvenlik yapısı hakkında ayrıntı sızdırmaz.",
+              "Bu alan kişisel kullanıma özeldir.",
+              "Giriş için yetkili hesabını kullan.",
+              "İki adımlı doğrulama hesabını korur.",
             ].map((note) => (
               <div
                 key={note}
@@ -64,8 +63,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
               Güvenli oturum
             </p>
             <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-              Başarılı parola doğrulamasından sonra TOTP enrollment veya
-              challenge adımına yönlendirilirsin.
+              Girişten sonra doğrulama kodun istenir. İlk kullanımda doğrulama
+              uygulamanı bağlayabilirsin.
             </p>
           </div>
 
@@ -84,7 +83,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
             href="/"
             className="mt-6 block rounded-xl border border-[var(--border)] px-4 py-3 text-center text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
           >
-            Public siteye dön
+            Web sitesine dön
           </Link>
         </section>
       </div>

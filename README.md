@@ -29,9 +29,8 @@ npm run dev
 Supabase bağlantısı için `.env.local` içindeki geliştirme ortamı değerlerini doldurmak gerekiyor. Anahtarları repoya eklemeyin.
 
 ```bash
-npm run lint
-npm run typecheck
-npm run build
+npm test
+npm run check
 ```
 
 ## Proje notları

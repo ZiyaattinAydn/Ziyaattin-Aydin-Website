@@ -2,30 +2,32 @@
 
 Son kontrol: 25 Ekim 2026
 
-## Çalışan kısımlar
+## Studio 1.0 geliştirmesi
 
-- Kişisel sitenin ana sayfa, hakkımda, projeler, yazılar ve yolculuk sayfaları.
-- Supabase Auth ile giriş, TOTP doğrulaması ve korumalı Studio alanı.
-- Studio'da proje oluşturma/düzenleme, yayın durumu ve arşivleme.
-- Studio'da yazı oluşturma/düzenleme ve yayın akışı.
-- Görev oluşturma, projeye bağlama, durum değiştirme, tamamlama ve arşivleme.
-- Açık görevleri gösteren Studio ana paneli.
-- GitHub'dan Vercel'e otomatik dağıtım.
+- Görev oluşturma/düzenleme, öncelik, başlangıç/bitiş tarihi, proje bağlantısı, durum, yeniden açma ve onaylı arşivleme.
+- Proje, durum, öncelik ve tarih filtreleri; Türkçe arama, sıralama ve gecikme göstergeleri.
+- Gerçek kayıtlardan dashboard sayaçları, yaklaşan işler, son çalışılan projeler ve hızlı görev formu.
+- Proje detayında görevler, görevlerden hesaplanan ilerleme, sıradaki adımlar ve bağlantılar. Görev yoksa yüzde gösterilmez. Önceki manuel ilerleme alanı açıkça kişisel tahmin olarak etiketlenir.
+- Proje tamamlanmadan açık görev kontrolü; tamamlanmış projeye açık görev eklenince/yeniden açılınca projenin aktif duruma dönmesi.
+- Mobil navigasyon, form yüklenme/hata durumları, arşiv onayı, erişilebilir odak ve hata ekranları.
+- Manifest ve uygulama ikonları. Service worker, özel veri önbelleği veya çevrimdışı düzenleme yok.
 
-## Henüz tamamlanmayanlar
+## Güvenlik ve ortam
 
-- Public portföydeki örnek içerikleri gerçek projeler ve kişisel bilgilerle değiştirmek.
-- Görevlerin başlık, açıklama, tarih, öncelik ve proje bağlantısını sonradan düzenlemek.
-- Proje çalışma geçmişi ve kaldığım yerden devam et akışını geliştirmek.
-- Not alma ve dosya yönetiminde gerçek kayıt işlemleri.
-- Telefona kurulabilen PWA.
-- Ayrı Production Supabase veritabanı ve Studio girişinin Production'da çalışması.
+Preview ve Production aynı Supabase projesini (`atrphakkgpqtoqdigggt`) kullanır. Yeni bir proje açılmadı. İki ortamda URL ve publishable key tanımlı; görünür değişkenlerde service-role/secret key yok.
 
-## Teknik notlar
+`20261025200525_studio_1_0_security_and_tasks.sql` ortak veritabanına uygulandı. Başlangıç alanı ve kontroller eklendi; mevcut satırlar değiştirilmedi. Önce/sonra proje ve görev sayıları ile içerik özetleri aynı. Eski migration dosyaları geçmişte SQL Editor ile kurulmuş; bunları tekrar çalıştırmayın.
 
-- Supabase geliştirme ortamı aktif. Vercel Preview Supabase'e bağlı; Production için ayrı veritabanı/ortam değişkenleri gerekiyor.
-- Public sayfalarda üretim ortamı hâlâ büyük ölçüde örnek içerik gösteriyor.
-- Supabase'in güvenlik uyarılarından `public.rls_auto_enable()` fonksiyonunun erişim yetkisi gözden geçirilmeli.
-- Gerçek Production geçişinden önce migration geçmişi, yedekleme ve MFA/erişim testleri yapılmalı.
+Owner RLS yardımcısı artık AAL2 de ister. AAL1'de yalnız kişinin kendi profilini okuma korunur; TOTP kurulumu engellenmez. `rls_auto_enable()` için anon/authenticated erişimi kaldırıldı; ilgili iki güvenlik uyarısı kapandı. Sızdırılmış parola koruması hâlâ kapalı: Supabase Auth ayarından ayrıca ele alınmalı; ücretli plan değişikliği yapılmadı.
 
-Yapılacakların sırası için [yol haritası](ROADMAP.md).
+Uygulama geri alınırsa eklenen sütun korunabilir; veri içeren sütunları veya tabloları silerek rollback yapmayın.
+
+## Doğrulama ve yayın kapısı
+
+`npm test`: görev/Server Action testleri, ayrı geçici PostgreSQL üzerinde sentetik CRUD/RLS testleri, proje kuralları ve public içerik sınırları. Test PostgreSQL'i ağdaki Supabase'e bağlanmaz; Auth işlevleri yerel test karşılıklarıdır, gerçek Auth/TOTP testi sayılmaz.
+
+`npm run check`: lint, typecheck ve production build. Güvenlik düzeltmeleri için Next.js 16.4.3'e geçildi; npm audit temiz.
+
+Gerçek hesapla Preview giriş → TOTP → Studio → çıkış → korumalı adresin yeniden açılmaması henüz kullanıcı tarafından doğrulanmalı. Oturum yenileme ve Android/iOS ana ekrana ekleme de gerçek cihaz testi bekler. Bu kontroller tamamlanmadan PR birleştirilmez ve Studio 1.0 Production yayını tamamlandı sayılmaz.
+
+Notlar ve dosyalar ayrı çalışma kapsamında. Public portföy tasarımı ve mevcut içerik kaynağı değiştirilmedi.

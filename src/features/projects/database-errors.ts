@@ -1,7 +1,4 @@
-import {
-  projectFailure,
-  type ProjectResult,
-} from "@/features/projects/domain";
+import { projectFailure, type ProjectResult } from "@/features/projects/domain";
 
 export type ProjectDatabaseErrorLike = {
   code?: string | null;
@@ -23,14 +20,8 @@ export function mapProjectDatabaseError(
     );
   }
 
-  if (
-    error?.code === "42501" ||
-    error?.code === "PGRST301"
-  ) {
-    return projectFailure(
-      "forbidden",
-      "Bu proje işlemi için yetkiniz yok.",
-    );
+  if (error?.code === "42501" || error?.code === "PGRST301") {
+    return projectFailure("forbidden", "Bu proje işlemi için yetkiniz yok.");
   }
 
   if (error?.code === "23514") {
@@ -38,13 +29,14 @@ export function mapProjectDatabaseError(
       "validation_failed",
       "Proje verisi database kurallarıyla uyuşmuyor.",
       {
-        _form: ["Alanları kontrol edip tekrar deneyin."],
+        _form: [
+          error.message === "Project still has open tasks"
+            ? "Projeyi tamamlamak için açık görevleri tamamla, arşivle veya projeden ayır."
+            : "Alanları kontrol edip tekrar deneyin.",
+        ],
       },
     );
   }
 
-  return projectFailure(
-    "database_error",
-    "Proje işlemi tamamlanamadı.",
-  );
+  return projectFailure("database_error", "Proje işlemi tamamlanamadı.");
 }

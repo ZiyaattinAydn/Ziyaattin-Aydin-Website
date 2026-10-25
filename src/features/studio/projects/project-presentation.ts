@@ -5,17 +5,15 @@ import type {
 } from "@/features/projects/domain";
 import type { StudioStatusTone } from "@/features/studio/studio-content";
 
-export const PROJECT_PUBLISH_STATE_LABELS: Record<
-  ProjectPublishState,
-  string
-> = {
-  draft: "Taslak",
-  review: "İncelemede",
-  approved: "Onaylandı",
-  published: "Yayında",
-  unpublished: "Yayından kaldırıldı",
-  archived: "Arşivlendi",
-};
+export const PROJECT_PUBLISH_STATE_LABELS: Record<ProjectPublishState, string> =
+  {
+    draft: "Taslak",
+    review: "İncelemede",
+    approved: "Onaylandı",
+    published: "Yayında",
+    unpublished: "Yayından kaldırıldı",
+    archived: "Arşivlendi",
+  };
 
 export const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
   planned: "Planlandı",
@@ -28,7 +26,7 @@ export const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
 export const PROJECT_VISIBILITY_LABELS: Record<ProjectVisibility, string> = {
   private: "Özel",
   hidden: "Gizli",
-  public: "Public",
+  public: "Herkese açık",
 };
 
 export const PROJECT_PUBLISH_STATE_TONES: Record<
@@ -51,6 +49,7 @@ export function formatProjectDate(value: string): string {
   }
 
   return new Intl.DateTimeFormat("tr-TR", {
+    timeZone: "Europe/Istanbul",
     dateStyle: "medium",
     timeStyle: "short",
   }).format(parsed);

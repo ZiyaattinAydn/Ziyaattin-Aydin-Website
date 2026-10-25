@@ -36,8 +36,7 @@ type ProjectFormProps = {
 
 const inputClassName =
   "mt-2 w-full rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent-dim)] disabled:cursor-not-allowed disabled:opacity-60";
-const labelClassName =
-  "block text-sm font-medium text-[var(--foreground)]";
+const labelClassName = "block text-sm font-medium text-[var(--foreground)]";
 
 function FieldError({
   id,
@@ -91,7 +90,7 @@ export function ProjectForm({
       ? createProjectAction
       : updateProjectAction.bind(null, projectId ?? "");
 
-  const [state, formAction] = useActionState(
+  const [state, formAction, pending] = useActionState(
     serverAction,
     INITIAL_PROJECT_ACTION_STATE,
   );
@@ -103,7 +102,7 @@ export function ProjectForm({
       <ActionMessage state={state} />
       <FieldError id="project-form-error" messages={state.fieldErrors._form} />
 
-      <fieldset disabled={readOnly} className="space-y-8">
+      <fieldset disabled={readOnly || pending} className="space-y-8">
         <div className="grid gap-6 lg:grid-cols-2">
           <label className={labelClassName}>
             Başlık
@@ -144,9 +143,12 @@ export function ProjectForm({
                 </div>
               </>
             )}
-            <p id="slug-help" className="mt-2 text-xs leading-5 text-[var(--muted)]">
-              Küçük harf, rakam ve tek tire grupları kullanın. Published veya
-              unpublished projelerde slug server-side olarak kilitlidir.
+            <p
+              id="slug-help"
+              className="mt-2 text-xs leading-5 text-[var(--muted)]"
+            >
+              Küçük harf, rakam ve tire kullan. Yayına alınan projelerin adresi
+              korunur.
             </p>
             <FieldError id="slug-error" messages={state.fieldErrors.slug} />
           </label>
@@ -182,7 +184,10 @@ export function ProjectForm({
               }
               className={inputClassName}
             />
-            <FieldError id="problem-error" messages={state.fieldErrors.problem} />
+            <FieldError
+              id="problem-error"
+              messages={state.fieldErrors.problem}
+            />
           </label>
 
           <label className={labelClassName}>
@@ -194,11 +199,16 @@ export function ProjectForm({
               defaultValue={initialValues.approach}
               aria-invalid={Boolean(state.fieldErrors.approach?.length)}
               aria-describedby={
-                state.fieldErrors.approach?.length ? "approach-error" : undefined
+                state.fieldErrors.approach?.length
+                  ? "approach-error"
+                  : undefined
               }
               className={inputClassName}
             />
-            <FieldError id="approach-error" messages={state.fieldErrors.approach} />
+            <FieldError
+              id="approach-error"
+              messages={state.fieldErrors.approach}
+            />
           </label>
         </div>
 
@@ -213,7 +223,10 @@ export function ProjectForm({
               aria-describedby="highlights-help"
               className={inputClassName}
             />
-            <p id="highlights-help" className="mt-2 text-xs text-[var(--muted)]">
+            <p
+              id="highlights-help"
+              className="mt-2 text-xs text-[var(--muted)]"
+            >
               Her satır ayrı bir madde olarak kaydedilir.
             </p>
             <FieldError
@@ -232,7 +245,10 @@ export function ProjectForm({
               aria-describedby="next-steps-help"
               className={inputClassName}
             />
-            <p id="next-steps-help" className="mt-2 text-xs text-[var(--muted)]">
+            <p
+              id="next-steps-help"
+              className="mt-2 text-xs text-[var(--muted)]"
+            >
               Her satır ayrı bir madde olarak kaydedilir.
             </p>
             <FieldError
@@ -250,11 +266,13 @@ export function ProjectForm({
               defaultValue={initialValues.status}
               className={inputClassName}
             >
-              {Object.entries(PROJECT_STATUS_LABELS).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
+              {Object.entries(PROJECT_STATUS_LABELS)
+                .filter(([value]) => value !== "archived" || readOnly)
+                .map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
             </select>
             <FieldError id="status-error" messages={state.fieldErrors.status} />
           </label>
@@ -265,7 +283,7 @@ export function ProjectForm({
               <>
                 <input type="hidden" name="visibility" value="public" />
                 <div className={`${inputClassName} opacity-70`}>
-                  Public — published durumda kilitli
+                  Herkese açık — published durumda kilitli
                 </div>
               </>
             ) : (
@@ -290,7 +308,7 @@ export function ProjectForm({
           </label>
 
           <label className={labelClassName}>
-            İlerleme
+            Kişisel ilerleme tahmini (%)
             <input
               name="progress"
               type="number"
@@ -326,8 +344,8 @@ export function ProjectForm({
           <div>
             <h2 className="text-lg font-semibold">Bağlantılar ve görsel</h2>
             <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              Yeni veya değişen link/görsel approval durumunu pending yapar.
-              Approval UI bu sprintte yoktur; pending içerik publish edilemez.
+              Yeni veya değişen bağlantı ve görseller yayınlanmadan önce
+              inceleme gerektirir.
             </p>
           </div>
 
@@ -386,7 +404,9 @@ export function ProjectForm({
       {!readOnly ? (
         <div className="flex flex-wrap items-center gap-3">
           <ProjectSubmitButton
-            pendingLabel={mode === "create" ? "Oluşturuluyor..." : "Kaydediliyor..."}
+            pendingLabel={
+              mode === "create" ? "Oluşturuluyor..." : "Kaydediliyor..."
+            }
           >
             {mode === "create" ? "Taslak oluştur" : "Değişiklikleri kaydet"}
           </ProjectSubmitButton>

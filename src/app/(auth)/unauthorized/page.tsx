@@ -9,12 +9,11 @@ export default function UnauthorizedPage() {
   return (
     <Panel className="w-full max-w-xl p-7 sm:p-9">
       <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-        Studio Security
+        Studio güvenliği
       </p>
       <h1 className="mt-4 text-3xl font-semibold">Erişim tamamlanamadı</h1>
       <p className="mt-4 text-sm leading-7 text-[var(--muted)]">
-        Bu oturum Studio içeriğini açamaz. Owner kaydı veya güvenlik modeli
-        hakkında ek bilgi gösterilmedi.
+        Bu hesapla Studio açılamıyor. Yetkili hesabınla yeniden giriş yap.
       </p>
 
       <form action="/auth/logout" method="post" className="mt-7">
@@ -30,7 +29,7 @@ export default function UnauthorizedPage() {
         href="/"
         className="mt-4 block rounded-xl border border-[var(--border)] px-4 py-3 text-center text-sm text-[var(--muted)]"
       >
-        Public siteye dön
+        Web sitesine dön
       </Link>
     </Panel>
   );

@@ -24,6 +24,7 @@ function redirectWithCookies(
     const { name, value, ...options } = cookie;
     redirectResponse.cookies.set(name, value, options);
   });
+  redirectResponse.headers.set("Cache-Control", "private, no-store, max-age=0");
   return redirectResponse;
 }
 
@@ -54,10 +55,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
     if ((isStudioRoute || isMfaRoute) && !hasAuthenticatedClaims) {
       const loginUrl = new URL("/login", request.url);
       const requestedPath = `${pathname}${request.nextUrl.search}`;
-      loginUrl.searchParams.set(
-        "next",
-        getSafeRedirectPath(requestedPath),
-      );
+      loginUrl.searchParams.set("next", getSafeRedirectPath(requestedPath));
       return redirectWithCookies(loginUrl, response);
     }
 
@@ -68,6 +66,7 @@ export async function proxy(request: NextRequest): Promise<NextResponse> {
       return redirectWithCookies(new URL(nextPath, request.url), response);
     }
 
+    response.headers.set("Cache-Control", "private, no-store, max-age=0");
     return response;
   } catch {
     return unavailableResponse();

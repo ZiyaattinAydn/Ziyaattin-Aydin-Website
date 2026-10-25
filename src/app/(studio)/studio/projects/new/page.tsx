@@ -33,10 +33,10 @@ export default function NewStudioProjectPage() {
           ← Projelere dön
         </Link>
         <StudioPageHeader
-          eyebrow="Studio / Projects / New"
+          eyebrow="Studio / Projeler / Yeni"
           title="Yeni proje taslağı"
-          description="Form yalnız düzenlenebilir proje alanlarını gönderir. Owner kimliği, draft state ve approval alanları server-side yönetilir."
-          status="Private default"
+          description="Proje bilgilerini gir. Yeni proje özel bir taslak olarak kaydedilir."
+          status="Yeni proje"
         />
       </div>
 

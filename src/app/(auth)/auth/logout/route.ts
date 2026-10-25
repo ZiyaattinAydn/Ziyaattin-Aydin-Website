@@ -4,6 +4,13 @@ import { isSupabaseConfigured } from "@/lib/supabase/environment";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export async function POST(request: Request) {
+  const origin = request.headers.get("origin");
+  if (
+    (origin && origin !== new URL(request.url).origin) ||
+    request.headers.get("sec-fetch-site") === "cross-site"
+  ) {
+    return new NextResponse("İstek doğrulanamadı.", { status: 403 });
+  }
   if (isSupabaseConfigured()) {
     try {
       const supabase = await createServerSupabaseClient();

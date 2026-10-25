@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Integration scratch directories
 /.tmp-s07-*/
+
+# Supabase CLI transient metadata
+/supabase/.temp/

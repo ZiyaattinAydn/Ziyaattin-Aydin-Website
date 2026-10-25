@@ -21,7 +21,12 @@ export function ProjectCard({ project }: { project: ProjectEntity }) {
               {project.slug}
             </p>
             <h2 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
-              {project.title}
+              <Link
+                href={`/studio/projects/${project.id}`}
+                className="hover:text-[var(--accent)]"
+              >
+                {project.title}
+              </Link>
             </h2>
           </div>
           <StudioStatusPill
@@ -37,7 +42,7 @@ export function ProjectCard({ project }: { project: ProjectEntity }) {
 
         <div>
           <div className="mb-2 flex items-center justify-between text-xs text-[var(--muted)]">
-            <span>İlerleme</span>
+            <span>Kişisel ilerleme tahmini</span>
             <span className="font-mono text-[var(--accent)]">
               %{project.progress}
             </span>
@@ -69,7 +74,7 @@ export function ProjectCard({ project }: { project: ProjectEntity }) {
           </div>
           <div>
             <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
-              Featured
+              Öne çıkan
             </dt>
             <dd className="mt-1 text-sm">
               {project.isFeatured ? "Evet" : "Hayır"}
@@ -86,12 +91,12 @@ export function ProjectCard({ project }: { project: ProjectEntity }) {
         </dl>
 
         <Link
-          href={`/studio/projects/${project.id}/edit`}
+          href={`/studio/projects/${project.id}`}
           className="inline-flex rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm font-medium text-[var(--foreground)] transition hover:border-[var(--accent-dim)] hover:text-[var(--accent)]"
         >
           {project.publishState === "archived"
             ? "Arşiv kaydını görüntüle"
-            : "Projeyi düzenle"}
+            : "Proje detayına git"}
         </Link>
       </article>
     </Panel>

@@ -1,27 +1,19 @@
 # Yapılacaklar
 
-Bu listeyi ihtiyaç oldukça güncelliyorum.
+## Studio 1.0 yayın kapısı
 
-## Öncelik: Studio'yu günlük kullanıma hazırlamak
+- [ ] Preview'da gerçek hesapla giriş, TOTP, çıkış ve oturum yenilemeyi doğrula.
+- [ ] Yetkili oturumda dashboard, görev/proje detayları ve mobil formları gözden geçir.
+- [ ] Android Chrome ve iOS Safari'de ana ekrana eklemeyi gerçek cihazda dene.
+- [ ] Supabase Auth sızdırılmış parola korumasını mevcut planın desteklediği ölçüde aç.
+- [ ] Bu kontrollerden sonra PR'ı birleştir, Production'ı doğrula ve geçici branch'i temizle.
 
-- [ ] Görev düzenleme, tarih, filtreleme ve arama
-- [ ] Proje detayında çalışma geçmişi ve sıradaki işler
-- [ ] Not alma sisteminin kullanım şeklini netleştirip geliştirmek
-- [ ] Dosya yükleme, listeleme ve indirme
+Görev düzenleme/filtreler, proje detayları, dashboard ve PWA manifesti bu geliştirmede eklendi. Teknik testlerin kapsamı [proje durumunda](PROJECT_STATUS.md).
 
-## Kişisel site
+## Sonraki çalışmalar
 
-- [ ] Gerçek projeleri ve proje görsellerini eklemek
-- [ ] Hakkımda ve kariyer/yolculuk içeriklerini düzenlemek
-- [ ] Yazılar için içerik yönetimini ve yayın deneyimini iyileştirmek
-- [ ] SEO, paylaşım görselleri ve mobil tasarım kontrolü
-- [ ] Studio'dan Public siteye güvenli içerik yayını
-
-## Yayına hazırlık
-
-- [ ] Ayrı Production Supabase kurulumu ve yedekleme
-- [ ] Migration, Auth/MFA, RLS ve erişim testleri
-- [ ] PWA kurulumu, ikonlar ve çevrimdışı davranış kararı
-- [ ] Güvenlik ve performans kontrolü
-
-Bitmiş özelliklerin özeti [proje durumunda](PROJECT_STATUS.md).
+- Not alma sistemini ayrıca planlayıp geliştirmek.
+- Dosya yükleme, listeleme ve indirmeyi ayrıca planlamak.
+- Public portföydeki örnek içerikleri gerçek içeriklerle değiştirmek.
+- Yazı ve medya yayın incelemesini geliştirmek.
+- Gerekirse veri tabanı ortamlarını ayırmayı ayrıca değerlendirmek; mevcut çalışma ortak Supabase'i kullanır.

@@ -20,13 +20,13 @@ const SAFE_ERROR_MESSAGES: Record<ProjectErrorCode, string> = {
   configuration_missing: "Proje servisi şu anda kullanılamıyor.",
   unauthenticated: "Bu işlem için güvenli Studio oturumu gereklidir.",
   forbidden: "Bu işlem için yetkiniz bulunmuyor.",
-  mfa_required: "Bu işlem için current AAL2 doğrulaması gereklidir.",
+  mfa_required: "Bu işlem için iki adımlı doğrulama gereklidir.",
   validation_failed: "Proje alanlarını kontrol edin.",
   not_found: "Proje bulunamadı veya erişilemiyor.",
   invalid_transition: "Bu durum geçişine izin verilmiyor.",
   slug_locked: "Bu projenin slug değeri artık değiştirilemez.",
   slug_conflict: "Bu slug başka bir projede kullanılıyor.",
-  project_archived: "Arşivlenmiş proje bu sprintte değiştirilemez.",
+  project_archived: "Arşivlenmiş proje değiştirilemez.",
   database_error: "Proje işlemi güvenli şekilde tamamlanamadı.",
 };
 
