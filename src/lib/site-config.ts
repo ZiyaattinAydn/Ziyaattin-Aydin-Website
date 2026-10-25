@@ -12,14 +12,15 @@ export type ExternalLinkItem = {
   note: string;
 };
 
-const unverifiedContactNote = "Gerçek bağlantı doğrulandıktan sonra etkinleştirilecek.";
+const unverifiedContactNote =
+  "Gerçek bağlantı doğrulandıktan sonra etkinleştirilecek.";
 
 export const siteConfig = {
   name: "Kişisel Sistemim",
-  owner: "Ziyaattin",
-  title: "Ziyaattin — Kişisel Sistem",
+  owner: "Ziyaattin Aydın",
+  title: "Ziyaattin Aydın | Kişisel Web Sitesi",
   description:
-    "Projelerimi, yazılarımı ve gelişim yolculuğumu paylaştığım; özel çalışma alanımla desteklenen kişisel platform.",
+    "Ziyaattin Aydın’ın kişisel web sitesi. Projeler, yazılar ve öğrenme yolculuğundan notlar.",
   locale: "tr_TR",
   defaultTheme: "palette-2",
   navigation: [
@@ -34,11 +35,26 @@ export const siteConfig = {
     label: "Yönetici Girişi",
   },
   contactLinks: [
-    { label: "E-posta", href: null, status: "placeholder", note: unverifiedContactNote },
+    {
+      label: "E-posta",
+      href: null,
+      status: "placeholder",
+      note: unverifiedContactNote,
+    },
   ] satisfies readonly ExternalLinkItem[],
   socialLinks: [
-    { label: "GitHub", href: null, status: "placeholder", note: unverifiedContactNote },
-    { label: "LinkedIn", href: null, status: "placeholder", note: unverifiedContactNote },
+    {
+      label: "GitHub",
+      href: null,
+      status: "placeholder",
+      note: unverifiedContactNote,
+    },
+    {
+      label: "LinkedIn",
+      href: null,
+      status: "placeholder",
+      note: unverifiedContactNote,
+    },
   ] satisfies readonly ExternalLinkItem[],
   links: {
     email: null,

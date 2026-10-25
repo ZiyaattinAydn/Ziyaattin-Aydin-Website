@@ -5,7 +5,7 @@ import type {
   WritingSummary,
 } from "@/features/public/content/model";
 
-export type PublicRepositorySource = "mock" | "supabase";
+export type PublicRepositorySource = "supabase" | "empty";
 
 export class PublicRepositoryUnavailableError extends Error {
   readonly code = "PUBLIC_CONTENT_UNAVAILABLE";

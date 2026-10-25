@@ -5,12 +5,11 @@ import { StudioSessionControls } from "@/components/studio/studio-session-contro
 import { StudioShell } from "@/components/studio/studio-shell";
 import { getStudioAuthorization } from "@/lib/auth/studio-authorization";
 
+export const metadata = { robots: { index: false, follow: false } };
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default async function StudioLayout({
-  children,
-}: PropsWithChildren) {
+export default async function StudioLayout({ children }: PropsWithChildren) {
   const authorization = await getStudioAuthorization();
 
   if (!authorization.ok) {

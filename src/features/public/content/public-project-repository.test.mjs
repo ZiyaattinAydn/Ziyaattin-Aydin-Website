@@ -5,13 +5,11 @@ import {
   PROJECT_LIST_COLUMNS,
   createSupabasePublicContentRepository,
 } from "./supabase-repository.ts";
-import {
-  PublicRepositoryUnavailableError,
-} from "./repository.ts";
+import { PublicRepositoryUnavailableError } from "./repository.ts";
 
 function createProjectRow(overrides = {}) {
   return {
-    id: "51000000-0000-4000-8000-000000000001",
+    id: "61000000-0000-4000-8000-000000000001",
     slug: "development-public-project",
     title: "Development Public Project",
     summary: "Development Supabase public read doğrulama kaydı.",
@@ -54,9 +52,7 @@ test("project list uses explicit public-safe columns and mandatory filters", asy
     data: [createProjectRow()],
     error: null,
   }));
-  const repository = createSupabasePublicContentRepository(
-    fixture.reader,
-  );
+  const repository = createSupabasePublicContentRepository(fixture.reader);
 
   const projects = await repository.listProjects();
   assert.equal(projects.length, 1);
@@ -83,9 +79,7 @@ test("published public project detail opens by slug", async () => {
     data: createProjectRow(),
     error: null,
   }));
-  const repository = createSupabasePublicContentRepository(
-    fixture.reader,
-  );
+  const repository = createSupabasePublicContentRepository(fixture.reader);
 
   const project = await repository.getProjectBySlug(
     "development-public-project",
@@ -119,14 +113,9 @@ for (const [label, overrides] of [
       data: createProjectRow(overrides),
       error: null,
     }));
-    const repository = createSupabasePublicContentRepository(
-      fixture.reader,
-    );
+    const repository = createSupabasePublicContentRepository(fixture.reader);
 
-    assert.equal(
-      await repository.getProjectBySlug("non-public-project"),
-      null,
-    );
+    assert.equal(await repository.getProjectBySlug("non-public-project"), null);
   });
 }
 
@@ -139,9 +128,7 @@ test("unapproved links and project image are not exposed", async () => {
     }),
     error: null,
   }));
-  const repository = createSupabasePublicContentRepository(
-    fixture.reader,
-  );
+  const repository = createSupabasePublicContentRepository(fixture.reader);
 
   const project = await repository.getProjectBySlug(
     "development-public-project",
@@ -161,22 +148,14 @@ test("approved valid project links are exposed without credentials", async () =>
     }),
     error: null,
   }));
-  const repository = createSupabasePublicContentRepository(
-    fixture.reader,
-  );
+  const repository = createSupabasePublicContentRepository(fixture.reader);
 
   const project = await repository.getProjectBySlug(
     "development-public-project",
   );
 
-  assert.equal(
-    project?.links.github.href,
-    "https://example.com/repository",
-  );
-  assert.equal(
-    project?.links.demo.href,
-    "https://example.com/demo",
-  );
+  assert.equal(project?.links.github.href, "https://example.com/repository");
+  assert.equal(project?.links.demo.href, "https://example.com/demo");
 });
 
 test("empty project list remains a safe empty result", async () => {
@@ -184,9 +163,7 @@ test("empty project list remains a safe empty result", async () => {
     data: [],
     error: null,
   }));
-  const repository = createSupabasePublicContentRepository(
-    fixture.reader,
-  );
+  const repository = createSupabasePublicContentRepository(fixture.reader);
 
   assert.deepEqual(await repository.listProjects(), []);
 });
@@ -198,9 +175,7 @@ test("database failure becomes the generic unavailable domain error", async () =
       message: "raw database detail that must not reach the UI",
     },
   }));
-  const repository = createSupabasePublicContentRepository(
-    fixture.reader,
-  );
+  const repository = createSupabasePublicContentRepository(fixture.reader);
 
   await assert.rejects(
     repository.listProjects(),

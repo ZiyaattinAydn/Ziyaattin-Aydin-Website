@@ -18,11 +18,10 @@ Next.js App Router kullanıyorum. Herkese açık site ve özel çalışma alanı
 
 Studio işlemleri sunucuda oturum ve TOTP doğrulamasından geçiyor; Supabase RLS de sahiplik kontrolünü uyguluyor. Normal kayıt işlemlerinde service-role anahtarı kullanılmıyor.
 
-Public site yalnız yayınlanmış/herkese açık veriyi alabiliyor. Gizli notlar ve görevler public içerik kaynağı değil. Production'da örnek içeriklerden gerçek veriye geçiş henüz tamamlanmadı.
+Public site yalnız yayınlanmış/herkese açık veriyi alabiliyor. Gizli notlar ve görevler public içerik kaynağı değil. Public sorgular oturum çerezi almayan anonim bir istemci kullanır; yalnız public + published + yayın tarihi olan kayıtlar okunur. Bilinen geliştirme kayıtları ayrıca dışlanır. Eksik yapılandırma örnek veri üretmez.
 
 ## Ortamlar
 
-- **Yerel ve Preview:** Geliştirme Supabase projesi.
-- **Production:** Vercel'de dağıtım var; ayrı Production Supabase henüz kurulmadı.
+- **Yerel, Preview ve Production:** Aynı Supabase projesi; ortamlar için ayrı bir proje açılmadı.
 
-Deployment başarılı olması, Production'da Studio girişinin çalıştığı anlamına gelmiyor. Ortam değişkenleri [burada](deployment/ENVIRONMENT.md), veritabanı adımları [burada](../supabase/README.md).
+Studio 1.0 giriş/TOTP/çıkış akışı Preview ve Production’da kullanıcı tarafından doğrulandı. Ortam değişkenleri [burada](deployment/ENVIRONMENT.md), veritabanı adımları [burada](../supabase/README.md).

@@ -2,148 +2,129 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Panel } from "@/components/ui/panel";
 import { Tag } from "@/components/ui/tag";
-import { DetailSection } from "@/components/public/detail-section";
-import { StatusPill } from "@/components/public/status-pill";
-import { PublishStatusNote } from "@/components/public/publish-status-note";
-import {
-  getProjectActions,
-  linkApprovalLabels,
-  publishFlowStateLabels,
-  publishStateLabels,
-} from "@/features/public/content/model";
-import { getPublicProjectContentRepository } from "@/features/public/content/source-selection";
-
-
+import { readPublicProject } from "@/features/public/content/public-reads";
+import { getProjectActions } from "@/features/public/content/model";
+import { PublicUnavailable } from "@/components/public/content-state";
+import { publicMetadata } from "@/lib/public-metadata";
 export const dynamic = "force-dynamic";
-export default async function ProjectDetailPage({ params }: { params: Promise<{ slug: string }> }) {
+type Props = { params: Promise<{ slug: string }> };
+export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
-  const repository = getPublicProjectContentRepository();
-  const project = await repository.getProjectBySlug(slug);
-
+  try {
+    const project = await readPublicProject(slug);
+    if (!project)
+      return {
+        title: "Proje bulunamadı",
+        robots: { index: false, follow: false },
+      };
+    return publicMetadata(
+      project.title,
+      project.description,
+      "/projects/" + encodeURIComponent(project.slug),
+    );
+  } catch {
+    return { title: "Proje", robots: { index: false, follow: false } };
+  }
+}
+export default async function ProjectDetailPage({ params }: Props) {
+  const { slug } = await params;
+  const result = await readPublicProject(slug)
+    .then((data) => ({ ok: true as const, data }))
+    .catch(() => ({ ok: false as const }));
+  if (!result.ok)
+    return (
+      <div className="space-y-6">
+        <h1 className="text-3xl font-semibold">Proje</h1>
+        <PublicUnavailable href={"/projects/" + encodeURIComponent(slug)} />
+      </div>
+    );
+  const project = result.data;
   if (!project) notFound();
-
+  const links = getProjectActions(project).filter((link) => link.href);
   return (
-    <div className="space-y-8 overflow-hidden">
-      <Link href="/projects" className="inline-flex text-sm font-semibold text-[var(--accent)]">
+    <article className="mx-auto max-w-5xl space-y-8 lg:space-y-10">
+      <Link
+        href="/projects"
+        className="inline-flex py-2 text-sm font-semibold text-[var(--accent)]"
+      >
         ← Projelere dön
       </Link>
-
-      <section className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(280px,.82fr)] lg:items-stretch">
-        <Panel className="min-w-0 p-5 sm:p-8">
-          <div className="flex flex-wrap items-center gap-3">
-            <StatusPill status={project.status} />
-            <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--muted)]">
-              {project.category}
-            </span>
-            <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--muted)]">
-              {project.contentState}
-            </span>
-            <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--muted)]">
-              {publishStateLabels[project.publishState]}
-            </span>
-            <span className="rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-3 py-1 text-xs text-[var(--accent)]">
-              Yayın akışı: {publishFlowStateLabels[project.publishFlowState]}
-            </span>
-          </div>
-          <h1 className="mt-6 max-w-4xl text-4xl font-semibold tracking-tight break-words sm:text-5xl lg:text-6xl">
-            {project.title}
-          </h1>
-          <p className="mt-4 text-base font-medium leading-7 text-[var(--foreground)] sm:text-lg">{project.statusLabel}</p>
-          <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--muted)] sm:text-lg">{project.description}</p>
+      <header className="rounded-3xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-10">
+        <p className="text-sm font-medium text-[var(--accent)]">
+          {project.statusLabel}
+        </p>
+        <h1 className="mt-5 break-words text-4xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+          {project.title}
+        </h1>
+        <p className="mt-6 max-w-3xl break-words text-base leading-8 text-[var(--muted)] sm:text-lg">
+          {project.description}
+        </p>
+        {project.technologies.length > 0 && (
           <div className="mt-6 flex flex-wrap gap-2">
-            {project.technologies.map((technology) => (
-              <Tag key={technology}>{technology}</Tag>
+            {project.technologies.map((t) => (
+              <Tag key={t}>{t}</Tag>
             ))}
           </div>
-
-          <div className="mt-8" aria-label={`${project.title} public ilerleme yüzdesi ${project.progress}`}>
-            <div className="flex flex-wrap items-center justify-between gap-3 text-sm text-[var(--muted)]">
-              <span>{project.timeframe}</span>
-              <span className="font-mono text-[var(--accent)]">%{project.progress}</span>
-            </div>
-            <div className="mt-3 h-2 overflow-hidden rounded-full bg-[var(--surface-strong)]">
-              <div className="h-full rounded-full bg-[var(--accent)]" style={{ width: `${project.progress}%` }} />
-            </div>
-          </div>
-        </Panel>
-
-        <Panel className="flex min-w-0 flex-col justify-between overflow-hidden p-5 sm:p-6">
-          <div>
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-              Public bağlantılar
-            </p>
-            <h2 className="mt-3 text-2xl font-semibold">Doğrulanmış link yoksa pasif kalır</h2>
-            <p className="mt-3 text-sm leading-6 text-[var(--muted)]">{project.visibilityNote}</p>
-            <div className="mt-3">
-              <PublishStatusNote
-                publishFlowState={project.publishFlowState}
-                visibility={project.visibility}
-                sourceNote={project.sourceNote}
-                approvalNote={project.approvalNote}
-              />
-            </div>
-          </div>
-          <div className="mt-6 space-y-3">
-            {getProjectActions(project).map((link) => (
-              <div key={link.label} className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <p className="font-semibold">{link.label}</p>
-                  <span className="rounded-full border border-[var(--border)] px-2.5 py-1 text-xs text-[var(--muted)]">
-                    {link.disabledLabel} · {linkApprovalLabels[link.approvalState]}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{link.note}</p>
-                {link.href ? (
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-3 inline-flex text-sm font-semibold text-[var(--accent)]"
-                  >
-                    Bağlantıya git →
-                  </a>
-                ) : (
-                  <span aria-disabled="true" className="mt-3 inline-flex cursor-not-allowed text-sm font-semibold text-[var(--muted)]">
-                    Aktif bağlantı yok
-                  </span>
-                )}
-              </div>
+        )}
+        {links.length > 0 && (
+          <nav
+            aria-label="Proje bağlantıları"
+            className="mt-7 flex flex-wrap gap-3"
+          >
+            {links.map((link) => (
+              <a
+                key={link.label}
+                href={link.href!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="rounded-xl border border-[var(--accent-dim)] px-4 py-3 text-sm font-semibold text-[var(--accent)]"
+              >
+                {link.label} <span aria-hidden="true">↗</span>
+                <span className="sr-only"> (yeni sekmede)</span>
+              </a>
             ))}
-          </div>
-        </Panel>
-      </section>
-
-      <div className="grid gap-5 lg:grid-cols-3">
-        <DetailSection eyebrow="Özet" title="Projenin public anlatımı" description={project.summary} />
-        <DetailSection eyebrow="Problem" title="Çözülmek istenen ihtiyaç" description={project.problem} />
-        <DetailSection eyebrow="Yaklaşım" title="Nasıl ele alınıyor?" description={project.approach} />
+          </nav>
+        )}
+      </header>
+      <div className="grid gap-6 md:grid-cols-2">
+        {[
+          { title: "Problem", text: project.problem },
+          { title: "Yaklaşım", text: project.approach },
+        ]
+          .filter((section) => section.text)
+          .map((section) => (
+            <Panel key={section.title} className="p-6 sm:p-8">
+              <h2 className="text-2xl font-semibold tracking-tight">
+                {section.title}
+              </h2>
+              <p className="mt-4 whitespace-pre-wrap break-words text-base leading-8 text-[var(--muted)]">
+                {section.text}
+              </p>
+            </Panel>
+          ))}
       </div>
-
-      <section className="grid gap-5 xl:grid-cols-[1.1fr_.9fr]">
-        <Panel className="p-5 sm:p-6">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-            Süreç
-          </p>
-          <h2 className="mt-2 text-2xl font-semibold">Kilometre taşları</h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {project.milestones.map((milestone) => (
-              <div key={milestone.label} className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
-                <p className="font-semibold text-[var(--accent)]">{milestone.label}</p>
-                <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{milestone.detail}</p>
-              </div>
-            ))}
-          </div>
-        </Panel>
-
-        <DetailSection eyebrow="Görünürlük" title="Public notlar" items={project.publicNotes} />
-      </section>
-
-      <div className="grid gap-5 lg:grid-cols-2 xl:grid-cols-4">
-        <DetailSection eyebrow="Öne çıkanlar" title="Kısa notlar" items={project.highlights} />
-        <DetailSection eyebrow="Teknik" title="Teknik notlar" items={project.technicalNotes} />
-        <DetailSection eyebrow="Öğrenme" title="Öğrendiklerim" items={project.learnings} />
-        <DetailSection eyebrow="Devam" title="Sıradaki adımlar" items={project.nextSteps} />
-      </div>
-    </div>
+      {[
+        { title: "Öne çıkanlar", items: project.highlights },
+        { title: "Sıradaki adımlar", items: project.nextSteps },
+      ]
+        .filter((section) => section.items.length)
+        .map((section) => (
+          <section
+            key={section.title}
+            className="rounded-2xl border border-[var(--border)] p-6 sm:p-8"
+          >
+            <h2 className="text-2xl font-semibold tracking-tight">
+              {section.title}
+            </h2>
+            <ul className="mt-5 list-disc space-y-3 pl-5 text-base leading-8 text-[var(--muted)]">
+              {section.items.map((item, index) => (
+                <li className="break-words" key={index}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))}
+    </article>
   );
 }

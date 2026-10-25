@@ -13,7 +13,10 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
   const [sort, setSort] = useState<SortKey>("newest");
 
   const categories = useMemo(
-    () => ["Tümü", ...Array.from(new Set(writings.map((writing) => writing.category)))],
+    () => [
+      "Tümü",
+      ...Array.from(new Set(writings.map((writing) => writing.category))),
+    ],
     [writings],
   );
 
@@ -22,18 +25,10 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
 
     return writings
       .filter((writing) => {
-        const matchesCategory = category === "Tümü" || writing.category === category;
+        const matchesCategory =
+          category === "Tümü" || writing.category === category;
         const matchesQuery = normalizedQuery
-          ? [
-              writing.title,
-              writing.excerpt,
-              writing.category,
-              writing.sourceNote,
-              writing.approvalNote,
-              writing.publishState,
-              writing.publishFlowState,
-              ...writing.tags,
-            ]
+          ? [writing.title, writing.excerpt, writing.category, ...writing.tags]
               .join(" ")
               .toLocaleLowerCase("tr-TR")
               .includes(normalizedQuery)
@@ -42,8 +37,8 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
       })
       .sort((first, second) => {
         if (sort === "oldest") return first.sortOrder - second.sortOrder;
-        if (sort === "title") return first.title.localeCompare(second.title, "tr");
-        if (first.isFeatured !== second.isFeatured) return Number(second.isFeatured) - Number(first.isFeatured);
+        if (sort === "title")
+          return first.title.localeCompare(second.title, "tr");
         return second.sortOrder - first.sortOrder;
       });
   }, [category, query, sort, writings]);
@@ -53,8 +48,11 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
       <Panel className="p-4 sm:p-5">
         <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
           <label className="space-y-2">
-            <span className="text-sm font-medium text-[var(--muted)]">Yazılarda ara</span>
+            <span className="text-sm font-medium text-[var(--muted)]">
+              Yazılarda ara
+            </span>
             <input
+              type="search"
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Başlık, kategori veya konu"
@@ -62,26 +60,32 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
             />
           </label>
           <label className="space-y-2">
-            <span className="text-sm font-medium text-[var(--muted)]">Sıralama</span>
+            <span className="text-sm font-medium text-[var(--muted)]">
+              Sıralama
+            </span>
             <select
               value={sort}
               onChange={(event) => setSort(event.target.value as SortKey)}
               className="w-full rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent-dim)] lg:w-48"
             >
-              <option value="newest">En yeni mock</option>
-              <option value="oldest">En eski mock</option>
+              <option value="newest">En yeni</option>
+              <option value="oldest">En eski</option>
               <option value="title">Başlık A-Z</option>
             </select>
           </label>
         </div>
 
-        <div className="mt-5 flex flex-wrap gap-2" aria-label="Yazı kategori filtreleri">
+        <div
+          className="mt-5 flex flex-wrap gap-2"
+          aria-label="Yazı kategori filtreleri"
+        >
           {categories.map((item) => {
             const active = item === category;
             return (
               <button
                 key={item}
                 type="button"
+                aria-pressed={active}
                 onClick={() => setCategory(item)}
                 className={`rounded-full border px-4 py-2 text-sm transition ${
                   active
@@ -89,7 +93,7 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
                     : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted)] hover:border-[var(--accent-dim)] hover:text-[var(--foreground)]"
                 }`}
               >
-                ● {item}
+                {item}
               </button>
             );
           })}
@@ -98,10 +102,14 @@ export function WritingExplorer({ writings }: { writings: WritingSummary[] }) {
 
       <div>
         <h2 id="writing-list-heading" className="text-xl font-semibold">
-          Tüm public yazı taslakları
+          Tüm yazılar
         </h2>
-        <p className="mt-1 text-sm text-[var(--muted)]">
-          {filteredWritings.length} sonuç gösteriliyor. Tarihler, publish durumu ve içerikler geçici mock/taslak veridir; gerçek yayın Studio publish akışıyla bağlanacak.
+        <p
+          role="status"
+          aria-live="polite"
+          className="mt-1 text-sm text-[var(--muted)]"
+        >
+          {filteredWritings.length} yazı
         </p>
       </div>
 

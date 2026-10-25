@@ -1,17 +1,11 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import {
-  getApprovedPublicImage,
-  getApprovedPublicUrl,
-} from "./approvals.ts";
+import { getApprovedPublicImage, getApprovedPublicUrl } from "./approvals.ts";
 import {
   hasPublicSupabaseConfiguration,
   resolvePublicContentSource,
 } from "./source-policy.ts";
-import {
-  isPubliclyReadable,
-  normalizeVisibility,
-} from "./visibility.ts";
+import { isPubliclyReadable, normalizeVisibility } from "./visibility.ts";
 
 test("published public content with published_at is readable", () => {
   assert.equal(
@@ -59,25 +53,16 @@ test("legacy unlisted visibility normalizes to hidden", () => {
 
 test("only approved and valid links become public URLs", () => {
   assert.equal(
-    getApprovedPublicUrl(
-      "https://example.com/project",
-      "approved",
-    ),
+    getApprovedPublicUrl("https://example.com/project", "approved"),
     "https://example.com/project",
   );
 
   assert.equal(
-    getApprovedPublicUrl(
-      "https://example.com/private",
-      "pending",
-    ),
+    getApprovedPublicUrl("https://example.com/private", "pending"),
     null,
   );
 
-  assert.equal(
-    getApprovedPublicUrl("javascript:alert(1)", "approved"),
-    null,
-  );
+  assert.equal(getApprovedPublicUrl("javascript:alert(1)", "approved"), null);
 });
 
 test("unapproved portrait and image values are removed", () => {
@@ -108,48 +93,30 @@ test("unapproved portrait and image values are removed", () => {
   );
 });
 
-test("production and missing source configuration default to mock", () => {
-  assert.equal(
-    resolvePublicContentSource({
-      NODE_ENV: "production",
-    }),
-    "mock",
-  );
-
-  assert.equal(
-    resolvePublicContentSource({
-      NODE_ENV: "development",
-    }),
-    "mock",
-  );
-
-  assert.equal(
-    resolvePublicContentSource({
-      NODE_ENV: "production",
-      VERCEL_ENV: "production",
-      PUBLIC_CONTENT_SOURCE: "supabase",
-    }),
-    "mock",
-  );
+test("configured Production and Preview use the same publication boundary", () => {
+  for (const VERCEL_ENV of ["production", "preview", undefined]) {
+    assert.equal(
+      resolvePublicContentSource({
+        NODE_ENV: "production",
+        VERCEL_ENV,
+        NEXT_PUBLIC_SUPABASE_URL: "https://example.supabase.co",
+        NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "public-key",
+      }),
+      "supabase",
+    );
+  }
 });
-
-test("non-production Supabase source must be explicitly requested", () => {
-  assert.equal(
-    resolvePublicContentSource({
-      NODE_ENV: "production",
-      VERCEL_ENV: "preview",
-      PUBLIC_CONTENT_SOURCE: "supabase",
-    }),
-    "supabase",
-  );
-
-  assert.equal(
-    resolvePublicContentSource({
-      NODE_ENV: "development",
-      PUBLIC_CONTENT_SOURCE: "unexpected",
-    }),
+test("missing configuration never enables demonstration content", () => {
+  for (const PUBLIC_CONTENT_SOURCE of [
+    undefined,
     "mock",
-  );
+    "supabase",
+    "unexpected",
+  ])
+    assert.equal(
+      resolvePublicContentSource({ PUBLIC_CONTENT_SOURCE }),
+      "empty",
+    );
 });
 
 test("Supabase project configuration requires both public values", () => {
