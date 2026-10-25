@@ -1,6 +1,6 @@
-# Tasarım Referansları
+# Tasarım referansları
 
-Bu dosyalar birebir kod üretme zorunluluğu değil, onaylanmış görsel yön referanslarıdır.
+Başlangıçta hazırladığım tasarım görselleri:
 
 - `reference-designs/home.png`
 - `reference-designs/projects.png`
@@ -8,7 +8,4 @@ Bu dosyalar birebir kod üretme zorunluluğu değil, onaylanmış görsel yön r
 - `reference-designs/writings.png`
 - `reference-designs/about-layout.png`
 
-## Onaylı Portreler
-- `public/images/portraits/home-hero.png` — ana sayfa için kesin portre
-- `public/images/portraits/writings-hero.png` — yazılar sayfası için aday
-- `public/images/portraits/about-portrait.png` — Hakkımda için aday; kodlama sırasında kullanıcıyla doğrulanmalı
+Portreler `public/images/portraits/` altında. Ana sayfada `home-hero.png` kullanılıyor. `writings-hero.png` ve `about-portrait.png` henüz kesinleştirilmedi.

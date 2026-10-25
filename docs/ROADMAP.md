@@ -1,28 +1,27 @@
-# Yol Haritası — Kişisel Sistemim
+# Yapılacaklar
 
-Bu plan kesin süre vaadi değil; geliştirme sırası ve kapsamını gösterir.
+Bu listeyi ihtiyaç oldukça güncelliyorum.
 
-## Faz A — Tek kod tabanı, güvenli temel
-- [x] Sprint 08 Yazı CRUD ve Sprint 09 Görev CRUD kodunu main'e bütünleştir.
-- [x] 5-sayfa/çok-branch geliştirme modelini kapat, belgeleri sadeleştir.
-- [ ] Uçtan uca Preview kabul ve Supabase security linter uyarılarını gider.
-- [ ] Ayrı production Supabase, backup, owner ve MFA kurulumu; production env; kontrollü smoke test.
+## Öncelik: Studio'yu günlük kullanıma hazırlamak
 
-## Faz B — Her gün kullanılan Studio
-- [ ] Görev güncelleme, filtreleme/arama, tarih/öncelik, ilişkili proje detayları.
-- [ ] Proje kanbanı/çalışma geçmişi ve 'kaldığım yerden' akışını olgunlaştırma.
-- [ ] İhtiyaçları birlikte tanımlanmış özel not sistemi.
-- [ ] Güvenli dosya yöneticisi ve Storage entegrasyonu.
+- [ ] Görev düzenleme, tarih, filtreleme ve arama
+- [ ] Proje detayında çalışma geçmişi ve sıradaki işler
+- [ ] Not alma sisteminin kullanım şeklini netleştirip geliştirmek
+- [ ] Dosya yükleme, listeleme ve indirme
 
-## Faz C — Kişisel markalaşma
-- [ ] Mevcut Public tasarım ve responsive kalite kontrolü.
-- [ ] Gerçek proje case-study'leri ve onaylanmış portföy görselleri.
-- [ ] Hakkımda, kariyer/yolculuk ve doğrulanmış bağlantılar.
-- [ ] Studio -> Public yayın, onay, unpublish ve production cutover.
+## Kişisel site
 
-## Faz D — Telefon ve yayın kalitesi
-- [ ] PWA manifest/ikon/install; offline ve auth cache güvenlik kararları.
-- [ ] Mobil testler, erişilebilirlik, performans ve SEO/OG.
-- [ ] Backup, gözlemlenebilirlik, sürüm/rollback prosedürü ve production v1.
+- [ ] Gerçek projeleri ve proje görsellerini eklemek
+- [ ] Hakkımda ve kariyer/yolculuk içeriklerini düzenlemek
+- [ ] Yazılar için içerik yönetimini ve yayın deneyimini iyileştirmek
+- [ ] SEO, paylaşım görselleri ve mobil tasarım kontrolü
+- [ ] Studio'dan Public siteye güvenli içerik yayını
 
-Her küçük işi tek bir branch'te tamamla; farklı alanları paralel sohbetlere ayırma.
+## Yayına hazırlık
+
+- [ ] Ayrı Production Supabase kurulumu ve yedekleme
+- [ ] Migration, Auth/MFA, RLS ve erişim testleri
+- [ ] PWA kurulumu, ikonlar ve çevrimdışı davranış kararı
+- [ ] Güvenlik ve performans kontrolü
+
+Bitmiş özelliklerin özeti [proje durumunda](PROJECT_STATUS.md).

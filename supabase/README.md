@@ -1,266 +1,57 @@
-# Supabase SQL Paketi — Sprint 05
+# Supabase
 
-> Durum: **Development project üzerinde Sprint 06 kapsamında uygulandı ve doğrulandı; production'a uygulanmadı.**
+Bu klasör Kişisel Sistemim'in SQL dosyalarını içeriyor. Geliştirme projesinin şeması kurulmuş durumda; Production için ayrı bir Supabase projesi henüz hazırlanmadı.
 
-Bu paket, Kişisel Sistemim / Studio için owner-only yönetim modeli, anonymous public read sınırı, RLS, Storage bucket politikaları, development seed ve destructive rollback talimatlarını içerir.
+## SQL dosyaları
 
-## Çalıştırma sırası
+| Dosya | İçerik |
+| --- | --- |
+| `migrations/202607100001_initial_schema.sql` | Tablolar ve veri tipleri |
+| `migrations/202607100002_database_functions.sql` | Fonksiyonlar ve trigger'lar |
+| `migrations/202607100003_rls_policies.sql` | Erişim kuralları |
+| `migrations/202607100004_storage_setup.sql` | Dosya bucket'ları |
+| `seed/202607100001_development_seed.sql` | Yalnız development örnek kayıtları |
+| `rollback/202607100001_rollback_sprint_05.sql` | Veri silen geri alma dosyası |
 
-Zorunlu migration dosyalarını Supabase Dashboard → SQL Editor içinde **ayrı ayrı** ve aşağıdaki sırayla çalıştır:
+Başlangıçtaki dört migration belirtilen sırayla uygulanmalı. Daha önce kurulmuş bir projede bu dosyaları körlemesine yeniden çalıştırma; önce canlı şemayı kontrol et. Yeni değişikliklerde ayrı migration kullan.
 
-1. `migrations/202607100001_initial_schema.sql`
-2. `migrations/202607100002_database_functions.sql`
-3. `migrations/202607100003_rls_policies.sql`
-4. `migrations/202607100004_storage_setup.sql`
+Ayrıntılı adımlar: [Migration notları](../docs/supabase/MIGRATION_RUNBOOK.md).
 
-İsteğe bağlı:
+## Veriler
 
-5. `seed/202607100001_development_seed.sql` — yalnız development/preview ortamında
+`owner_profiles`, `projects`, `writings`, `journey_items`, `tasks`, `notes`, `files` ve `publish_queue` tabloları var.
 
-Acil ve destructive geri alma:
+Giriş yapan herkes Studio sahibi sayılmıyor. Yetki, Supabase Auth kullanıcısına bağlı aktif `owner_profiles` kaydıyla veriliyor. Owner rolünü istemci verisinden atamıyoruz.
 
-- `rollback/202607100001_rollback_sprint_05.sql`
+Public okuma yalnız yayınlanmış/herkese açık proje, yazı ve yolculuk kayıtları için mümkün. Görev, not ve özel dosyalar yalnız sahibine açık.
 
-Migration dosyaları tek seferliktir. Başarılı bir çalıştırmadan sonra aynı dosyayı yeniden çalıştırmak yerine yeni bir forward migration hazırlanmalıdır. Her dosya transaction kullanır; bir statement hata verirse o dosyanın transaction’ı commit edilmemelidir.
+## Storage
 
-## Dosyaların amacı
+- `public-assets`: Onaylı görseller. Public okuma; yükleme/değiştirme yalnız owner.
+- `private-files`: Kişisel dosyalar. Okuma ve yazma yalnız owner.
 
-| Dosya | Amaç | Zorunlu mu? |
-| --- | --- | --- |
-| `202607100001_initial_schema.sql` | Enum/type, tablolar, foreign key, constraint ve indexler | Evet |
-| `202607100002_database_functions.sql` | `updated_at`, publish metadata, owner helper ve pending Auth profile trigger’ları | Evet |
-| `202607100003_rls_policies.sql` | SQL privilege + RLS politikaları | Evet |
-| `202607100004_storage_setup.sql` | `public-assets` ve `private-files` bucket tanımları; hosted policy kurulumu ayrı runbook ile | Evet |
-| `202607100001_development_seed.sql` | Güvenli mock development verisi | Hayır |
-| `202607100001_rollback_sprint_05.sql` | Sprint 05 nesnelerini destructive kaldırma | Yalnız acil durumda |
+Dosya yolları ilgili kullanıcının UUID'siyle başlamalı. Mevcut boyut sınırları public bucket için 10 MiB, private bucket için 25 MiB. Barındırılan Storage policy kurulumu için [Storage notlarına](../docs/studio/STUDIO_STORAGE_POLICY_RUNBOOK.md) bak.
 
-## Owner hesabı hazırlığı
+## Owner hesabı
 
-Bu paket `auth.users` içine kullanıcı eklemez ve hiçbir kullanıcıyı otomatik owner yapmaz.
+SQL paketinin kendisi bir Auth hesabı oluşturmaz. İlk owner hesabı Supabase Dashboard üzerinden oluşturulduktan sonra `owner_profiles` satırının ilgili UUID'ye ait olduğu doğrulanır. Profil yetkisini yalnız güvenilir yönetim oturumundan ver.
 
-1. Kullanıcı onayından sonra Supabase Auth üzerinden gerçek owner hesabını oluştur.
-2. SQL Editor’da gerçek UUID’yi bul:
+MFA kurtarma adımları [burada](../docs/studio/STUDIO_MFA_RECOVERY_RUNBOOK.md).
 
-```sql
-select id, email, created_at
-from auth.users
-order by created_at;
-```
-
-3. `202607100002_database_functions.sql` daha önce çalıştıysa yeni Auth kullanıcısı için `owner_profiles` içinde `pending` satırı oluşur.
-4. UUID ve e-posta doğru kullanıcıya ait olduğu elle doğrulandıktan sonra yalnız trusted SQL Editor oturumunda aktivasyon yap:
-
-```sql
-update public.owner_profiles
-set
-  role = 'owner'::public.studio_role,
-  status = 'active'::public.owner_profile_status,
-  activated_at = now()
-where user_id = '<REAL_OWNER_UUID>'::uuid;
-```
-
-5. Tek owner beklentisini doğrula:
-
-```sql
-select user_id, role, status, activated_at
-from public.owner_profiles
-where status = 'active';
-```
-
-Client metadata, JWT içine client tarafından yazılan role veya formdan gelen `owner_id` yetki kaynağı değildir. RLS helper yalnız `auth.uid()` ile eşleşen aktif allowlist satırını doğrular.
-
-## Şema özeti
-
-Tablolar:
-
-- `owner_profiles`
-- `projects`
-- `writings`
-- `journey_items`
-- `tasks`
-- `notes`
-- `files`
-- `publish_queue`
-
-Owner ilişkileri `owner_profiles.user_id → auth.users.id` üzerinden kurulur. Proje sahipliği silinmeye karşı `restrict` davranışı kullanır; yanlışlıkla Auth kullanıcısı silinerek tüm içeriklerin cascade ile kaybolması engellenir.
-
-## Anonymous ve owner erişim özeti
-
-Anonymous:
-
-- `projects`: yalnız `visibility = public` ve `publish_state = published`
-- `writings`: yalnız `visibility = public` ve `publish_state = published`
-- `journey_items`: yalnız `visibility = public` ve `publish_state = published`
-- `tasks`, `notes`, `files`, `publish_queue`, `owner_profiles`: erişim yok
-- Hiçbir application tablosuna anonymous insert/update/delete yetkisi yok
-
-Authenticated ama allowlist dışı kullanıcı:
-
-- Public kayıtları authenticated public-read policy üzerinden okuyabilir.
-- Private Studio kayıtlarını okuyamaz veya değiştiremez.
-
-Aktif owner/admin:
-
-- Yalnız `owner_id = auth.uid()` olan kayıtları yönetebilir.
-- `owner_id` alanını başka kullanıcıya taşıyamaz.
-- Task/note/file ilişkisinde başka kullanıcıya ait projeyi seçemez.
-- `owner_profiles` role/status değerlerini client üzerinden değiştiremez.
-
-## Storage modeli
-
-### `public-assets`
-
-- Public download açıktır.
-- Upload/update/delete yalnız aktif owner/admin için açıktır.
-- Zorunlu path başlangıcı: `<owner_uuid>/...`
-- Önerilen kullanım: onaylanmış public proje/yazı görselleri
-- Onaysız portre, private belge veya internal dosya bu bucket’a konmamalıdır.
-
-### `private-files`
-
-- Anonymous read yoktur.
-- Download/list/upload/update/delete yalnız aktif owner/admin için açıktır.
-- Zorunlu path başlangıcı: `<owner_uuid>/...`
-- Önerilen kullanım: PDF, sunum, private proje dosyaları ve hazırlık görselleri
-
-Bucket baseline limitleri:
-
-- `public-assets`: 10 MiB, image MIME türleri
-- `private-files`: 25 MiB, belge/sunum ve kontrollü image MIME türleri
-
-Supabase project-wide Storage limiti veya Dashboard ayarı daha kısıtlayıcı olabilir. Üretime geçmeden önce dosya boyutu ve MIME listesi kullanıcı tarafından onaylanmalıdır.
-
-## SQL sonuçlarını doğrulama
-
-### Tablolar
+## Kontrol
 
 ```sql
 select table_name
 from information_schema.tables
 where table_schema = 'public'
-  and table_name in (
-    'owner_profiles',
-    'projects',
-    'writings',
-    'journey_items',
-    'tasks',
-    'notes',
-    'files',
-    'publish_queue'
-  )
 order by table_name;
 ```
 
-### RLS
-
 ```sql
-select schemaname, tablename, rowsecurity
-from pg_tables
-where schemaname = 'public'
-  and tablename in (
-    'owner_profiles',
-    'projects',
-    'writings',
-    'journey_items',
-    'tasks',
-    'notes',
-    'files',
-    'publish_queue'
-  )
-order by tablename;
-```
-
-```sql
-select schemaname, tablename, policyname, roles, cmd
+select tablename, policyname, cmd, roles
 from pg_policies
-where schemaname in ('public', 'storage')
-order by schemaname, tablename, policyname;
+where schemaname = 'public'
+order by tablename, policyname;
 ```
 
-### Bucket’lar
-
-```sql
-select id, name, public, file_size_limit, allowed_mime_types
-from storage.buckets
-where id in ('public-assets', 'private-files')
-order by id;
-```
-
-### Owner helper
-
-Authenticated owner oturumu ile helper `true`; allowlist dışı kullanıcı veya anonymous bağlamda `false` dönmelidir:
-
-```sql
-select private.is_current_user_owner();
-```
-
-## RLS test senaryoları
-
-Uygulama başlamadan önce ayrı test hesapları ve Supabase API/SQL test yöntemleriyle en az şu senaryolar doğrulanmalıdır:
-
-1. Anonymous published/public project okur.
-2. Anonymous draft veya private project okuyamaz.
-3. Anonymous task, note, file metadata veya publish queue okuyamaz.
-4. Anonymous hiçbir application tablosuna yazamaz.
-5. Authenticated ama pending/disabled kullanıcı Studio private verisi okuyamaz.
-6. Authenticated ama allowlist dışı kullanıcı insert/update/delete yapamaz.
-7. Aktif owner kendi kaydını okuyup yazabilir.
-8. Owner başka UUID ile `owner_id` insert/update yapamaz.
-9. Owner başka path prefix’ine Storage upload/update/delete yapamaz.
-10. `private-files` public URL veya anonymous JWT ile okunamaz.
-11. `public-assets` read çalışır; write yalnız owner için çalışır.
-12. Yeni Auth kullanıcısı `pending` profile alır ama owner yetkisi kazanmaz.
-
-## Seed kullanımı
-
-Seed opsiyoneldir ve production için değildir.
-
-- Repository dosyası gerçek owner UUID veya e-posta içermez.
-- Seed server-side olarak tam bir active owner/admin profilini çözer.
-- Hiç veya birden fazla active owner/admin varsa güvenli exception ile durur.
-- Çözülen UUID auth.users içinde yoksa durur.
-- Auth user oluşturmaz.
-- Gerçek GitHub/demo/contact/social link veya portre eklemez.
-- Deterministic ID + `ON CONFLICT DO NOTHING` kullandığı için tekrar çalıştırma mevcut seed satırlarını overwrite etmez.
-
-Seed’den sonra anonymous public-read testi için örnek writing kaydı kullanılabilir. Private proje, task ve note anonymous bağlamda görünmemelidir.
-
-## Rollback riski
-
-Rollback:
-
-- Storage policy’lerini kaldırır.
-- Boşsa Sprint 05 bucket’larını siler.
-- RLS policy’lerini, trigger’ları ve function’ları kaldırır.
-- Tüm Sprint 05 application tablolarını ve içindeki verileri siler.
-- Enum/type yapılarını kaldırır.
-
-Bucket’larda object varsa rollback güvenli exception ile durur. Önce backup ve kontrollü object export/delete gerekir. Rollback production’da açık kullanıcı onayı olmadan çalıştırılmamalıdır.
-
-## Bu sprintte uygulanmayanlar
-
-- Supabase projesi oluşturulmadı.
-- SQL dosyaları gerçek Supabase projesinde çalıştırılmadı.
-- Gerçek owner UUID repository’ye eklenmedi.
-- Auth/MFA ekranı veya route guard uygulanmadı.
-- Supabase client/import eklenmedi.
-- Gerçek CRUD/upload/delete/publish başlamadı.
-- RLS canlı ortamda test edilmedi.
-
-SQL ancak Sprint 05 entegrasyon güvenlik denetimi ve kullanıcı karar kapısından sonra uygulanmalıdır.
-
-
-
-## Sprint 06 development uygulama sonucu — S06_SUPABASE_DEV_APPLIED
-
-- Project: ayrı development Supabase project
-- Region: Southeast Asia (Singapore)
-- 001 initial schema: başarılı
-- 002 database functions: başarılı
-- 003 RLS policies: başarılı
-- 004 bucket setup: iki bucket başarılı
-- Hosted storage.objects policies: Dashboard runbook ile sekiz policy başarılı
-- Owner Auth: tek active owner
-- Development seed: project/writing/task/note sayıları 1/1/1/1
-- RLS matrisi: anon, outsider ve owner AAL2 beklenen sonuçları verdi
-- Production project, production migration ve production env uygulanmadı
+Production'da migration veya seed çalıştırmadan önce doğru ortamı, verilerin yedeğini ve etkilenebilecek kayıtları doğrula. Geliştirme seed'i Production'a taşınmaz.
