@@ -1,8 +1,10 @@
 import type { Metadata, Viewport } from "next";
+import { publicSiteUrl } from "@/lib/public-metadata";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(publicSiteUrl),
   applicationName: siteConfig.name,
   manifest: "/manifest.webmanifest",
   appleWebApp: {

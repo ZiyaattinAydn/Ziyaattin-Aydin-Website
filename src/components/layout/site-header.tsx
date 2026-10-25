@@ -1,99 +1,111 @@
 "use client";
-
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { siteConfig } from "@/lib/site-config";
-
 export function SiteHeader() {
-  const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
-
+  const pathname = usePathname(),
+    [openPath, setOpenPath] = useState<string | null>(null);
+  const menuOpen = openPath === pathname,
+    button = useRef<HTMLButtonElement>(null),
+    header = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!menuOpen) return;
+    function close(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpenPath(null);
+        button.current?.focus();
+      }
+    }
+    function outside(event: PointerEvent) {
+      if (header.current && !header.current.contains(event.target as Node))
+        setOpenPath(null);
+    }
+    document.addEventListener("keydown", close);
+    document.addEventListener("pointerdown", outside);
+    return () => {
+      document.removeEventListener("keydown", close);
+      document.removeEventListener("pointerdown", outside);
+    };
+  }, [menuOpen]);
+  function navLink(
+    item: (typeof siteConfig.navigation)[number],
+    mobile = false,
+  ) {
+    const active =
+      item.href === "/"
+        ? pathname === "/"
+        : pathname.startsWith(item.href + "/") || pathname === item.href;
+    return (
+      <Link
+        key={item.href}
+        href={item.href}
+        aria-current={active ? "page" : undefined}
+        onClick={() => setOpenPath(null)}
+        className={
+          mobile
+            ? "rounded-xl px-4 py-3 text-sm " +
+              (active
+                ? "bg-[var(--accent-soft)] text-[var(--accent)]"
+                : "text-[var(--muted)] hover:text-[var(--foreground)]")
+            : "border-b-2 py-6 text-sm transition-colors " +
+              (active
+                ? "border-[var(--accent)] text-[var(--foreground)]"
+                : "border-transparent text-[var(--muted)] hover:text-[var(--foreground)]")
+        }
+      >
+        {item.label}
+      </Link>
+    );
+  }
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_88%,transparent)] backdrop-blur-xl">
-      <div className="mx-auto flex min-h-16 max-w-[var(--container-max)] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header
+      ref={header}
+      className="sticky top-0 z-50 border-b border-[var(--border)] bg-[color-mix(in_srgb,var(--background)_92%,transparent)] backdrop-blur-xl"
+    >
+      <a
+        href="#public-content"
+        className="sr-only rounded-xl bg-[var(--background)] text-[var(--accent)] focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:px-4 focus:py-3"
+      >
+        İçeriğe geç
+      </a>
+      <div className="mx-auto flex min-h-[76px] max-w-[var(--container-max)] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         <Link
           href="/"
-          className="font-mono text-3xl font-bold text-[var(--accent)] transition hover:brightness-110"
-          aria-label="Ana sayfa"
+          onClick={() => setOpenPath(null)}
+          className="font-mono text-3xl font-bold text-[var(--accent)]"
+          aria-label="Ziyaattin Aydın — ana sayfa"
         >
           Z.
         </Link>
-
-        <nav className="hidden items-center gap-7 md:flex" aria-label="Ana navigasyon">
-          {siteConfig.navigation.map((item) => (
-            <NavigationLink key={item.href} href={item.href} label={item.label} pathname={pathname} />
-          ))}
+        <nav
+          className="hidden items-center gap-7 md:flex"
+          aria-label="Ana navigasyon"
+        >
+          {siteConfig.navigation.map((item) => navLink(item))}
         </nav>
-
-        <div className="flex items-center gap-3">
-          <div className="hidden items-center gap-2 text-sm text-[var(--muted)] sm:flex" aria-label="Varsayılan tema Palet 2">
-            <span>Palet 2</span>
-            <span aria-hidden="true" className="h-2 w-2 rounded-full bg-[var(--accent)] shadow-[0_0_18px_var(--accent-dim)]" />
-          </div>
-
-          <button
-            type="button"
-            className="inline-flex items-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-sm font-medium text-[var(--foreground)] transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-strong)] md:hidden"
-            aria-expanded={menuOpen}
-            aria-controls="mobile-public-navigation"
-            onClick={() => setMenuOpen((current) => !current)}
-          >
-            {menuOpen ? "Kapat" : "Menü"}
-          </button>
-        </div>
+        <button
+          ref={button}
+          type="button"
+          className="rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium md:hidden"
+          aria-expanded={menuOpen}
+          aria-controls="mobile-public-navigation"
+          onClick={() => setOpenPath(menuOpen ? null : pathname)}
+        >
+          {menuOpen ? "Kapat" : "Menü"}
+        </button>
       </div>
-
-      {menuOpen ? (
-        <nav id="mobile-public-navigation" className="border-t border-[var(--border)] px-4 pb-4 pt-2 md:hidden" aria-label="Mobil ana navigasyon">
-          <div className="mx-auto grid max-w-[var(--container-max)] gap-2">
-            {siteConfig.navigation.map((item) => (
-              <NavigationLink
-                key={item.href}
-                href={item.href}
-                label={item.label}
-                pathname={pathname}
-                mobile
-                onClick={() => setMenuOpen(false)}
-              />
-            ))}
+      {menuOpen && (
+        <nav
+          id="mobile-public-navigation"
+          className="max-h-[calc(100dvh-76px)] overflow-y-auto border-t border-[var(--border)] p-4 md:hidden"
+          aria-label="Mobil ana navigasyon"
+        >
+          <div className="mx-auto grid max-w-[var(--container-max)] gap-1">
+            {siteConfig.navigation.map((item) => navLink(item, true))}
           </div>
         </nav>
-      ) : null}
+      )}
     </header>
-  );
-}
-
-type NavigationLinkProps = {
-  href: string;
-  label: string;
-  pathname: string;
-  mobile?: boolean;
-  onClick?: () => void;
-};
-
-function NavigationLink({ href, label, pathname, mobile = false, onClick }: NavigationLinkProps) {
-  const active = href === "/" ? pathname === "/" : pathname.startsWith(href);
-
-  return (
-    <Link
-      href={href}
-      aria-current={active ? "page" : undefined}
-      onClick={onClick}
-      className={
-        mobile
-          ? `rounded-xl px-4 py-3 text-sm transition ${
-              active
-                ? "bg-[var(--accent-soft)] text-[var(--foreground)]"
-                : "text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
-            }`
-          : `relative py-5 text-sm transition-colors ${
-              active ? "text-[var(--foreground)]" : "text-[var(--muted)] hover:text-[var(--foreground)]"
-            }`
-      }
-    >
-      {label}
-      {!mobile && active ? <span className="absolute inset-x-0 bottom-0 h-0.5 bg-[var(--accent)]" aria-hidden="true" /> : null}
-    </Link>
   );
 }

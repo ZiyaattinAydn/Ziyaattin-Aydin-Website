@@ -32,4 +32,8 @@ Kullanıcı Preview’da gerçek hesapla giriş → TOTP → Studio → çıkı�
 
 Panel, görev listesi/formu ve proje detayı 390/768/1440 pikselde bağımsız sentetik görsel testte taşma veya etiketsiz form alanı göstermedi. Bu test uygulamanın yetkilendirmesini değiştirmez. Uzun süreli oturum yenileme ve gerçek Android/iOS ana ekrana ekleme henüz cihaz testi bekler. Kullanıcı onaylı Preview akışından sonra Production dağıtımı ayrıca kontrol edilir.
 
-Notlar ve dosyalar ayrı çalışma kapsamında. Public portföy tasarımı ve mevcut içerik kaynağı değiştirilmedi.
+Notlar ve dosyalar ayrı çalışma kapsamında.
+
+## Public 1.0
+
+Public sayfalardaki geliştirme notları ve örnek içerikler kaldırıldı. Mevcut portre dosyaları korundu. Proje/yazı detayları, mobil menü, metadata, paylaşım görseli, robots ve sitemap düzenlendi. Public okumalar anonim ve yalnız yayınlanan kayıtlarla sınırlı; Supabase kayıtları değiştirilmedi. Doğrulanmış biyografi, iletişim bağlantıları ve gerçek portföy içerikleri kullanıcıdan bekleniyor.

@@ -1,6 +1,5 @@
-import {
-  getApprovedPublicUrl,
-} from "@/features/public/content/approvals";
+import { publicProfile } from "@/features/public/content/profile";
+import { getApprovedPublicUrl } from "@/features/public/content/approvals";
 import type {
   ApprovalState,
   JourneyItem,
@@ -191,6 +190,7 @@ function formatDate(value: string | null): string {
 }
 
 function mapProjectRow(row: ProjectRow): ProjectSummary | null {
+  if (row.id === "51000000-0000-4000-8000-000000000001") return null;
   const visibility = normalizeVisibility(row.visibility);
   const publishState = normalizePublishState(row.publish_state);
 
@@ -208,14 +208,8 @@ function mapProjectRow(row: ProjectRow): ProjectSummary | null {
   }
 
   const approvalState = asApprovalState(row.link_approval_state);
-  const demoUrl = getApprovedPublicUrl(
-    row.demo_url,
-    approvalState,
-  );
-  const githubUrl = getApprovedPublicUrl(
-    row.github_url,
-    approvalState,
-  );
+  const demoUrl = getApprovedPublicUrl(row.demo_url, approvalState);
+  const githubUrl = getApprovedPublicUrl(row.github_url, approvalState);
 
   return {
     slug: row.slug,
@@ -269,9 +263,7 @@ function mapProjectRow(row: ProjectRow): ProjectSummary | null {
   };
 }
 
-function parseWritingSections(
-  content: string,
-): WritingSection[] | null {
+function parseWritingSections(content: string): WritingSection[] | null {
   const trimmed = content.trim();
 
   if (!trimmed) {
@@ -313,8 +305,7 @@ function parseWritingSections(
         !Array.isArray(candidate.paragraphs) ||
         !candidate.paragraphs.every(
           (paragraph) =>
-            typeof paragraph === "string" &&
-            paragraph.trim().length > 0,
+            typeof paragraph === "string" && paragraph.trim().length > 0,
         )
       ) {
         return [];
@@ -326,13 +317,8 @@ function parseWritingSections(
           title: candidate.title,
           paragraphs: candidate.paragraphs,
           quote:
-            typeof candidate.quote === "string"
-              ? candidate.quote
-              : undefined,
-          code:
-            typeof candidate.code === "string"
-              ? candidate.code
-              : undefined,
+            typeof candidate.quote === "string" ? candidate.quote : undefined,
+          code: typeof candidate.code === "string" ? candidate.code : undefined,
           codeLanguage:
             typeof candidate.codeLanguage === "string"
               ? candidate.codeLanguage
@@ -370,6 +356,8 @@ function mapWritingRow(
   const publishState = normalizePublishState(row.publish_state);
 
   if (
+    row.id === "51000000-0000-4000-8000-000000000002" ||
+    row.tags?.includes("development-seed") ||
     !isPubliclyReadable({
       visibility,
       publishState,
@@ -382,9 +370,7 @@ function mapWritingRow(
     return null;
   }
 
-  const sections = row.content
-    ? parseWritingSections(row.content)
-    : [];
+  const sections = row.content ? parseWritingSections(row.content) : [];
 
   if (requireContent && !sections) {
     return null;
@@ -398,9 +384,7 @@ function mapWritingRow(
     tags: row.tags ?? [],
     date: formatDate(row.published_at),
     updatedLabel: formatDate(row.updated_at),
-    readingTime: row.reading_time
-      ? `${row.reading_time} dk`
-      : "",
+    readingTime: row.reading_time ? `${row.reading_time} dk` : "",
     sortOrder: Date.parse(row.published_at ?? row.updated_at) || 0,
     coverLabel: row.category?.trim() || "Yazı",
     visibility,
@@ -459,9 +443,7 @@ async function executeRows<TRow>(
   const response = await reader.execute<TRow>(request);
 
   if (response.error) {
-    console.error(
-      `[public-content] Query failed for ${request.table}.`,
-    );
+    console.error(`[public-content] Query failed for ${request.table}.`);
     throw new PublicRepositoryUnavailableError();
   }
 
@@ -469,9 +451,7 @@ async function executeRows<TRow>(
     return [];
   }
 
-  return Array.isArray(response.data)
-    ? response.data
-    : [response.data];
+  return Array.isArray(response.data) ? response.data : [response.data];
 }
 
 async function executeMaybeRow<TRow>(
@@ -675,10 +655,7 @@ export function createSupabasePublicContentRepository(
     },
 
     async getProfile(): Promise<ProfileContent> {
-      console.error(
-        "[public-content] Public profile storage is not available in the current Supabase schema.",
-      );
-      throw new PublicRepositoryUnavailableError();
+      return publicProfile;
     },
   };
 }

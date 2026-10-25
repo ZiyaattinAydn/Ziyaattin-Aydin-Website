@@ -8,7 +8,7 @@ Kişisel web sitem ve proje takip alanım. Yaptığım işleri bir arada tutmak,
 
 **Studio:** Sadece benim giriş yapabildiğim yönetim alanı. Proje ve görev takibi çalışıyor; notlar ve dosya yönetimi sırada.
 
-Site henüz tamamlanmadı. Özellikle portföy içeriklerinin bir kısmı örnek verilerden geliyor. Studio'yu ve kişisel sitemi aynı sistemden yönetmek, daha sonra da telefona kurulabilen bir PWA olarak kullanmak istiyorum.
+Public sayfalar yalnız yayınlanmış içerikleri gösterir; örnek kayıtlar portföye dahil edilmez. Studio’da proje ve görev takibi, PWA manifesti ve uygulama ikonları hazır. Gerçek biyografi ve portföy içerikleri zamanla eklenecek.
 
 ## Kullandığım teknolojiler
 

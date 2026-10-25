@@ -1,173 +1,152 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Panel } from "@/components/ui/panel";
 import { ProjectCard } from "@/components/public/project-card";
-import { PublicSection } from "@/components/public/public-section";
-import { PublicStatCard } from "@/components/public/public-stat-card";
-import { TimelineCard } from "@/components/public/timeline-card";
 import { WritingCard } from "@/components/public/writing-card";
+import { PublicSection } from "@/components/public/public-section";
+import {
+  PublicEmptyState,
+  PublicUnavailable,
+} from "@/components/public/content-state";
 import { getPublicContentRepository } from "@/features/public/content/source-selection";
-
+import { publicMetadata } from "@/lib/public-metadata";
+export const dynamic = "force-dynamic";
+const homeMetadata = publicMetadata(
+  "Ziyaattin Aydın",
+  "Ziyaattin Aydın’ın kişisel web sitesi. Projeler, yazılar ve öğrenme yolculuğundan notlar.",
+  "/",
+);
+export const metadata = {
+  ...homeMetadata,
+  title: { absolute: "Ziyaattin Aydın | Kişisel Web Sitesi" },
+};
 export default async function HomePage() {
   const repository = getPublicContentRepository();
-  const [projects, writings, journeyItems, featuredProjects, featuredWritings] = await Promise.all([
+  const [projects, writings] = await Promise.allSettled([
     repository.listProjects(),
     repository.listWritings(),
-    repository.listJourneyItems(),
-    repository.listFeaturedProjects(3),
-    repository.listFeaturedWritings(2),
   ]);
-
-  const activeProjectCount = projects.filter((project) => project.status === "Devam Ediyor").length;
-  const completedProjectCount = projects.filter((project) => project.status === "Tamamlandı").length;
-  const draftWritingCount = writings.filter((writing) => writing.publishState === "draft").length;
-
   return (
-    <div className="space-y-10 overflow-hidden">
-      <section className="relative overflow-hidden rounded-3xl border border-[var(--border)] bg-[linear-gradient(115deg,rgba(4,8,10,.98)_0%,rgba(4,8,10,.9)_52%,rgba(0,190,100,.08)_100%)] px-5 py-8 sm:px-8 lg:grid lg:min-h-[560px] lg:grid-cols-[1.05fr_.95fr] lg:items-center lg:px-12 xl:px-14">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(18,217,120,.12),transparent_28rem)]" />
-        <div className="relative z-10 max-w-2xl space-y-6">
-          <div className="inline-flex rounded-full border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-2 font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
-            Public site · Sprint 04 publish planı
-          </div>
-          <div>
-            <p className="text-base text-[var(--accent)] sm:text-lg">Merhaba, ben</p>
-            <h1 className="mt-2 text-4xl font-semibold tracking-tight sm:text-6xl lg:text-7xl">
-              Ziyaattin<span className="text-[var(--accent)]">.</span>
-            </h1>
-          </div>
-          <h2 className="max-w-2xl text-2xl font-semibold leading-tight sm:text-4xl lg:text-5xl">
-            Öğrenme, üretme ve dijital sistem kurma yolculuğunu sade bir public yüzeyde topluyorum.
-          </h2>
-          <p className="max-w-xl text-base leading-7 text-[var(--muted)] sm:text-lg">
-            Bu public sürüm; proje, yazı ve yolculuk alanlarını ileride Studio publish akışına bağlanacak güvenli mock içerik sözleşmesiyle gösterir. Gerçek bağlantılar, iletişim bilgileri ve portre kararı kullanıcı onayı olmadan aktifleşmeyecek.
+    <div className="space-y-14 lg:space-y-20">
+      <section className="relative isolate overflow-hidden rounded-3xl border border-[var(--border)] bg-[linear-gradient(115deg,rgba(4,8,10,.98),rgba(4,8,10,.9)_52%,rgba(0,190,100,.08))] px-6 py-10 sm:px-10 lg:grid lg:min-h-[550px] lg:grid-cols-[1.15fr_.85fr] lg:items-center lg:px-12">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(18,217,120,.1),transparent_28rem)]"
+        />
+        <div className="relative z-10 max-w-2xl">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
+            Kişisel web sitem
           </p>
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <h1 className="mt-6 text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-6xl xl:text-7xl">
+            Ziyaattin
+            <br />
+            Aydın<span className="text-[var(--accent)]">.</span>
+          </h1>
+          <p className="mt-6 text-xl font-medium leading-snug sm:text-2xl">
+            Fikirlerden projelere.
+          </p>
+          <p className="mt-4 max-w-lg text-base leading-8 text-[var(--muted)]">
+            Projelerim, yazılarım ve öğrenme notlarım için kişisel alanım.
+          </p>
+          <div className="mt-8 flex flex-wrap gap-3">
             <Link
               href="/projects"
-              className="inline-flex justify-center rounded-xl bg-[var(--accent)] px-5 py-3 font-semibold text-[#021108] transition hover:opacity-90"
+              className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-[var(--accent-contrast)] transition hover:brightness-110"
             >
-              Projeleri İncele
+              Projeleri keşfet{" "}
+              <span aria-hidden="true" className="ml-3">
+                ↗
+              </span>
             </Link>
             <Link
-              href="/writings"
-              className="inline-flex justify-center rounded-xl border border-[var(--border)] bg-[var(--surface)] px-5 py-3 font-semibold transition hover:border-[var(--accent-dim)]"
+              href="/about"
+              className="inline-flex items-center justify-center rounded-xl border border-[var(--border-strong)] px-5 py-3 text-sm font-semibold transition hover:border-[var(--accent-dim)]"
             >
-              Yazıları Oku
+              Hakkımda
             </Link>
           </div>
-          <p className="text-sm leading-6 text-[var(--muted)]">
-            Not: Sayaçlar ve içerikler şu anda gerçek veri değil, public deneyimi test eden mock alanlardır.
-          </p>
         </div>
-        <div className="relative z-10 mt-8 min-h-[320px] sm:min-h-[420px] lg:mt-0 lg:h-full">
-          <div className="absolute inset-x-4 bottom-0 top-8 rounded-[2rem] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(18,217,120,.08),rgba(3,7,10,.22))]" />
+        <div className="relative mx-auto mt-8 h-72 w-full max-w-md sm:h-96 lg:mt-0 lg:h-[460px]">
+          <div
+            aria-hidden="true"
+            className="absolute inset-x-4 bottom-0 top-8 rounded-[2rem] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(18,217,120,.08),rgba(3,7,10,.22))]"
+          />
           <Image
             src="/images/portraits/home-hero.png"
-            alt="Ziyaattin'in onaylı ana sayfa stilize portresi"
+            alt="Ziyaattin Aydın’ın stilize portresi"
             fill
             priority
-            sizes="(max-width: 1024px) 100vw, 48vw"
+            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 448px, 38vw"
             className="object-contain object-bottom"
           />
         </div>
       </section>
-
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <PublicStatCard value={String(projects.length)} label="Mock public proje" note="Gerçek proje sayısı iddiası değildir." />
-        <PublicStatCard value={String(activeProjectCount)} label="Devam eden kayıt" note="Mock status alanından hesaplanır." />
-        <PublicStatCard value={String(completedProjectCount)} label="Tamamlanan mock" note="Gerçek müşteri işi iddiası taşımaz." />
-        <PublicStatCard value={String(draftWritingCount)} label="Taslak yazı" note="Gerçek publish/database başlamadı." />
-      </div>
-
       <PublicSection
         eyebrow="Projeler"
-        title="Öne çıkan public proje kayıtları"
-        description="Kartlar; durum, publish akışı, ilerleme, kategori ve teknoloji etiketlerini gerçek link uydurmadan gösterir. Link yoksa detay sayfasında pasif bilgi görünür."
+        title="Üzerinde çalıştıklarım"
+        description="Paylaştığım çalışmaların fikirleri, süreçleri ve ayrıntıları."
         href="/projects"
         linkLabel="Tüm projeler"
       >
-        {featuredProjects.length > 0 ? (
+        {projects.status === "rejected" ? (
+          <PublicUnavailable href="/" />
+        ) : projects.value.length ? (
           <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {featuredProjects.map((project) => (
-              <ProjectCard key={project.slug} project={project} />
+            {projects.value.slice(0, 3).map((p) => (
+              <ProjectCard key={p.slug} project={p} />
             ))}
           </div>
         ) : (
-          <RepositoryEmptyState label="Henüz öne çıkan yayınlanmış proje yok." />
+          <PublicEmptyState
+            headingLevel={3}
+            title="Projeler için yeni bir sayfa"
+            description="Henüz paylaşılmış proje yok. Çalışmalarımın ayrıntılarını bu bölümde bulabileceksin."
+            href="/about"
+            linkLabel="Siteyi tanı"
+          />
         )}
       </PublicSection>
-
-      <div className="grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
-        <PublicSection
-          eyebrow="Yazılar"
-          title="Okunabilir yazı taslakları"
-          description="Yazı alanı şimdilik mock içerikle çalışır; kategori, tarih ve okuma süresi gerçek yayın verisi değildir."
-          href="/writings"
-          linkLabel="Tüm yazılar"
-        >
-          {featuredWritings.length > 0 ? (
-            <div className="grid gap-4 md:grid-cols-2">
-              {featuredWritings.map((writing) => (
-                <WritingCard key={writing.slug} writing={writing} />
-              ))}
-            </div>
-          ) : (
-            <RepositoryEmptyState label="Henüz öne çıkan yayınlanmış yazı yok." />
-          )}
-        </PublicSection>
-
-        <Panel className="p-5 sm:p-6">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-            Dijital pano
-          </p>
-          <h2 className="mt-3 text-2xl font-semibold">Public durum özeti</h2>
-          <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-            Bu pano, ileride Studio verilerinden beslenecek alanların yerleşimini test eder. Şimdilik tüm değerler mock içerikten türetilir.
-          </p>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <MiniStat label="Aktif kategori" value="Mock" />
-            <MiniStat label="Yayın modu" value="Onay bekliyor" />
-            <MiniStat label="Veri kaynağı" value={repository.source === "mock" ? "Mock" : "Supabase"} />
-            <MiniStat label="Link durumu" value="Pasif" />
-          </div>
-        </Panel>
-      </div>
-
       <PublicSection
-        eyebrow="Yolculuk"
-        title="Kısa yolculuk özeti"
-        description="Gerçek kişisel tarihçe netleşene kadar aşamalar geçici anlatım blokları olarak tutulur."
-        href="/journey"
-        linkLabel="Yolculuğu gör"
+        eyebrow="Yazılar"
+        title="Notlar ve düşünceler"
+        description="Yazılarımı bir arada bulabileceğin okuma alanı."
+        href="/writings"
+        linkLabel="Tüm yazılar"
       >
-        {journeyItems.length > 0 ? (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {journeyItems.map((item) => (
-              <TimelineCard key={item.marker} item={item} compact />
+        {writings.status === "rejected" ? (
+          <PublicUnavailable href="/" />
+        ) : writings.value.length ? (
+          <div className="grid gap-5 md:grid-cols-2">
+            {writings.value.slice(0, 2).map((w) => (
+              <WritingCard key={w.slug} writing={w} />
             ))}
           </div>
         ) : (
-          <RepositoryEmptyState label="Henüz yayınlanmış yolculuk kaydı yok." />
+          <PublicEmptyState
+            headingLevel={3}
+            title="Henüz yazı paylaşmadım"
+            description="Yayınladığım yazılar burada yer alacak."
+          />
         )}
       </PublicSection>
+      <section className="flex flex-col justify-between gap-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:flex-row sm:items-center sm:p-8">
+        <div>
+          <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
+            Yolculuğum
+          </p>
+          <h2 className="mt-3 text-2xl font-semibold tracking-tight">
+            Süreç de sonucun bir parçası.
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
+            Öğrenme ve üretme sürecinden paylaşacağım notlar için ayrı bir alan.
+          </p>
+        </div>
+        <Link
+          href="/journey"
+          className="shrink-0 text-sm font-semibold text-[var(--accent)]"
+        >
+          Yolculuğuma göz at <span aria-hidden="true">→</span>
+        </Link>
+      </section>
     </div>
-  );
-}
-
-function MiniStat({ value, label }: { value: string; label: string }) {
-  return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
-      <p className="font-semibold text-[var(--foreground)]">{value}</p>
-      <p className="mt-1 text-xs text-[var(--muted)]">{label}</p>
-    </div>
-  );
-}
-
-function RepositoryEmptyState({ label }: { label: string }) {
-  return (
-    <Panel className="p-6 text-center">
-      <p className="text-sm leading-6 text-[var(--muted)]">{label}</p>
-    </Panel>
   );
 }

@@ -1,6 +1,7 @@
 import "server-only";
 
-import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createClient } from "@supabase/supabase-js";
+import { getSupabasePublicEnvironment } from "@/lib/supabase/environment";
 import type {
   PublicQueryReader,
   PublicQueryRequest,
@@ -13,7 +14,23 @@ export function createSupabaseServerPublicQueryReader(): PublicQueryReader {
       request: PublicQueryRequest,
     ): Promise<PublicQueryResponse<TRow>> {
       try {
-        const supabase = await createServerSupabaseClient();
+        const environment = getSupabasePublicEnvironment();
+        // Always anonymous: an owner browsing the public site must not widen reads.
+        const supabase = createClient(
+          environment.url,
+          environment.publishableKey,
+          {
+            auth: {
+              persistSession: false,
+              autoRefreshToken: false,
+              detectSessionInUrl: false,
+            },
+            global: {
+              fetch: (input, init) =>
+                fetch(input, { ...init, cache: "no-store" }),
+            },
+          },
+        );
         let query = supabase
           .from(request.table)
           .select(request.columns.join(","));

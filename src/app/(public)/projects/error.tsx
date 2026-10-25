@@ -12,14 +12,13 @@ export default function ProjectsError({
     <div className="space-y-8">
       <Panel className="p-8 text-center">
         <p className="font-mono text-xs font-semibold uppercase tracking-[0.2em] text-[var(--accent)]">
-          Public projeler
+          Projeler
         </p>
         <h1 className="mt-3 text-2xl font-semibold">
           Projeler geçici olarak yüklenemiyor
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-[var(--muted)]">
-          Kayıtların durumu veya sistem ayrıntıları paylaşılmadan güvenli
-          bir hata sınırı gösteriliyor. Bir süre sonra tekrar deneyebilirsin.
+          Bir süre sonra tekrar deneyebilirsin.
         </p>
         <button
           type="button"
