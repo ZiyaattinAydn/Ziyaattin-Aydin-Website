@@ -1,6 +1,6 @@
 # Projenin durumu
 
-Son kontrol: 25 Ekim 2026
+Son kontrol: 26 Ekim 2026
 
 ## Studio 1.0 geliştirmesi
 
@@ -32,7 +32,7 @@ Kullanıcı Preview’da gerçek hesapla giriş → TOTP → Studio → çıkı�
 
 Panel, görev listesi/formu ve proje detayı 390/768/1440 pikselde bağımsız sentetik görsel testte taşma veya etiketsiz form alanı göstermedi. Bu test uygulamanın yetkilendirmesini değiştirmez. Uzun süreli oturum yenileme ve gerçek Android/iOS ana ekrana ekleme henüz cihaz testi bekler. Kullanıcı onaylı Preview akışından sonra Production dağıtımı ayrıca kontrol edilir.
 
-Notlar ve dosyalar ayrı çalışma kapsamında.
+Notlar ve dosyalar PR #11 ile tamamlandı ve Production'a alındı.
 
 ## Public 1.0
 
@@ -42,5 +42,14 @@ Public sayfalardaki geliştirme notları ve örnek içerikler kaldırıldı. Mev
 
 - PR #11 ile notlar, dosyalar ve içerik yayın araçları `main` üzerinden Production'a alındı; Supabase `20261025211818` migration kayıtlı.
 - Studio Yolculuğum editörü eklendi: taslak oluşturma/düzenleme, kontrollü yayınlama, yayından kaldırma ve arşivleme. Gerçek kariyer kaydı oluşturulmadı.
-- GitHub Actions kalite kontrolü PR ve `main` push'larında `npm test`, `npm run check` ve yüksek önem seviyeli `npm audit` çalıştıracak. İş akışının ilk gerçek yürütmesi ayrıca doğrulanmalı; kural zorunlu değilse GitHub branch protection bağımsız ayar gerektirir.
-- Preview ve Production hâlâ aynı Supabase veritabanını kullanır. Yeni migration eklenmedi.
+- GitHub Actions kalite kontrolü PR ve `main` push'larında `npm test`, `npm run check` ve yüksek önem seviyeli `npm audit` çalıştıracak. GitHub Actions PR ve main çalıştırmalarında başarılı doğrulandı. Required check henüz etkin değil; main protected=false ve GitHub rulesets listesi boş.
+- Preview ve Production halen aynı Supabase veritabanını kullanır. Yeni profil migration'ı ayrı sonraki adımda eklendi.
+
+## Son teknik teslim (26 Ekim 2026)
+
+- PR #12 Yolculuğum editörü ve otomatik kalite kontrolünü; PR #13 özel profil/iletişim editörünü Production'a taşıdı. Son doğrulanan Production commit: d3ad6f24 (READY); main GitHub Actions başarılı.
+- 20261025223430_site_profile_content migration'ı uygulandı; içerik kayıtları değişmedi ve yeni site_profiles tablosu boştur. Henüz kullanıcı biyografisi ya da iletişim bilgisi yayınlanmadı.
+- Preview otomatik dağıtımlarını kapatmak için Vercel proje ayarına previewDeploymentsDisabled=true gönderildi. Yanıt bu değeri tekrar okumaya izin vermediği için UI'da kalıcılığını doğrulamak gerekiyor; Production etkilenmedi.
+- GitHub'da rulesets boş ve main protected=false. Quality checks / test-and-build zorunlu kontrol yapmak Administration erişimi gerektiriyor; mevcut bağlantının yetkisi yok.
+- PR #8, #12 ve #13 birleşmiş olsa da üç eski branch duruyor. Kodlar main'de, silme işlemi GitHub UI ya da git push ile yapılabilir.
+- Son gerçek hesap/telefon ve profil içerik kabul testleri kullanıcıyla birlikte yapılacak.
