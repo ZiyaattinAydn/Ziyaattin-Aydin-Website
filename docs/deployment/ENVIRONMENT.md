@@ -11,6 +11,6 @@ Gerçek değerler `.env.local` veya Vercel Environment Variables içinde tutulur
 
 `NEXT_PUBLIC_` ile başlayan değerler tarayıcıya gidebilir. Service-role anahtarını bu adla tanımlama ve normal Studio işlemlerinde kullanma.
 
-Vercel Preview geliştirme Supabase projesini kullanıyor. Production ortamı için ayrı Supabase projesi, owner hesabı, MFA, migration ve yedek hazırlanmadan geliştirme anahtarlarını Production'a taşımayacağız.
+Preview ve Production şu anda aynı Supabase projesini kullanır. Bu nedenle Preview’da gerçek kayıtları test amacıyla değiştirmeyin veya silmeyin. Public okumalar iki ortamda da anonimdir; yalnız yayınlanmış/herkese açık kayıtlar gösterilir. Bağlantı eksikse örnek içerik üretilmez.
 
 Bağlantı değişkenleri güncellendikten sonra ilgili Vercel deployment yeniden oluşturulmalı.
