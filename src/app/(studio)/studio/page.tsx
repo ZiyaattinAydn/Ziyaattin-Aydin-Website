@@ -60,7 +60,7 @@ export default async function StudioPage() {
         eyebrow="Özel çalışma alanı"
         title="Çalışma merkezim"
         description="Projelerin, açık işlerin ve sıradaki adımların bir arada."
-        status="Studio 1.0"
+        status="Studio"
       />
       <section
         aria-label="Çalışma özeti"
