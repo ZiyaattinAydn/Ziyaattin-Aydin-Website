@@ -1,78 +1,46 @@
-# Ziyaattin Aydın — Personal Website
+# Ziyaattin — Kişisel Sistemim
 
-> 🟡 **Durum:** Aktif geliştirme
+Kişisel marka/portföy sitesi ve tek kullanıcıya özel proje-görev çalışma alanı.
 
-Public portföyü ile yalnızca kişisel kullanım için tasarlanan özel **Studio** çalışma alanını tek platformda birleştiren Next.js projesi.
-
-## Proje hedefi
-
-Tek bir sistem içinde:
-
-- Projeleri ve case study'leri sergilemek
-- Yazıları ve teknik notları yayınlamak
-- Kişisel gelişim / journey alanını göstermek
-- Public portföy ile private Studio deneyimini ayırmak
-- İlerleyen fazlarda Supabase tabanlı veri ve oturum yapısını kullanmak
+## Amaç
+- **Public**: Kendimi, deneyimlerimi, projelerimi ve yazılarımı güvenilir içerikle sergilemek.
+- **Studio**: Projelerimi, açık/tamamlanan görevlerimi ve ileride notları/dosyaları takip etmek.
+- **Mobil**: Responsive tasarımdan, telefona kurulabilir bir PWA'ya ilerlemek.
 
 ## Teknoloji
+Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Supabase (Auth/PostgreSQL/Storage/RLS) ve Vercel.
 
-- Next.js 16 / App Router
-- React 19
-- TypeScript
-- Tailwind CSS 4
-- Supabase *(sonraki faz)*
-- Vercel
+## Gerçek durum (25 Ekim 2026)
+- Public arayüz mevcut; Production'da içerik büyük ölçüde mock. Production Supabase cutover yok.
+- Studio login, TOTP MFA (AAL2), aktif owner denetimi ve RLS altyapısı mevcut.
+- Proje CRUD, yazı CRUD ve görev oluşturma/durum/arşivleme kodu main'de.
+- Not ve dosya sayfaları henüz gerçek CRUD yapmıyor.
+- PWA manifest/service worker/install akışı henüz uygulanmadı.
+- Geliştirme Supabase projesi `atrphakkgpqtoqdigggt` ve Vercel Preview bağlantısı bulunuyor; Production'da ayrı Supabase ortamı kurulmadı.
+- Gerçek kabul testleri ve üretim geçişi için docs/PROJECT_STATUS.md'yi incele.
 
-## Temel rotalar
-
-```text
-/
-/projects
-/projects/[slug]
-/writings
-/writings/[slug]
-/journey
-/about
-/login
-/studio
-```
-
-## Gereksinim
-
-- Node.js 20.9 veya üzeri
-- Node.js 22 önerilir
-
-## Başlangıç
+## Geliştirme
+Node.js 22.x gerekli.
 
 ```bash
-npm install
-cp .env.example .env.local
+npm ci
+# .env.example içinden güvenli biçimde .env.local hazırla
 npm run dev
-```
-
-## Kalite kontrolleri
-
-```bash
 npm run lint
 npm run typecheck
 npm run build
-# veya
-npm run check
 ```
 
-## Geliştirme durumu
+## Temel rotalar
+- Public: `/`, `/about`, `/projects`, `/projects/[slug]`, `/writings`, `/writings/[slug]`, `/journey`
+- Studio: `/login`, `/mfa`, `/studio`, `/studio/projects`, `/studio/writings`, `/studio/tasks`, `/studio/notes`, `/studio/files`
 
-Proje tamamlanmış bir portföy şablonu olarak değil, aktif olarak büyütülen kişisel bir sistem olarak geliştirilmektedir. Public portföy tarafı ile private Studio tarafı aynı ürün mimarisi içinde ilerlemektedir.
+## Belgeler
+- [Durum](docs/PROJECT_STATUS.md)
+- [Yol haritası](docs/ROADMAP.md)
+- [Kararlar](docs/DECISIONS.md)
+- [Mimari](docs/ARCHITECTURE.md)
+- [Geliştirme kuralları](CONTRIBUTING.md)
+- [Orijinal proje ana dokümanı](docs/kisisel-sistemim-proje-ana-dokumani.pdf)
 
-## Proje belgeleri
-
-Çalışmaya başlamadan önce:
-
-1. `docs/PROJECT_STATUS.md`
-2. `docs/WORKSTREAMS.md`
-3. `docs/DECISIONS.md`
-4. `CONTRIBUTING.md`
-
-Ana proje belgesi:
-
-`docs/kisisel-sistemim-proje-ana-dokumani.pdf`
+Önceki sprint/handoff ayrıntıları silinen dokümanlarla birlikte Git geçmişinde korunur; yeni çalışma modeli tek akışlıdır.
