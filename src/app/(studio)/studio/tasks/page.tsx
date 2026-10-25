@@ -1,90 +1,206 @@
-import { StudioListCard } from "@/components/studio/studio-list-card";
-import { StudioMockList } from "@/components/studio/studio-mock-list";
-import { StudioModulePage } from "@/components/studio/studio-module-page";
+import Link from "next/link";
+
+import { StudioPageHeader } from "@/components/studio/studio-page-header";
 import {
-  mockStudioTasks,
-  studioModules,
-  studioPublishStateLabels,
-  studioVisibilityLabels,
-  type StudioTaskStatus,
-} from "@/features/studio/studio-content";
+  archiveTaskAction,
+  changeTaskStatusAction,
+  createTaskAction,
+} from "@/features/studio/tasks/actions";
+import {
+  listStudioTasks,
+  type StudioTask,
+  type TaskStatus,
+} from "@/features/studio/tasks/task-store";
 
-const taskColumns = ["Bugün", "Yakında", "Beklemede"] as const satisfies readonly StudioTaskStatus[];
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
-const taskWorkflowNotes = [
-  {
-    title: "studio_tasks taslağı",
-    meta: "Future DB mapping",
-    description: "Görevler id, relatedProjectId, workstream, status, priority ve nextAction alanlarıyla gelecek task tablosuna hizalanır.",
-  },
-  {
-    title: "Sprint/workstream ilişkisi",
-    meta: "Mock",
-    description: "Bu sprintte yalnız owner/workstream bilgisi gösterilir; gerçek sprint tablosu, kanban veya tamamlandı aksiyonu yoktur.",
-  },
-  {
-    title: "Kanban beklemede",
-    meta: "Sonraki faz",
-    description: "Kanban/list görünümü kararı gerçek veri modeli netleştiğinde tekrar ele alınacak.",
-  },
-] as const;
+const columns: { status: TaskStatus; label: string }[] = [
+  { status: "in_progress", label: "Üzerinde çalışıyorum" },
+  { status: "todo", label: "Yapılacak" },
+  { status: "blocked", label: "Beklemede" },
+  { status: "done", label: "Tamamlandı" },
+];
 
-export default function TasksPage() {
+const priorities: Record<StudioTask["priority"], string> = {
+  low: "Düşük",
+  medium: "Orta",
+  high: "Yüksek",
+  urgent: "Acil",
+};
+
+const notices: Record<string, string> = {
+  created: "Yeni görev kaydedildi.",
+  updated: "Görev durumu güncellendi.",
+  archived: "Görev arşivlendi.",
+  invalid: "Girilen bilgiler geçersiz. Başlığı, önceliği ve proje seçimini kontrol et.",
+  unauthorized: "Bu işlem için geçerli ve MFA doğrulanmış bir Studio oturumu gerekli.",
+  database: "İşlem tamamlanamadı. Veritabanı bağlantısını veya erişim izinlerini kontrol et.",
+};
+
+function TaskCard({ task, projectName }: { task: StudioTask; projectName?: string }) {
   return (
-    <StudioModulePage
-      module={studioModules.tasks}
-      status="studio_tasks mock"
-      aside={
-        <StudioMockList
-          title="Görev ve güvenlik workflow notları"
-          description="Bu liste gerçek task CRUD yerine ekran ve veri ilişkisini anlatır."
-          items={taskWorkflowNotes}
-        />
-      }
-    >
-      <section className="space-y-5" aria-label="Mock görev grupları">
-        <div>
-          <h2 className="text-2xl font-semibold">Mock görev akışı</h2>
-          <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-            Görevler bugün, yakında ve beklemede olarak gruplanır. Workstream ve relatedProjectId alanları gelecek Supabase ilişkisini gösterir; bu statik görünüm database veya görev güncellemesi yapmaz.
-          </p>
-        </div>
+    <article className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <h3 className="min-w-0 flex-1 text-lg font-semibold">{task.title}</h3>
+        <span className="rounded-lg border border-[var(--border)] px-2 py-1 text-xs text-[var(--accent)]">
+          {priorities[task.priority]}
+        </span>
+      </div>
+      {task.description ? (
+        <p className="mt-3 whitespace-pre-wrap text-sm leading-6 text-[var(--muted)]">
+          {task.description}
+        </p>
+      ) : null}
+      <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-[var(--muted)]">
+        {task.project_id ? (
+          <Link href={"/studio/projects/" + task.project_id + "/edit"} className="underline underline-offset-4">
+            {projectName ?? "İlişkili proje"}
+          </Link>
+        ) : (
+          <span>Bağımsız görev</span>
+        )}
+        <span>Güncelleme: {new Date(task.updated_at).toLocaleDateString("tr-TR")}</span>
+      </div>
+      <div className="mt-5 flex flex-wrap items-end gap-3 border-t border-[var(--border)] pt-4">
+        <form action={changeTaskStatusAction.bind(null, task.id)} className="flex flex-1 flex-wrap items-end gap-2">
+          <label className="flex min-w-[170px] flex-1 flex-col gap-1 text-xs text-[var(--muted)]">
+            Durum
+            <select
+              name="status"
+              defaultValue={task.status}
+              className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-3 py-2 text-sm text-[var(--foreground)]"
+            >
+              {columns.map((column) => (
+                <option key={column.status} value={column.status}>{column.label}</option>
+              ))}
+            </select>
+          </label>
+          <button type="submit" className="rounded-xl border border-[var(--accent-dim)] px-4 py-2 text-sm text-[var(--accent)]">
+            Kaydet
+          </button>
+        </form>
+        <form action={archiveTaskAction.bind(null, task.id)}>
+          <button type="submit" className="rounded-xl border border-[var(--border)] px-4 py-2 text-sm text-[var(--muted)]">
+            Arşivle
+          </button>
+        </form>
+      </div>
+    </article>
+  );
+}
 
-        <div className="grid gap-5 xl:grid-cols-3">
-          {taskColumns.map((column) => (
-            <div key={column} className="space-y-4">
-              <div className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-4">
-                <h3 className="font-mono text-sm uppercase tracking-[0.16em] text-[var(--accent)]">{column}</h3>
-                <p className="mt-2 text-xs text-[var(--muted)]">
-                  {mockStudioTasks.filter((task) => task.status === column).length} mock görev · gerçek kanban yok
-                </p>
+export default async function TasksPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ notice?: string }>;
+}) {
+  const result = await listStudioTasks();
+  const { notice } = await searchParams;
+
+  return (
+    <div className="space-y-8">
+      <StudioPageHeader
+        eyebrow="Studio / Görevler"
+        title="Kaldığım yerden devam et"
+        description="Projelere bağlı veya bağımsız özel görevlerini kaydet, durumlarını güncelle ve tamamlananları arşivle. Gerçek veriler yalnız MFA doğrulanmış owner oturumundan okunur."
+        status="Gerçek görev takibi"
+      />
+      {notice && notices[notice] ? (
+        <p role="status" className="rounded-xl border border-[var(--border)] bg-[var(--surface)] p-4 text-sm">
+          {notices[notice]}
+        </p>
+      ) : null}
+
+      {!result.ok ? (
+        <section role="alert" className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6">
+          <h2 className="text-xl font-semibold">Görevler şu anda yüklenemiyor</h2>
+          <p className="mt-2 text-sm text-[var(--muted)]">
+            Supabase erişilemezken örnek görevler gerçek kayıt gibi gösterilmez. Güvenli bağlantı kurulduğunda tekrar deneyebilirsin.
+          </p>
+        </section>
+      ) : (
+        <>
+          <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-7">
+            <h2 className="text-xl font-semibold">Yeni görev ekle</h2>
+            <form action={createTaskAction} className="mt-5 grid gap-4 md:grid-cols-2">
+              <label className="flex flex-col gap-2 text-sm">
+                Başlık
+                <input
+                  name="title"
+                  required
+                  maxLength={160}
+                  placeholder="Örn. Demon Slayer diyalog sistemini bitir"
+                  className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3"
+                />
+              </label>
+              <label className="flex flex-col gap-2 text-sm">
+                İlişkili proje
+                <select name="projectId" defaultValue="" className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3">
+                  <option value="">Bağımsız görev</option>
+                  {result.projects.map((project) => (
+                    <option key={project.id} value={project.id}>{project.title}</option>
+                  ))}
+                </select>
+              </label>
+              <label className="flex flex-col gap-2 text-sm md:col-span-2">
+                Açıklama / sonraki adım
+                <textarea
+                  name="description"
+                  maxLength={2000}
+                  rows={3}
+                  placeholder="En son ne yaptım, sırada ne var?"
+                  className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3"
+                />
+              </label>
+              <label className="flex flex-col gap-2 text-sm">
+                Öncelik
+                <select name="priority" defaultValue="medium" className="rounded-xl border border-[var(--border)] bg-[var(--background)] px-4 py-3">
+                  <option value="low">Düşük</option>
+                  <option value="medium">Orta</option>
+                  <option value="high">Yüksek</option>
+                  <option value="urgent">Acil</option>
+                </select>
+              </label>
+              <div className="flex items-end">
+                <button type="submit" className="w-full rounded-xl border border-[var(--accent-dim)] bg-[rgba(18,217,120,0.12)] px-5 py-3 font-semibold text-[var(--accent)]">
+                  Görev oluştur
+                </button>
               </div>
-              {mockStudioTasks
-                .filter((task) => task.status === column)
-                .map((task) => (
-                  <StudioListCard
-                    key={task.id}
-                    eyebrow={task.workstream}
-                    title={task.title}
-                    description={task.description}
-                    status={task.priority}
-                    tone={task.tone}
-                    details={[
-                      { label: "Durum", value: task.status },
-                      { label: "Zaman", value: task.dueLabel },
-                      { label: "Owner", value: task.owner },
-                      { label: "Proje ilişkisi", value: task.relatedProjectId },
-                      { label: "Görünürlük", value: studioVisibilityLabels[task.visibility] },
-                      { label: "Publish", value: studioPublishStateLabels[task.publishState] },
-                      { label: "Sonraki aksiyon", value: task.nextAction },
-                    ]}
-                    actionLabel="Görevi güncelle"
-                  />
-                ))}
-            </div>
-          ))}
-        </div>
-      </section>
-    </StudioModulePage>
+            </form>
+          </section>
+
+          <section className="grid gap-5 xl:grid-cols-2" aria-label="Görev durumları">
+            {columns.map((column) => {
+              const tasks = result.tasks.filter((task) => task.status === column.status);
+              return (
+                <div key={column.status} className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-xl font-semibold">{column.label}</h2>
+                    <span className="text-sm text-[var(--muted)]">{tasks.length} görev</span>
+                  </div>
+                  {tasks.length === 0 ? (
+                    <p className="rounded-2xl border border-dashed border-[var(--border)] p-5 text-sm text-[var(--muted)]">
+                      Bu grupta görev yok.
+                    </p>
+                  ) : (
+                    tasks.map((task) => (
+                      <TaskCard
+                        key={task.id}
+                        task={task}
+                        projectName={result.projects.find((project) => project.id === task.project_id)?.title}
+                      />
+                    ))
+                  )}
+                </div>
+              );
+            })}
+          </section>
+          <p className="text-xs text-[var(--muted)]">
+            Arşivlenmiş kayıtlar silinmez; aktif görev listesinde gösterilmez. Bu ilk sürümde görev başlığı ve açıklaması kayıttan sonra düzenlenmez.
+          </p>
+        </>
+      )}
+    </div>
   );
 }
