@@ -201,3 +201,10 @@ button:disabled,
     animation: none !important;
   }
 }
+
+/* Prevent focus zoom in iOS without disabling the visitor's own zoom controls. */
+@media (max-width: 767px) {
+  input:not([type="checkbox"]):not([type="radio"]), select, textarea {
+    font-size: 16px;
+  }
+}

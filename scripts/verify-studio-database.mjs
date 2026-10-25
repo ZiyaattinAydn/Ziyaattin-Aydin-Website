@@ -32,6 +32,8 @@ set studio.test_database='isolated';
   console.log(
     "STUDIO_DATABASE_OK: isolated PostgreSQL CRUD, dates, timestamps, archive, project consistency, AAL1/AAL2, owner isolation, pending/disabled, public reads and RPC grants",
   );
+  await db.exec(fs.readFileSync(path.join(root,"scripts/verify-studio-library.sql"),"utf8"));
+  console.log("LIBRARY_DATABASE_OK: notes/files CRUD, archive history, private visibility, project ownership, Storage policies, anonymous/AAL1/pending/other owner denial, isolated snapshot rehearsal");
   await db.close();
 } catch (e) {
   console.error(

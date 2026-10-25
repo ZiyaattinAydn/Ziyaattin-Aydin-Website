@@ -1,6 +1,8 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
+import { UploadForm } from "@/features/studio/library/upload-form";
+import { useUnsavedChanges } from "@/features/studio/library/unsaved";
 
 import type {
   ProjectFormValues,
@@ -85,20 +87,23 @@ export function ProjectForm({
   slugEditable,
   readOnly = false,
 }: ProjectFormProps) {
+  const [dirty, setDirty] = useState(false);
   const serverAction: ProjectFormAction =
     mode === "create"
       ? createProjectAction
       : updateProjectAction.bind(null, projectId ?? "");
 
   const [state, formAction, pending] = useActionState(
-    serverAction,
+    async (previous: ProjectActionState, form: FormData) => { const result = await serverAction(previous, form); if(result.status === "success") setDirty(false); return result; },
     INITIAL_PROJECT_ACTION_STATE,
   );
 
+  const [imageValue, setImageValue] = useState(initialValues.imageUrl ?? "");
+  useUnsavedChanges(dirty && !pending);
   const publishedVisibilityLocked = publishState === "published";
 
   return (
-    <form action={formAction} className="space-y-8">
+    <form data-unsaved-editor action={formAction} onChange={()=>setDirty(true)} className="space-y-8">
       <ActionMessage state={state} />
       <FieldError id="project-form-error" messages={state.fieldErrors._form} />
 
@@ -383,13 +388,14 @@ export function ProjectForm({
             </label>
           </div>
 
+          {!readOnly && <UploadForm image onUploaded={url=>{setImageValue(url);setDirty(true);}}/>}
           <label className={labelClassName}>
-            Görsel URL
+            Görsel adresi
             <input
               name="imageUrl"
               type="url"
               maxLength={2048}
-              defaultValue={initialValues.imageUrl ?? ""}
+              value={imageValue} onChange={e=>setImageValue(e.target.value)}
               placeholder="https://..."
               className={inputClassName}
             />
@@ -411,12 +417,12 @@ export function ProjectForm({
             {mode === "create" ? "Taslak oluştur" : "Değişiklikleri kaydet"}
           </ProjectSubmitButton>
           <p className="text-xs leading-5 text-[var(--muted)]">
-            Owner kimliği, publish state ve approval alanları formdan alınmaz.
+            Değişikliklerini kaydettikten sonra önizlemeyi kontrol et.
           </p>
         </div>
       ) : (
         <p className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
-          Arşivlenmiş proje read-only durumundadır. Restore bu sprintte yoktur.
+          Arşivlenmiş proje yalnız okunabilir.
         </p>
       )}
     </form>

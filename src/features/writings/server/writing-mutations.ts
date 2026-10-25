@@ -58,6 +58,7 @@ const WRITING_SELECT = [
 
 type AuthorizedOperationContext = WritingMutationContext & {
   supabase: SupabaseClient;
+  expectedVersion?: string;
 };
 
 type WritingInsertPayload = {
@@ -200,6 +201,7 @@ async function updateOwnedWritingRow(
     .update(payload)
     .eq("id", writingId)
     .eq("owner_id", context.ownerId)
+    .eq("updated_at", context.expectedVersion ?? "")
     .select(WRITING_SELECT)
     .maybeSingle();
 
@@ -250,7 +252,7 @@ async function transitionOwnedWriting(
       : {}),
   };
 
-  return updateOwnedWritingRow(context, writingId, payload);
+  return updateOwnedWritingRow({...context, expectedVersion: current.data.updatedAt}, writingId, payload);
 }
 
 export async function listOwnerWritings(): Promise<
@@ -374,7 +376,7 @@ export async function updateWriting(
     );
 
     return updateOwnedWritingRow(
-      context,
+      {...context, expectedVersion: current.data.updatedAt},
       writingId.data,
       payload,
     );

@@ -1,3 +1,4 @@
+import { ContentImage } from "@/components/public/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { readPublicWriting } from "@/features/public/content/public-reads";
@@ -69,6 +70,7 @@ export default async function WritingDetailPage({ params }: Props) {
           {writing.readingTime ? " · " + writing.readingTime : ""}
         </p>
       </header>
+      {writing.coverImage && <div className="mb-5"><ContentImage src={writing.coverImage.src} alt={writing.coverImage.alt}/></div>}
       <div className="grid gap-8 lg:grid-cols-[200px_minmax(0,1fr)]">
         <aside>
           <nav

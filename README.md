@@ -6,9 +6,19 @@ Kişisel web sitem ve proje takip alanım. Yaptığım işleri bir arada tutmak,
 
 **Web sitesi:** Hakkımda, projeler, yazılar ve kariyer yolculuğu sayfaları.
 
-**Studio:** Sadece benim giriş yapabildiğim yönetim alanı. Proje ve görev takibi çalışıyor; notlar ve dosya yönetimi sırada.
+**Studio:** Yalnız doğrulanmış hesabımla açılan yönetim alanı. Proje, görev, özel not ve dosyalarımı yönetebilir; proje ve yazıları önizleyip yayınlayabilirim.
 
 Public sayfalar yalnız yayınlanmış içerikleri gösterir; örnek kayıtlar portföye dahil edilmez. Studio’da proje ve görev takibi, PWA manifesti ve uygulama ikonları hazır. Gerçek biyografi ve portföy içerikleri zamanla eklenecek.
+
+Özel dosyalar `private-files` içinde saklanır; indirme ve önizleme her istekte owner ve MFA denetiminden geçer. Proje/yazı görselleri ayrı `public-assets` alanına açık onayla yüklenir: sayfa taslak olsa da bu görsellerin adresleri herkese açıktır. Yükleme, doğrulama ve kayıt adımları ayrıdır; kesilen yükleme Dosyalar ekranından tekrar tamamlanabilir. Arşivleme dosyayı veya notu silmez.
+
+Telefon kontrolü (fiziksel cihazda ayrıca yapılmalı):
+
+1. Android Chrome ve iPhone Safari'de giriş → TOTP → Studio → çıkış akışını dene. Çıkıştan sonra Geri düğmesi özel içerik göstermemeli.
+2. Not editöründe yazı yaz, başka sayfaya geçmeyi dene; kaydedilmeyen değişiklik uyarısını kontrol et.
+3. Kendi seçtiğin bir dosyayı yükle, önizle ve indir. Aktarım sırasında bağlantıyı kesip yükleme durumunu kontrol et; mevcut verileri değiştirme.
+4. Android menüsünden yükle/ana ekrana ekle, iPhone paylaş menüsünden Ana Ekrana Ekle. İkonu ve yeniden açılışı kontrol et.
+5. Uygulamayı arka plana alıp tekrar aç; süresi dolmuş oturumda yeniden giriş gerektiğini doğrula. Çevrimdışı düzenleme yoktur; not/dosya içerikleri localStorage, IndexedDB veya service worker önbelleğine yazılmaz.
 
 ## Kullandığım teknolojiler
 

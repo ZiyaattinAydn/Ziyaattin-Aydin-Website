@@ -1,3 +1,4 @@
+import { PublicationReview } from "@/features/studio/library/publication-review";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -37,8 +38,7 @@ function WritingReadError() {
           Yazı açılamadı
         </h2>
         <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-          Güvenli Studio oturumunu doğrulayın ve tekrar deneyin. Ham database
-          veya authorization ayrıntısı gösterilmez.
+          Güvenli Studio oturumunu doğrulayın ve tekrar deneyin. Bağlantını kontrol edip sayfayı yenile.
         </p>
       </div>
     </Panel>
@@ -103,7 +103,7 @@ export default async function EditStudioWritingPage({
           <StudioPageHeader
             eyebrow="Studio / Writings / Edit"
             title={writing.title}
-            description="Alan güncellemeleri ve publish workflow yalnız Core domain mutation sınırları üzerinden çalışır."
+            description="Yazının içeriğini, görselini ve yayın durumunu yönet."
             status={writing.slug}
           />
           <StudioStatusPill
@@ -117,6 +117,7 @@ export default async function EditStudioWritingPage({
       <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
         <Panel className="p-5 sm:p-7">
           <WritingForm
+            key={writing.updatedAt}
             mode="edit"
             writingId={writing.id}
             initialValues={formValues}
@@ -133,19 +134,7 @@ export default async function EditStudioWritingPage({
             allowedTransitions={allowedTransitions}
           />
 
-          <Panel className="p-5">
-            <h2 className="text-lg font-semibold">Approval görünümü</h2>
-            <dl className="mt-4 space-y-3 text-sm">
-              <div className="flex items-center justify-between gap-4">
-                <dt className="text-[var(--muted)]">Kapak görseli approval</dt>
-                <dd className="font-mono">{writing.imageApprovalState}</dd>
-              </div>
-            </dl>
-            <p className="mt-4 text-xs leading-5 text-[var(--muted)]">
-              Approval state düzenleme UI&apos;ı bu sprintte yoktur. Pending
-              görsel publish geçişini server-side engeller.
-            </p>
-          </Panel>
+          <PublicationReview kind="writings" id={writing.id} version={writing.updatedAt} archived={writing.publishState === "archived"}/>
         </div>
       </div>
     </div>

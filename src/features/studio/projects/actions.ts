@@ -57,6 +57,7 @@ function readProjectInput(formData: FormData) {
 }
 
 function revalidateProjectPaths(projectId: string, slug: string): void {
+  revalidatePath("/", "layout");
   revalidatePath("/studio");
   revalidatePath(`/studio/projects/${projectId}`);
   revalidatePath("/studio/projects");
