@@ -10,4 +10,4 @@ Projeyi tek akışta geliştiriyorum. Her iş için ayrı bir branch açıp işi
 
 Özel Studio verileri herkese açık siteye sızmamalı. Auth, MFA ve RLS kontrolleri korunmalı. Veritabanı değişiklikleri önce geliştirme ortamında denenmeli; Production için yedek ve geri dönüş planı bulunmalı.
 
-Güncel yapılacakları `docs/ROADMAP.md` içinde, biten işleri `CHANGELOG.md` içinde tutuyorum.
+Güncel yapılacaklar `docs/ROADMAP.md` içinde. Yapılan değişikliklerin geçmişi Git commitlerinde.
