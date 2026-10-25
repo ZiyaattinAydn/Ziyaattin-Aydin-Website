@@ -12,11 +12,11 @@ import {
   publishStateLabels,
   visibilityLabels,
 } from "@/features/public/content/model";
-import { getPublicContentRepository } from "@/features/public/content/source-selection";
+import { getPublicWritingContentRepository } from "@/features/public/content/source-selection";
 
 export default async function WritingDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const repository = getPublicContentRepository();
+  const repository = getPublicWritingContentRepository();
   const writing = await repository.getWritingBySlug(slug);
 
   if (!writing) notFound();
