@@ -8,11 +8,11 @@ const filename = "src/features/studio/journey/domain.ts";
 const transpiled = ts.transpileModule(fs.readFileSync(filename,"utf8"), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 }
 }).outputText;
-const module = { exports: {} };
+const loadedModule = { exports: {} };
 vm.runInThisContext("(function(module,exports){" + transpiled + "\n})", { filename })(
-  module, module.exports
+  loadedModule, loadedModule.exports
 );
-const { parseJourney } = module.exports;
+const { parseJourney } = loadedModule.exports;
 function form(fields = {}) {
   const data = new FormData();
   for (const [name, value] of Object.entries({
