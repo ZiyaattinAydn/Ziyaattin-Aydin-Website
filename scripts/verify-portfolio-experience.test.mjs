@@ -1,6 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
+import vm from "node:vm";
+import ts from "typescript";
+import React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { selectResumeTasksPerProject } from "../src/features/studio/tasks/continue-work.ts";
 
 const project = (id, status = "active") => ({
@@ -70,4 +74,75 @@ test("project filters search actual subtitle and separate paused from active", (
   assert.ok(!explorer.includes("setCategory"));
   assert.ok(mapper.includes('status === "paused"'));
   assert.ok(mapper.includes('return "Duraklatıldı"'));
+});
+
+test("resume cards prominently show a linked project identity above task title", () => {
+  const card = readFileSync("src/features/studio/tasks/task-card.tsx", "utf8");
+  assert.ok(card.includes('aria-label={projectName + " projesini aç"}'));
+  assert.ok(card.includes('className="mb-4 inline-flex'));
+  assert.ok(card.indexOf('mb-4 inline-flex') < card.indexOf('<h3 className='));
+  assert.ok(card.includes('text-sm font-semibold text-[var(--accent)]'));
+});
+
+test("carousel retains manual arrows but no automatic transition counter", () => {
+  const carousel = readFileSync("src/components/public/auto-carousel.tsx", "utf8");
+  const css = readFileSync("src/components/public/auto-carousel.module.css", "utf8");
+  assert.ok(!carousel.includes("Otomatik geçiş"));
+  assert.ok(!carousel.includes("visiblePosition"));
+  assert.ok(carousel.includes('onClick={() => move(-1)}'));
+  assert.ok(carousel.includes('onClick={() => move(1)}'));
+  assert.ok(css.includes("justify-content: flex-end"));
+});
+
+test("public footer no longer exposes duplicate repository source link, but keeps existing Studio entry", () => {
+  const footer = readFileSync("src/components/layout/site-footer.tsx", "utf8");
+  assert.ok(!footer.includes("Kaynak kodu"));
+  assert.ok(!footer.includes("ZiyaattinAydn/Ziyaattin-Aydin-Website"));
+  assert.ok(footer.includes('href={siteConfig.adminEntry.href}'));
+});
+
+function loadShortcut(authorized) {
+  const src = readFileSync("src/components/layout/studio-return-shortcut.tsx", "utf8");
+  const js = ts.transpileModule(src, {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2022,
+      jsx: ts.JsxEmit.ReactJSX,
+      esModuleInterop: true,
+    },
+  }).outputText;
+  const module = { exports: {} };
+  const requireStub = (name) => {
+    if (name === "next/link") return { __esModule: true, default: ({ children, ...props }) => React.createElement("a", props, children) };
+    if (name === "@/lib/auth/studio-authorization") return {
+      getStudioAuthorization: async () => {
+        if (authorized === "error") throw new Error("AUTH_UNAVAILABLE");
+        return { ok: authorized };
+      },
+    };
+    if (name === "react/jsx-runtime") return require("react/jsx-runtime");
+    throw new Error("Unexpected shortcut dependency: " + name);
+  };
+  vm.runInThisContext("(function(require,module,exports){" + js + "\\n})")(requireStub, module, module.exports);
+  return module.exports.StudioReturnShortcut;
+}
+
+test("public Studio shortcut requires full server-side Studio authorization and stays hidden otherwise", async () => {
+  const source = readFileSync("src/components/layout/studio-return-shortcut.tsx", "utf8");
+  const layout = readFileSync("src/app/(public)/layout.tsx", "utf8");
+  const controls = readFileSync("src/components/studio/studio-session-controls.tsx", "utf8");
+  assert.ok(source.includes("getStudioAuthorization()"));
+  assert.ok(!source.includes("localStorage"));
+  assert.ok(layout.includes("<StudioReturnShortcut />"));
+  assert.ok(layout.includes('<Suspense fallback={null}>'));
+  assert.ok(controls.includes('href="/"') && controls.includes("Siteyi görüntüle"));
+
+  for (const denied of [false, "error"]) {
+    const component = loadShortcut(denied);
+    assert.equal(await component(), null);
+  }
+  const component = loadShortcut(true);
+  const html = renderToStaticMarkup(await component());
+  assert.ok(html.includes('href="/studio"'));
+  assert.ok(html.includes("Studio’ya dön"));
 });
