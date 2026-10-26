@@ -69,8 +69,8 @@ export function WritingForm({ mode, initialValues, writingId, readOnly = false }
         </label>
 
         <label className={label}>
-          Kısa açıklama *
-          <textarea name="excerpt" required rows={3} maxLength={800}
+          Kısa açıklama <span className="text-xs font-normal text-[var(--muted)]">(yayınlamak için gerekli)</span>
+          <textarea name="excerpt" rows={3} maxLength={800}
             defaultValue={initialValues.excerpt}
             onChange={(event) => setPreviewExcerpt(event.target.value)}
             aria-invalid={Boolean(state.fieldErrors.excerpt?.length)}
@@ -79,8 +79,8 @@ export function WritingForm({ mode, initialValues, writingId, readOnly = false }
         </label>
 
         <label className={label}>
-          Yazı içeriği *
-          <textarea name="content" required rows={20} maxLength={100000}
+          Yazı içeriği <span className="text-xs font-normal text-[var(--muted)]">(yayınlamak için gerekli)</span>
+          <textarea name="content" rows={20} maxLength={100000}
             defaultValue={initialValues.content}
             onChange={(event) => setPreviewContent(event.target.value)}
             aria-invalid={Boolean(state.fieldErrors.content?.length)}
