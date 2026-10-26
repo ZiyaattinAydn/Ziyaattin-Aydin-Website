@@ -56,10 +56,31 @@ async function saveTask(
           return errorState("Arşivdeki projeye yeni görev bağlanamaz.");
       }
     }
+    // Dates are no longer part of the task editor. Keep previously saved dates
+    // on edit instead of wiping them when the hidden fields are absent.
+    let values = { ...parsed.data, starts_at: null as string | null, due_at: null as string | null };
+    if (id) {
+      const existing = await supabase
+        .from("tasks")
+        .select("starts_at,due_at")
+        .eq("id", id)
+        .eq("owner_id", owner)
+        .eq("updated_at", String(form.get("version") ?? ""))
+        .neq("status", "archived")
+        .maybeSingle();
+      if (existing.error || !existing.data) {
+        return errorState("Görev değişmiş olabilir. Sayfayı yenileyip tekrar dene.");
+      }
+      values = {
+        ...parsed.data,
+        starts_at: existing.data.starts_at ?? null,
+        due_at: existing.data.due_at ?? null,
+      };
+    }
     const result = id
       ? await supabase
           .from("tasks")
-          .update(parsed.data)
+          .update(values)
           .eq("id", id)
           .eq("owner_id", owner)
           .eq("updated_at", String(form.get("version") ?? ""))
@@ -68,7 +89,7 @@ async function saveTask(
           .maybeSingle()
       : await supabase
           .from("tasks")
-          .insert({ ...parsed.data, owner_id: owner })
+          .insert({ ...values, owner_id: owner })
           .select("id")
           .single();
     if (result.error)
