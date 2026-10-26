@@ -65,7 +65,7 @@ export async function createProjectAction(
 
     if (result.ok) {
       revalidateProjectPaths(result.data.id, result.data.slug);
-      redirect(`/studio/projects/${result.data.id}/edit`);
+      redirect(`/studio/projects/${result.data.id}`);
     }
 
     if (result.error.code !== "slug_conflict") {
