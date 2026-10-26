@@ -97,6 +97,21 @@ export async function updateProjectAction(
   return projectActionSuccess("Proje kaydedildi.");
 }
 
+export async function updateProjectFeaturedAction(
+  projectId: string,
+  previousState: ProjectActionState,
+  formData: FormData,
+): Promise<ProjectActionState> {
+  void previousState;
+  const result = await updateProject(projectId, {
+    isFeatured: formData.get("isFeatured") === "on",
+  });
+
+  if (!result.ok) return toProjectActionError(result.error);
+  revalidateProjectPaths(result.data.id, result.data.slug);
+  return projectActionSuccess("Portföyde öne çıkarma tercihi kaydedildi.");
+}
+
 export async function transitionProjectAction(
   projectId: string,
   previousState: ProjectActionState,
