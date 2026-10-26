@@ -3,20 +3,26 @@
 import Link from "next/link";
 import { StudioSessionControls } from "./studio-session-controls";
 import { StudioPrivacyGuard } from "./studio-privacy-guard";
-import { usePathname } from "next/navigation";
-import type { PropsWithChildren } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import type { MouseEvent, PropsWithChildren } from "react";
 import { studioNavItems } from "@/features/studio/studio-content";
-
-function isActiveRoute(pathname: string, href: string) {
-  if (href === "/studio") {
-    return pathname === href;
-  }
-
-  return pathname === href || pathname.startsWith(`${href}/`);
-}
+import { studioNavigationState } from "@/features/studio/studio-navigation";
 
 export function StudioShell({ children }: PropsWithChildren) {
   const pathname = usePathname() ?? "";
+  const router = useRouter();
+
+  function openSectionRoot(event: MouseEvent<HTMLAnchorElement>, href: string, nested: boolean) {
+    // From a detail/editor page, actively navigate back to this section’s index.
+    // Regular, modifier-key and new-tab Link navigation remain untouched.
+    if (
+      !nested || event.defaultPrevented || event.button !== 0 ||
+      event.ctrlKey || event.metaKey || event.shiftKey || event.altKey
+    ) return;
+    event.preventDefault();
+    router.push(href);
+  }
+
 
   return (
     <div className="min-h-screen bg-code-grid text-[var(--foreground)]">
@@ -43,20 +49,25 @@ export function StudioShell({ children }: PropsWithChildren) {
             aria-label="Studio masaüstü navigasyonu"
           >
             {studioNavItems.map((item) => {
-              const active = isActiveRoute(pathname, item.href);
+              const { active, nested, currentPage } = studioNavigationState(pathname, item.href);
 
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  aria-current={active ? "page" : undefined}
+                  aria-current={currentPage ? "page" : undefined}
+                  title={nested ? `${item.label} bölümüne dön` : undefined}
+                  onClick={(event) => openSectionRoot(event, item.href, nested)}
                   className={`block rounded-xl border px-4 py-3 text-sm transition-colors ${
                     active
                       ? "border-[var(--accent-dim)] bg-[rgba(18,217,120,0.08)] text-[var(--foreground)]"
                       : "border-transparent text-[var(--muted)] hover:border-[var(--border)] hover:bg-[var(--surface)] hover:text-[var(--foreground)]"
                   }`}
                 >
-                  {item.label}
+                  <span className="flex items-center justify-between gap-3">
+                    <span>{item.label}</span>
+                    {nested && <span className="shrink-0 text-[11px] text-[var(--accent)]">Bölüme dön ↩</span>}
+                  </span>
                 </Link>
               );
             })}
@@ -79,20 +90,22 @@ export function StudioShell({ children }: PropsWithChildren) {
               aria-label="Studio mobil navigasyonu"
             >
               {studioNavItems.map((item) => {
-                const active = isActiveRoute(pathname, item.href);
+                const { active, nested, currentPage } = studioNavigationState(pathname, item.href);
 
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    aria-current={active ? "page" : undefined}
+                    aria-current={currentPage ? "page" : undefined}
+                    title={nested ? `${item.label} bölümüne dön` : undefined}
+                    onClick={(event) => openSectionRoot(event, item.href, nested)}
                     className={`shrink-0 rounded-full border px-3 py-2 text-xs ${
                       active
                         ? "border-[var(--accent-dim)] bg-[rgba(18,217,120,0.1)] text-[var(--foreground)]"
                         : "border-[var(--border)] bg-[var(--surface)] text-[var(--muted)]"
                     }`}
                   >
-                    {item.shortLabel}
+                    {item.shortLabel}{nested && <span aria-hidden="true"> ↩</span>}
                   </Link>
                 );
               })}
