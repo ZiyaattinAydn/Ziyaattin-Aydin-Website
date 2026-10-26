@@ -16,9 +16,8 @@ import {
   type ProjectRow,
   type UpdateProjectInput,
 } from "@/features/projects/domain";
-import {
-  mapProjectDatabaseError,
-} from "@/features/projects/database-errors";
+import { mapProjectDatabaseError } from "@/features/projects/database-errors";
+import { verifyPublicProjectAssets } from "@/features/projects/server/project-publication";
 import {
   getProjectMutationContext,
   type ProjectMutationContext,
@@ -76,7 +75,7 @@ type ProjectInsertPayload = {
   next_steps: string[];
   status: CreateProjectInput["status"];
   visibility: CreateProjectInput["visibility"];
-  publish_state: "draft";
+  publish_state: "draft" | "published";
   progress: number;
   is_featured: boolean;
   github_url: string | null;
@@ -90,6 +89,7 @@ type ProjectUpdatePayload = Partial<
   Omit<ProjectInsertPayload, "owner_id" | "publish_state">
 > & {
   publish_state?: ProjectPublishState;
+  published_at?: string | null;
 };
 
 async function withAuthorizedProjectOperation<T>(
@@ -143,6 +143,7 @@ async function readOwnedProject(
 function createInsertPayload(
   input: CreateProjectInput,
   ownerId: string,
+  approval?: { linkApproval: "approved" | "not_required"; imageApproval: "approved" | "not_required" },
 ): ProjectInsertPayload {
   const hasPublicLink = Boolean(input.githubUrl || input.demoUrl);
 
@@ -157,18 +158,14 @@ function createInsertPayload(
     next_steps: input.nextSteps,
     status: input.status,
     visibility: input.visibility,
-    publish_state: "draft",
+    publish_state: approval ? "published" : "draft",
     progress: input.progress,
     is_featured: input.isFeatured,
     github_url: input.githubUrl,
     demo_url: input.demoUrl,
-    link_approval_state: hasPublicLink
-      ? "pending"
-      : "not_required",
+    link_approval_state: approval?.linkApproval ?? (hasPublicLink ? "pending" : "not_required"),
     image_url: input.imageUrl,
-    image_approval_state: input.imageUrl
-      ? "pending"
-      : "not_required",
+    image_approval_state: approval?.imageApproval ?? (input.imageUrl ? "pending" : "not_required"),
   };
 }
 
@@ -350,9 +347,15 @@ export async function createProjectDraft(
       return input;
     }
 
+    const publication = input.data.visibility === "public"
+      ? await verifyPublicProjectAssets(context.supabase, context.ownerId, input.data)
+      : null;
+    if (publication && !publication.ok) return publication;
+
     const payload = createInsertPayload(
       input.data,
       context.ownerId,
+      publication?.ok ? publication.data : undefined,
     );
 
     const { data, error } = await context.supabase
@@ -418,6 +421,32 @@ export async function updateProject(
       policy.data,
       current.data,
     );
+
+    const nextVisibility = policy.data.visibility ?? current.data.visibility;
+    const shouldPublish = (
+      policy.data.visibility === "public" ||
+      (current.data.publishState === "published" && nextVisibility === "public")
+    );
+
+    if (shouldPublish) {
+      const publicAssets = await verifyPublicProjectAssets(
+        context.supabase,
+        context.ownerId,
+        {
+          summary: policy.data.summary ?? current.data.summary,
+          githubUrl: policy.data.githubUrl !== undefined ? policy.data.githubUrl : current.data.githubUrl,
+          demoUrl: policy.data.demoUrl !== undefined ? policy.data.demoUrl : current.data.demoUrl,
+          imageUrl: policy.data.imageUrl !== undefined ? policy.data.imageUrl : current.data.imageUrl,
+        },
+      );
+      if (!publicAssets.ok) return publicAssets;
+      payload.visibility = "public";
+      payload.publish_state = "published";
+      payload.link_approval_state = publicAssets.data.linkApproval;
+      payload.image_approval_state = publicAssets.data.imageApproval;
+    } else if (policy.data.visibility !== undefined && current.data.publishState === "published") {
+      payload.publish_state = "unpublished";
+    }
 
     return updateOwnedProjectRow(
       {...context, expectedVersion: current.data.updatedAt},
