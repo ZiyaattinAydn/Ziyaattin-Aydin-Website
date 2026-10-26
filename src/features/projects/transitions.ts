@@ -194,7 +194,7 @@ export function prepareProjectTransition(
   if (target === "unpublished") {
     return projectSuccess({
       publishState: "unpublished",
-      visibility: "hidden",
+      visibility: "private",
     });
   }
 
