@@ -52,10 +52,38 @@ export async function listStudioTasks(): Promise<StudioTaskList> {
 export async function getStudioTask(id: string) {
   if (!UUID_PATTERN.test(id))
     return { ok: false as const, reason: "not_found" };
-  const result = await listStudioTasks();
-  if (!result.ok) return { ok: false as const, reason: "unavailable" };
-  const task = result.tasks.find((task) => task.id === id);
-  return task
-    ? { ok: true as const, task, projects: result.projects }
-    : { ok: false as const, reason: "not_found" };
+  try {
+    const authorization = await getStudioAuthorization();
+    if (!authorization.ok) return { ok: false as const, reason: "unavailable" };
+    const db = await createServerSupabaseClient();
+    // A single task detail should not require downloading the whole task list.
+    // Check ownership in both queries, and keep project picker pagination.
+    const fetchProjects = async (): Promise<TaskProject[]> => {
+      const projects: TaskProject[] = [];
+      for (let offset = 0; ; offset += 500) {
+        const response = await db.from("projects")
+          .select("id,title,status,publish_state,created_at,updated_at")
+          .eq("owner_id", authorization.profile.userId)
+          .order("id")
+          .range(offset, offset + 499);
+        if (response.error) throw new Error("Projects unavailable");
+        projects.push(...(response.data as TaskProject[]));
+        if (response.data.length < 500) break;
+      }
+      return projects;
+    };
+    const [record, projects] = await Promise.all([
+      db.from("tasks")
+        .select(TASK_COLUMNS)
+        .eq("id", id)
+        .eq("owner_id", authorization.profile.userId)
+        .maybeSingle(),
+      fetchProjects(),
+    ]);
+    if (record.error) return { ok: false as const, reason: "unavailable" };
+    if (!record.data) return { ok: false as const, reason: "not_found" };
+    return { ok: true as const, task: record.data as StudioTask, projects };
+  } catch {
+    return { ok: false as const, reason: "unavailable" };
+  }
 }
