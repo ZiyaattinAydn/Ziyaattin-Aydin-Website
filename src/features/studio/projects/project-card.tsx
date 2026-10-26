@@ -40,7 +40,22 @@ export function ProjectCard({ project }: { project: ProjectEntity }) {
           {project.summary || "Bu proje için henüz özet girilmedi."}
         </p>
 
-        <dl className="grid gap-3 border-t border-[var(--border)] pt-4 sm:grid-cols-3">
+        <div>
+          <div className="mb-2 flex items-center justify-between text-xs text-[var(--muted)]">
+            <span>Kişisel ilerleme tahmini</span>
+            <span className="font-mono text-[var(--accent)]">
+              %{project.progress}
+            </span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-[var(--surface-strong)]">
+            <div
+              className="h-full rounded-full bg-[var(--accent)]"
+              style={{ width: `${project.progress}%` }}
+            />
+          </div>
+        </div>
+
+        <dl className="grid gap-3 border-t border-[var(--border)] pt-4 sm:grid-cols-2 xl:grid-cols-4">
           <div>
             <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
               Çalışma
@@ -55,6 +70,14 @@ export function ProjectCard({ project }: { project: ProjectEntity }) {
             </dt>
             <dd className="mt-1 text-sm">
               {PROJECT_VISIBILITY_LABELS[project.visibility]}
+            </dd>
+          </div>
+          <div>
+            <dt className="font-mono text-[11px] uppercase tracking-[0.14em] text-[var(--muted)]">
+              Öne çıkan
+            </dt>
+            <dd className="mt-1 text-sm">
+              {project.isFeatured ? "Evet" : "Hayır"}
             </dd>
           </div>
           <div>

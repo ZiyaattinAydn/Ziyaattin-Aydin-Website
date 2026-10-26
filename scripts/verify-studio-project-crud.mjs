@@ -101,9 +101,24 @@ check(
   actions.includes("projectSlugFromTitle") && actions.includes('"slug_conflict"'),
   "New project addresses must be generated and collision-safe.",
 );
-for (const oldField of ['name="problem"', 'name="approach"', 'name="highlights"', 'name="nextSteps"', 'name="progress"', 'name="isFeatured"', 'name="githubUrl"', 'name="demoUrl"']) {
-  check(!form.includes(oldField), `Project form must not show legacy field ${oldField}.`);
+for (const restoredField of [
+  'name="problem"', 'name="approach"', 'name="highlights"',
+  'name="progress"', 'name="githubUrl"', 'name="demoUrl"',
+]) {
+  check(form.includes(restoredField), `Original project field must be preserved: ${restoredField}`);
+  const formDataKey = restoredField.slice(6, -1);
+  check(actions.includes(`"${formDataKey}"`), `Server action must save: ${formDataKey}`);
 }
+for (const removedField of ['name="nextSteps"', 'name="isFeatured"']) {
+  check(!form.includes(removedField), `Only agreed fields should be removed: ${removedField}`);
+}
+const detailPage = read("src/app/(studio)/studio/projects/[projectId]/page.tsx");
+const card = read("src/features/studio/projects/project-card.tsx");
+for (const key of ["p.sections.problem", "p.sections.approach", "p.sections.highlights"]) {
+  check(detailPage.includes(key), `Project detail must show ${key}`);
+}
+check(card.includes("project.progress"), "Project list must keep manual progress.");
+check(!detailPage.includes("p.sections.nextSteps"), "Next steps must come from tasks.");
 check(
   form.includes("publishedVisibilityLocked"),
   "Published visibility must be locked in the UI.",

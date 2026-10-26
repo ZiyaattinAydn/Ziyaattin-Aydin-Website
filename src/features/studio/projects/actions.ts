@@ -26,14 +26,23 @@ function readNullableText(formData: FormData, name: string): string | null {
   return value.length > 0 ? value : null;
 }
 
-// Only the fields shown in the streamlined form are editable here.
-// Omitted legacy/portfolio fields are preserved on updates.
+// Preserve optional portfolio and tracking fields; only the fields explicitly
+// removed from the form stay server-managed.
 function readProjectInput(formData: FormData) {
   return {
     title: readText(formData, "title"),
     summary: readText(formData, "summary"),
+    problem: readText(formData, "problem"),
+    approach: readText(formData, "approach"),
+    highlights: readText(formData, "highlights")
+      .split(/\r?\n/)
+      .map((item) => item.trim())
+      .filter(Boolean),
     status: readText(formData, "status"),
     visibility: readText(formData, "visibility"),
+    progress: Number(readText(formData, "progress")),
+    githubUrl: readNullableText(formData, "githubUrl"),
+    demoUrl: readNullableText(formData, "demoUrl"),
     imageUrl: readNullableText(formData, "imageUrl"),
   };
 }
