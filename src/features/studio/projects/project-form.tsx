@@ -46,6 +46,14 @@ export function ProjectForm({
     INITIAL_PROJECT_ACTION_STATE,
   );
   const [imageValue, setImageValue] = useState(initialValues.imageUrl ?? "");
+  const [stagedFiles, setStagedFiles] = useState<Array<{ id: string; name: string }>>([]);
+  const [coverBusy, setCoverBusy] = useState(false);
+  const [documentsBusy, setDocumentsBusy] = useState(false);
+  const uploadsBusy = coverBusy || documentsBusy;
+  function recordUpload(id: string, name: string) {
+    setStagedFiles((current) => current.some((file) => file.id === id) ? current : [...current, { id, name }]);
+    if (mode === "create") setDirty(true);
+  }
   const [previewTitle, setPreviewTitle] = useState(initialValues.title);
   const [previewSubtitle, setPreviewSubtitle] = useState(initialValues.subtitle);
   const [previewSummary, setPreviewSummary] = useState(initialValues.summary);
@@ -204,10 +212,12 @@ export function ProjectForm({
         <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[rgba(255,255,255,0.015)] p-5">
           <h2 className="text-lg font-semibold">Kapak görseli <span className="text-sm font-normal text-[var(--muted)]">(isteğe bağlı)</span></h2>
           {!readOnly ? (
-            <UploadForm image streamlinedPublicImage onUploaded={(url) => {
-              setImageValue(url);
-              setDirty(true);
-            }}/>
+            <UploadForm image streamlinedPublicImage projectId={mode === "edit" ? projectId : null}
+              onBusyChange={setCoverBusy} onUploadedFile={recordUpload}
+              onUploaded={(url) => {
+                setImageValue(url);
+                setDirty(true);
+              }}/>
           ) : null}
           <input type="hidden" name="imageUrl" value={imageValue}/>
           {imageValue ? (
@@ -221,11 +231,29 @@ export function ProjectForm({
           ) : null}
           <FieldError id="image-url-error" messages={state.fieldErrors.imageUrl}/>
         </div>
+
+        <section className="space-y-3 rounded-2xl border border-[var(--border)] bg-[rgba(255,255,255,0.015)] p-5" aria-label="Proje dokümanları">
+          <h2 className="text-lg font-semibold">Proje dokümanları <span className="text-sm font-normal text-[var(--muted)]">(isteğe bağlı)</span></h2>
+          <p className="text-xs leading-6 text-[var(--muted)]">PDF, Word, PowerPoint, metin dosyaları veya özel görseller ekleyebilirsin. Belgeler ziyaretçilere açılmaz, sadece Studio içinde tutulur.</p>
+          {!readOnly && <UploadForm projectId={mode === "edit" ? projectId : null}
+            onBusyChange={setDocumentsBusy} onUploadedFile={recordUpload}/>}
+          {stagedFiles.length > 0 && (
+            <div className="space-y-1 text-xs text-[var(--accent)]">
+              {stagedFiles.map((file) => <p key={file.id} className="break-words">✓ {file.name} yüklendi</p>)}
+            </div>
+          )}
+          {mode === "edit" && projectId && (
+            <a className="inline-block text-sm text-[var(--accent)] hover:underline"
+              href={`/studio/files?project=${encodeURIComponent(projectId)}`}>Bu projenin dosyalarını görüntüle →</a>
+          )}
+        </section>
       </fieldset>
+      {mode === "create" && stagedFiles.map((file) => <input type="hidden" key={file.id} name="uploadedFileId" value={file.id}/>)}
+      {uploadsBusy && <p role="status" className="text-sm text-amber-200">Dosyalar yükleniyor. Kaydetmeden önce yüklemeyi tamamla.</p>}
 
       {!readOnly ? (
         <div className="flex flex-wrap items-center gap-3">
-          <ProjectSubmitButton pendingLabel={mode === "create" ? "Oluşturuluyor..." : "Kaydediliyor..."}>
+          <ProjectSubmitButton disabled={uploadsBusy} pendingLabel={mode === "create" ? "Oluşturuluyor..." : "Kaydediliyor..."}>
             {mode === "create" ? "Projeyi oluştur" : "Değişiklikleri kaydet"}
           </ProjectSubmitButton>
           <p className="text-xs leading-5 text-[var(--muted)]">
