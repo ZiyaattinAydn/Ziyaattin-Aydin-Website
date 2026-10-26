@@ -132,6 +132,7 @@ export default async function EditStudioProjectPage({
           <ProjectWorkflowActions
             projectId={project.id}
             publishState={project.publishState}
+            isFeatured={project.isFeatured}
             allowedTransitions={allowedTransitions}
           />
 
