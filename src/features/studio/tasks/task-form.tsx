@@ -7,7 +7,6 @@ import {
 } from "./actions";
 import { initialTaskState } from "./action-state";
 import {
-  calendarDate,
   priorityNames,
   statusNames,
   type StudioTask,
@@ -33,8 +32,6 @@ export function TaskForm({
     projectId: task?.project_id ?? projectId,
     priority: task?.priority ?? "medium",
     status: task?.status ?? "todo",
-    startsAt: task?.starts_at ? calendarDate(task.starts_at) : "",
-    dueAt: task?.due_at ? calendarDate(task.due_at) : "",
   }));
   function changeValue(
     event: ChangeEvent<
@@ -139,34 +136,6 @@ export function TaskForm({
         </label>
         <p className="self-center text-xs leading-6 text-[var(--muted)]">
           Tamamlanan bir görevi yeniden açmak için durumunu değiştirip kaydet.
-        </p>
-        <label className="min-w-0 space-y-2 text-sm">
-          <span>Başlangıç tarihi</span>
-          <input
-            name="startsAt"
-            type="date"
-            min="2000-01-01"
-            max="2100-12-31"
-            value={values.startsAt}
-            onChange={changeValue}
-            className={taskInputClass}
-          />
-        </label>
-        <label className="min-w-0 space-y-2 text-sm">
-          <span>Bitiş tarihi</span>
-          <input
-            name="dueAt"
-            type="date"
-            min="2000-01-01"
-            max="2100-12-31"
-            value={values.dueAt}
-            onChange={changeValue}
-            className={taskInputClass}
-          />
-        </label>
-        <p className="text-xs text-[var(--muted)] sm:col-span-2">
-          Tarihler İstanbul saatine göredir. Bitiş günü sonuna kadar görev
-          gecikmiş sayılmaz.
         </p>
         <button
           disabled={pending}
