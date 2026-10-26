@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { projectSlugFromTitle } from "./project-slug";
+import { validateStagedProjectUploads, attachStagedProjectUploads } from "@/features/projects/server/project-upload-linking";
 
 import {
   archiveProject,
@@ -66,6 +67,12 @@ export async function createProjectAction(
   void previousState;
 
   const input = readProjectInput(formData);
+  const uploads = await validateStagedProjectUploads(formData.getAll("uploadedFileId"));
+  if (!uploads.ok) return {
+    status: "error",
+    message: uploads.message,
+    fieldErrors: { _form: [uploads.message] },
+  };
   const baseSlug = projectSlugFromTitle(input.title);
 
   // Rely on the database unique index; retry with a numeric suffix if another
@@ -75,8 +82,10 @@ export async function createProjectAction(
     const result = await createProjectDraft({ ...input, slug });
 
     if (result.ok) {
+      const linked = await attachStagedProjectUploads(uploads.ids, result.data.id);
       revalidateProjectPaths(result.data.id, result.data.slug);
-      redirect(`/studio/projects/${result.data.id}`);
+      revalidatePath("/studio/files");
+      redirect(`/studio/projects/${result.data.id}${linked ? "" : "?attachments=unlinked"}`);
     }
 
     if (result.error.code !== "slug_conflict") {
