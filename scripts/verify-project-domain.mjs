@@ -149,6 +149,7 @@ const validDraft = validation.validateCreateProjectInput({
 check(validDraft.ok, "Geçerli draft create input reddedildi.");
 if (validDraft.ok) {
   equal(validDraft.data.title, "İlk Gerçek Proje");
+  equal(validDraft.data.subtitle, "", "Legacy create with no subtitle must still work.");
   equal(validDraft.data.approach, "");
   deepEqual(validDraft.data.highlights, [
     "İlk madde",
@@ -156,6 +157,19 @@ if (validDraft.ok) {
   ]);
   equal(validDraft.data.githubUrl, null);
 }
+
+const validSubtitle = validation.validateCreateProjectInput({
+  title: "RenTR",
+  slug: "rentr",
+  subtitle: "  Python · PySide6 · Ollama  ",
+});
+check(validSubtitle.ok, "Valid subtitle must pass input validation.");
+if (validSubtitle.ok) equal(validSubtitle.data.subtitle, "Python · PySide6 · Ollama");
+
+equal(validation.validateUpdateProjectInput({ subtitle: "x".repeat(161) }).ok, false, "Overlong subtitle must fail.");
+const emptySubtitle = validation.validateUpdateProjectInput({ subtitle: "  " });
+check(emptySubtitle.ok, "Subtitle can be removed without modifying other fields.");
+if (emptySubtitle.ok) equal(emptySubtitle.data.subtitle, "");
 
 const missingTitle = validation.validateCreateProjectInput({
   title: " ",
