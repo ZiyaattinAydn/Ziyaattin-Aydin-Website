@@ -31,7 +31,7 @@ test("Task and library list reads preserve owner filters and pagination but run 
   assert.ok(tasks.includes("await Promise.all(["));
   assert.ok(tasks.includes('fetchRows<StudioTask>("tasks", TASK_COLUMNS)'));
   assert.ok(tasks.includes('fetchRows<TaskProject>("projects"'));
-  assert.ok(tasks.includes('.eq("owner_id", authorization.profile.userId)'));
+  assert.ok(tasks.includes('.eq("owner_id", ownerId)'));
   assert.ok(tasks.includes(".range(offset, offset + 499)"));
   assert.ok(files.includes("await Promise.all([fetchLibraryRows(), fetchProjects()])"));
   assert.ok(files.includes('.eq("owner_id", ctx.owner)'));
@@ -42,7 +42,7 @@ test("Task detail query retrieves just the requested, authorized task", () => {
   const tasks = source("src/features/studio/tasks/task-store.ts");
   const portion = tasks.slice(tasks.indexOf("export async function getStudioTask"));
   assert.ok(portion.includes('.eq("id", id)'));
-  assert.ok(portion.includes('.eq("owner_id", authorization.profile.userId)'));
+  assert.ok(portion.includes('.eq("owner_id", ownerId)'));
   assert.ok(portion.includes(".maybeSingle()"));
   assert.ok(!portion.includes("await listStudioTasks()"));
 });
