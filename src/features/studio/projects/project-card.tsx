@@ -5,7 +5,6 @@ import { StudioStatusPill } from "@/components/studio/studio-status-pill";
 import type { ProjectEntity } from "@/features/projects/domain";
 import {
   formatProjectDate,
-  PROJECT_PUBLISH_STATE_LABELS,
   PROJECT_PUBLISH_STATE_TONES,
   PROJECT_STATUS_LABELS,
   PROJECT_VISIBILITY_LABELS,
