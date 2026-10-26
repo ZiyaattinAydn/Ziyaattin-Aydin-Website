@@ -77,3 +77,21 @@ export async function ownedFile(id: string) {
   if (r.error || !r.data) throw new Error("Dosya bulunamadı.");
   return { ...ctx, file: r.data as StoredFile };
 }
+
+export async function listProjectFiles(projectId: string) {
+  if (!UUID.test(projectId)) return [];
+  const ctx = await libraryContext();
+  await checkProject(ctx, projectId);
+  const rows: StoredFile[] = [];
+  for (let offset = 0; ; offset += 500) {
+    const r = await ctx.db.from("files")
+      .select("id,project_id,original_name,storage_bucket,storage_path,mime_type,size_bytes,status,upload_status,created_at,updated_at")
+      .eq("owner_id", ctx.owner).eq("project_id", projectId).eq("status", "active")
+      .order("created_at", { ascending: false })
+      .range(offset, offset + 499);
+    if (r.error) throw new Error("Proje dosyaları yüklenemedi.");
+    rows.push(...(r.data as unknown as StoredFile[]));
+    if (r.data.length < 500) break;
+  }
+  return rows;
+}
