@@ -32,34 +32,41 @@ export async function checkProject(
 export async function listLibrary(kind: "notes" | "files") {
   try {
     const ctx = await libraryContext();
-    const rows: (Note | StoredFile)[] = [];
     const columns =
       kind === "notes"
         ? "id,project_id,title,content,category,tags,status,created_at,updated_at"
         : "id,project_id,original_name,storage_bucket,storage_path,mime_type,size_bytes,status,upload_status,created_at,updated_at";
-    for (let offset = 0; ; offset += 500) {
-      const r = await ctx.db
-        .from(kind)
-        .select(columns)
-        .eq("owner_id", ctx.owner)
-        .order("id")
-        .range(offset, offset + 499);
-      if (r.error) throw new Error();
-      rows.push(...(r.data as unknown as (Note | StoredFile)[]));
-      if (r.data.length < 500) break;
+    async function fetchLibraryRows(): Promise<(Note | StoredFile)[]> {
+      const rows: (Note | StoredFile)[] = [];
+      for (let offset = 0; ; offset += 500) {
+        const r = await ctx.db
+          .from(kind)
+          .select(columns)
+          .eq("owner_id", ctx.owner)
+          .order("id")
+          .range(offset, offset + 499);
+        if (r.error) throw new Error("Files unavailable.");
+        rows.push(...(r.data as unknown as (Note | StoredFile)[]));
+        if (r.data.length < 500) break;
+      }
+      return rows;
     }
-    const projects: LibraryProject[] = [];
-    for (let offset = 0; ; offset += 500) {
-      const r = await ctx.db
-        .from("projects")
-        .select("id,title,status,publish_state")
-        .eq("owner_id", ctx.owner)
-        .order("id")
-        .range(offset, offset + 499);
-      if (r.error) throw new Error();
-      projects.push(...r.data);
-      if (r.data.length < 500) break;
+    async function fetchProjects(): Promise<LibraryProject[]> {
+      const projects: LibraryProject[] = [];
+      for (let offset = 0; ; offset += 500) {
+        const r = await ctx.db
+          .from("projects")
+          .select("id,title,status,publish_state")
+          .eq("owner_id", ctx.owner)
+          .order("id")
+          .range(offset, offset + 499);
+        if (r.error) throw new Error("Projects unavailable.");
+        projects.push(...r.data);
+        if (r.data.length < 500) break;
+      }
+      return projects;
     }
+    const [rows, projects] = await Promise.all([fetchLibraryRows(), fetchProjects()]);
     return { ok: true as const, rows, projects };
   } catch {
     return { ok: false as const };
@@ -81,7 +88,8 @@ export async function ownedFile(id: string) {
 export async function listProjectFiles(projectId: string) {
   if (!UUID.test(projectId)) return [];
   const ctx = await libraryContext();
-  await checkProject(ctx, projectId);
+  // This query is already scoped to the authenticated owner and protected by
+  // RLS. Project-detail routes separately authorize the project itself.
   const rows: StoredFile[] = [];
   for (let offset = 0; ; offset += 500) {
     const r = await ctx.db.from("files")

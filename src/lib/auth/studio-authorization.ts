@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 
@@ -175,7 +176,12 @@ export async function getStudioMfaAccess(): Promise<StudioMfaAccessResult> {
     return trustedUser;
   }
 
-  const profile = await readActiveOwnerProfile(supabase, trustedUser.user);
+  // Profile lookup and assurance-level verification are independent once the
+  // authenticated user has been verified. Parallelism avoids one network RTT.
+  const [profile, assuranceLevel] = await Promise.all([
+    readActiveOwnerProfile(supabase, trustedUser.user),
+    getAuthenticatorAssuranceLevel(supabase),
+  ]);
 
   if (!profile) {
     return {
@@ -183,8 +189,6 @@ export async function getStudioMfaAccess(): Promise<StudioMfaAccessResult> {
       reason: "unauthorized",
     };
   }
-
-  const assuranceLevel = await getAuthenticatorAssuranceLevel(supabase);
 
   if (!assuranceLevel.ok) {
     return {
@@ -212,7 +216,7 @@ export async function getStudioMfaAccess(): Promise<StudioMfaAccessResult> {
  * owner_profiles row is read through RLS, and current AAL2 is mandatory.
  * Client metadata, email strings and service-role bypass are not used.
  */
-export async function getStudioAuthorization(): Promise<StudioAuthorizationResult> {
+export const getStudioAuthorization = cache(async function getStudioAuthorization(): Promise<StudioAuthorizationResult> {
   const mfaAccess = await getStudioMfaAccess();
 
   if (!mfaAccess.ok) {
@@ -241,4 +245,4 @@ export async function getStudioAuthorization(): Promise<StudioAuthorizationResul
     profile: mfaAccess.profile,
     assuranceLevel: "aal2",
   };
-}
+});
