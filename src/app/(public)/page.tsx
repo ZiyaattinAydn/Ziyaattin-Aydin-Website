@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ProjectCard } from "@/components/public/project-card";
 import { WritingCard } from "@/components/public/writing-card";
 import { PublicSection } from "@/components/public/public-section";
+import { AutoCarousel } from "@/components/public/auto-carousel";
 import {
   PublicEmptyState,
   PublicUnavailable,
@@ -90,11 +91,9 @@ export default async function HomePage() {
         {projects.status === "rejected" ? (
           <PublicUnavailable href="/" />
         ) : projects.value.length ? (
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {projects.value.slice(0, 3).map((p) => (
-              <ProjectCard key={p.slug} project={p} />
-            ))}
-          </div>
+          <AutoCarousel label="Projeler" items={projects.value.map((p) => (
+            <ProjectCard key={p.slug} project={p} />
+          ))} />
         ) : (
           <PublicEmptyState
             headingLevel={3}
@@ -115,11 +114,9 @@ export default async function HomePage() {
         {writings.status === "rejected" ? (
           <PublicUnavailable href="/" />
         ) : writings.value.length ? (
-          <div className="grid gap-5 md:grid-cols-2">
-            {writings.value.slice(0, 2).map((w) => (
-              <WritingCard key={w.slug} writing={w} />
-            ))}
-          </div>
+          <AutoCarousel label="Yazılar" desktopVisible={2} items={writings.value.map((w) => (
+            <WritingCard key={w.slug} writing={w} />
+          ))} />
         ) : (
           <PublicEmptyState
             headingLevel={3}

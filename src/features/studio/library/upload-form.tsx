@@ -15,6 +15,7 @@ export function UploadForm({
   projects = [],
   image = false,
   streamlinedPublicImage = false,
+  embeddedInProject = false,
   onUploaded,
   onUploadedFile,
   projectId = null,
@@ -26,6 +27,7 @@ export function UploadForm({
   onBusyChange?: (busy: boolean) => void;
   image?: boolean;
   streamlinedPublicImage?: boolean;
+  embeddedInProject?: boolean;
   onUploaded?: (url: string) => void;
 }) {
   const router = useRouter();
@@ -128,7 +130,7 @@ export function UploadForm({
             ? "JPEG, PNG, WebP veya AVIF · En fazla 10 MB"
             : "PDF, Word, PowerPoint, metin, Markdown veya görsel · En fazla 25 MB. Dosyalar yalnız sana görünür."}
         </p>
-        {!image && !projectId && (
+        {!image && !projectId && !embeddedInProject && (
           <label className="block text-sm">
             Proje
             <select
@@ -147,7 +149,11 @@ export function UploadForm({
             </select>
           </label>
         )}
-        {projectId && !image && <p className="text-xs text-[var(--accent)]">Dosya doğrudan bu projeye bağlanacak.</p>}
+        {!image && (projectId || embeddedInProject) && (
+          <p className="text-xs text-[var(--accent)]">
+            {projectId ? "Dosya doğrudan bu projeye bağlanacak." : "Proje kaydedildiğinde dosya otomatik bu projeye bağlanacak."}
+          </p>
+        )}
         {image && streamlinedPublicImage && (
           <p className="text-xs leading-6 text-[var(--muted)]">
             Kapak görseli herkese açık bir bağlantıda saklanır; proje özel olsa bile bağlantıyı bilenler görseli görebilir. Özel belge yükleme.

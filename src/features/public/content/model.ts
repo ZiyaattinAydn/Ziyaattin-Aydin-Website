@@ -1,4 +1,4 @@
-export type ProjectStatus = "Devam Ediyor" | "Tamamlandı" | "Planlandı";
+export type ProjectStatus = "Devam Ediyor" | "Duraklatıldı" | "Tamamlandı" | "Planlandı";
 
 export type PublicVisibility = "private" | "hidden" | "public";
 

@@ -235,7 +235,7 @@ export function ProjectForm({
         <section className="space-y-3 rounded-2xl border border-[var(--border)] bg-[rgba(255,255,255,0.015)] p-5" aria-label="Proje dokümanları">
           <h2 className="text-lg font-semibold">Proje dokümanları <span className="text-sm font-normal text-[var(--muted)]">(isteğe bağlı)</span></h2>
           <p className="text-xs leading-6 text-[var(--muted)]">PDF, Word, PowerPoint, metin dosyaları veya özel görseller ekleyebilirsin. Belgeler ziyaretçilere açılmaz, sadece Studio içinde tutulur.</p>
-          {!readOnly && <UploadForm projectId={mode === "edit" ? projectId : null}
+          {!readOnly && <UploadForm embeddedInProject projectId={mode === "edit" ? projectId : null}
             onBusyChange={setDocumentsBusy} onUploadedFile={recordUpload}/>}
           {stagedFiles.length > 0 && (
             <div className="space-y-1 text-xs text-[var(--accent)]">

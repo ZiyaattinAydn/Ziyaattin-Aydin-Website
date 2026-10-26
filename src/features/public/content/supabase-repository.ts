@@ -177,9 +177,8 @@ function mapProjectStatus(status: string): ProjectStatus {
     return "Tamamlandı";
   }
 
-  if (status === "active" || status === "paused") {
-    return "Devam Ediyor";
-  }
+  if (status === "paused") return "Duraklatıldı";
+  if (status === "active") return "Devam Ediyor";
 
   return "Planlandı";
 }
