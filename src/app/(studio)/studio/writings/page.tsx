@@ -33,8 +33,7 @@ function EmptyWritings() {
       <div className="rounded-2xl border border-dashed border-[var(--border)] bg-[rgba(18,217,120,0.03)] p-8">
         <h2 className="text-2xl font-semibold">Henüz yazı taslağı yok</h2>
         <p className="mt-3 max-w-2xl text-sm leading-7 text-[var(--muted)]">
-          İlk yazı taslağını oluşturun. Owner kimliği ve draft publish state
-          server-side atanır.
+          İlk yazını oluşturarak başlayabilirsin. Kaydederken özel tutabilir veya yayınlayabilirsin.
         </p>
         <Link
           href="/studio/writings/new"
@@ -54,10 +53,9 @@ export default async function StudioWritingsPage() {
     <div className="space-y-8">
       <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
         <StudioPageHeader
-          eyebrow="Studio / Writings"
-          title="Yazı yönetimi"
-          description="Development Supabase üzerindeki owner yazılarını normal cookie-backed session, current AAL2 ve RLS sınırıyla yönetin."
-          status="Sprint 08 CRUD"
+          eyebrow="Studio / Yazılar"
+          title="Yazılarım"
+          description="Yazılarını oluştur, düzenle ve görünürlüklerini yönet."
         />
         <Link
           href="/studio/writings/new"
@@ -79,7 +77,7 @@ export default async function StudioWritingsPage() {
                 Aktif kayıtlar
               </h2>
               <p className="mt-2 text-sm text-[var(--muted)]">
-                Draft, review, approved, published ve unpublished yazılar.
+                Taslaklar, özel yazılar ve yayındaki içeriklerin.
               </p>
             </div>
             <div className="grid gap-5">
@@ -103,7 +101,7 @@ export default async function StudioWritingsPage() {
                   Arşiv
                 </h2>
                 <p className="mt-2 text-sm text-[var(--muted)]">
-                  Hard delete uygulanmamış terminal kayıtlar.
+                  Kaldırılan yazılar burada saklanır.
                 </p>
               </div>
               <div className="grid gap-5">
