@@ -35,7 +35,7 @@ export default function NewStudioProjectPage() {
         <StudioPageHeader
           eyebrow="Studio / Projeler / Yeni"
           title="Yeni proje taslağı"
-          description="Proje bilgilerini gir. Yeni proje özel bir taslak olarak kaydedilir."
+          description="Proje adını ve temel bilgileri ekle; görevlerini proje oluşturduktan sonra takip et."
           status="Yeni proje"
         />
       </div>
@@ -44,7 +44,6 @@ export default function NewStudioProjectPage() {
         <ProjectForm
           mode="create"
           initialValues={INITIAL_PROJECT_VALUES}
-          slugEditable
         />
       </Panel>
     </div>
