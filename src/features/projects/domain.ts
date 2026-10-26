@@ -47,6 +47,7 @@ export type ProjectFormValues = ProjectSections & {
   title: string;
   slug: string;
   summary: string;
+  subtitle: string;
   status: ProjectStatus;
   visibility: ProjectVisibility;
   progress: number;
@@ -65,6 +66,7 @@ export type ProjectRow = {
   title: string;
   slug: string;
   summary: string;
+  subtitle: string;
   problem: string;
   approach: string;
   highlights: string[];
@@ -91,6 +93,7 @@ export type ProjectEntity = {
   title: string;
   slug: string;
   summary: string;
+  subtitle: string;
   sections: ProjectSections;
   status: ProjectStatus;
   visibility: ProjectVisibility;
@@ -179,6 +182,7 @@ export function mapProjectRow(row: ProjectRow): ProjectEntity {
     title: row.title,
     slug: row.slug,
     summary: row.summary,
+    subtitle: row.subtitle ?? "",
     sections: {
       problem: row.problem,
       approach: row.approach,

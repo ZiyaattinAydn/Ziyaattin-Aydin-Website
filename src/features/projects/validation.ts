@@ -18,6 +18,7 @@ export const PROJECT_VALIDATION_LIMITS = {
   title: 140,
   slug: 120,
   summary: 600,
+  subtitle: 160,
   sectionText: 12_000,
   listItem: 500,
   listItems: 40,
@@ -32,6 +33,7 @@ const EDITABLE_KEYS = [
   "title",
   "slug",
   "summary",
+  "subtitle",
   "problem",
   "approach",
   "highlights",
@@ -296,6 +298,11 @@ function validateField(
         maximum: PROJECT_VALIDATION_LIMITS.summary,
         nullAsEmpty: true,
       });
+    case "subtitle":
+      return readTrimmedString(value, "subtitle", errors, {
+        maximum: PROJECT_VALIDATION_LIMITS.subtitle,
+        nullAsEmpty: true,
+      });
     case "problem":
     case "approach":
       return readTrimmedString(value, key, errors, {
@@ -392,6 +399,7 @@ export function validateCreateProjectInput(
     title: "",
     slug: "",
     summary: "",
+    subtitle: "",
     problem: "",
     approach: "",
     highlights: [],

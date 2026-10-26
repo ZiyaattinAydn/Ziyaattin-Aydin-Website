@@ -59,6 +59,7 @@ export type ProjectMilestone = {
 export type ProjectSummary = {
   slug: string;
   title: string;
+  subtitle?: string;
   description: string;
   status: ProjectStatus;
   statusLabel: string;

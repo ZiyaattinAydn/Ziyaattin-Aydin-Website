@@ -13,6 +13,7 @@ function createProjectRow(overrides = {}) {
     slug: "development-public-project",
     title: "Development Public Project",
     summary: "Development Supabase public read doğrulama kaydı.",
+    subtitle: "Next.js · TypeScript · Studio",
     problem: "Public project read sınırını doğrulamak.",
     approach: "RLS ve explicit query filtrelerini birlikte kullanmak.",
     highlights: ["Published/public list doğrulaması"],
@@ -56,10 +57,12 @@ test("project list uses explicit public-safe columns and mandatory filters", asy
 
   const projects = await repository.listProjects();
   assert.equal(projects.length, 1);
+  assert.equal(projects[0].subtitle, "Next.js · TypeScript · Studio");
 
   const [request] = fixture.requests;
   assert.equal(request.table, "projects");
   assert.deepEqual(request.columns, PROJECT_LIST_COLUMNS);
+  assert.equal(request.columns.includes("subtitle"), true);
   assert.equal(request.columns.includes("owner_id"), false);
   assert.equal(request.columns.includes("created_at"), false);
   assert.equal(request.columns.includes("*"), false);

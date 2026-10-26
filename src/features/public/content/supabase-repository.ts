@@ -30,6 +30,7 @@ export const PROJECT_LIST_COLUMNS = [
   "slug",
   "title",
   "summary",
+  "subtitle",
   "status",
   "progress",
   "is_featured",
@@ -96,6 +97,7 @@ type ProjectRow = {
   slug: string;
   title: string;
   summary: string;
+  subtitle?: string;
   problem?: string;
   approach?: string;
   highlights?: string[];
@@ -223,6 +225,7 @@ function mapProjectRow(row: ProjectRow): ProjectSummary | null {
   return {
     slug: row.slug,
     title: row.title,
+    subtitle: row.subtitle?.trim() ?? "",
     description: row.summary,
     status: mapProjectStatus(row.status),
     statusLabel: projectStatusLabel(row.status),

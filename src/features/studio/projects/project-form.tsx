@@ -46,6 +46,9 @@ export function ProjectForm({
     INITIAL_PROJECT_ACTION_STATE,
   );
   const [imageValue, setImageValue] = useState(initialValues.imageUrl ?? "");
+  const [previewTitle, setPreviewTitle] = useState(initialValues.title);
+  const [previewSubtitle, setPreviewSubtitle] = useState(initialValues.subtitle);
+  const [previewSummary, setPreviewSummary] = useState(initialValues.summary);
   useUnsavedChanges(dirty && !pending);
 
 
@@ -65,18 +68,41 @@ export function ProjectForm({
           <input name="title" required maxLength={140} defaultValue={initialValues.title}
             aria-invalid={Boolean(state.fieldErrors.title?.length)}
             aria-describedby={state.fieldErrors.title?.length ? "title-error" : undefined}
-            placeholder="Örneğin: Köprüaltı Tattoo" className={inputClassName}/>
+            placeholder="Örneğin: Köprüaltı Tattoo" onChange={(event) => setPreviewTitle(event.target.value)} className={inputClassName}/>
           <FieldError id="title-error" messages={state.fieldErrors.title} />
         </label>
 
         <label className={labelClassName}>
+          Kart alt başlığı <span className="text-xs font-normal text-[var(--muted)]">(isteğe bağlı)</span>
+          <input name="subtitle" maxLength={160} defaultValue={initialValues.subtitle}
+            onChange={(event) => setPreviewSubtitle(event.target.value)}
+            aria-invalid={Boolean(state.fieldErrors.subtitle?.length)}
+            aria-describedby={state.fieldErrors.subtitle?.length ? "subtitle-error" : "subtitle-help"}
+            placeholder="Next.js · TypeScript · Kurumsal Web" className={inputClassName}/>
+          <span id="subtitle-help" className="mt-2 block text-xs font-normal text-[var(--muted)]">Proje adının altında küçük satır olarak görünür. Teknoloji ve proje türünü yazabilirsin.</span>
+          <FieldError id="subtitle-error" messages={state.fieldErrors.subtitle}/>
+        </label>
+
+        <label className={labelClassName}>
           Kısa açıklama
-          <textarea name="summary" rows={4} maxLength={600} defaultValue={initialValues.summary}
+          <textarea name="summary" rows={4} maxLength={600} defaultValue={initialValues.summary} onChange={(event) => setPreviewSummary(event.target.value)}
             aria-invalid={Boolean(state.fieldErrors.summary?.length)}
             aria-describedby={state.fieldErrors.summary?.length ? "summary-error" : undefined}
             placeholder="Bu proje ne hakkında?" className={inputClassName}/>
           <FieldError id="summary-error" messages={state.fieldErrors.summary}/>
         </label>
+
+        <section aria-label="Proje kartı önizlemesi" className="space-y-3">
+          <h2 className="text-sm font-semibold">Kart önizlemesi</h2>
+          <div className="overflow-hidden rounded-3xl border border-[var(--border)] bg-[#080a0a] px-6 py-6 text-white sm:px-7">
+            <h3 className="break-words text-2xl font-semibold tracking-tight">{previewTitle.trim() || "Proje adı"}</h3>
+            {previewSubtitle.trim() && (
+              <p className="mt-2 break-words text-sm leading-6 text-[#aaa]">{previewSubtitle.trim()}</p>
+            )}
+            <p className="mt-4 whitespace-pre-wrap break-words text-base leading-7 text-[#c3c3c3]">{previewSummary.trim() || "Projenin kısa açıklaması burada görünecek."}</p>
+          </div>
+          <p className="text-xs leading-5 text-[var(--muted)]">İçerik önizlemesi. Yayınlanan kart, site tasarımına ve kapak görseline uyum sağlar.</p>
+        </section>
 
 
         <div className="grid gap-6 xl:grid-cols-2">

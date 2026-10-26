@@ -27,6 +27,7 @@ export function ProjectCard({ project }: { project: ProjectEntity }) {
                 {project.title}
               </Link>
             </h2>
+            {project.subtitle && <p className="mt-2 text-sm leading-6 text-[var(--muted)]">{project.subtitle}</p>}
           </div>
           <StudioStatusPill
             tone={PROJECT_PUBLISH_STATE_TONES[project.publishState]}

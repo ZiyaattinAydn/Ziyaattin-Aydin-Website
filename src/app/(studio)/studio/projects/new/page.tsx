@@ -9,6 +9,7 @@ const INITIAL_PROJECT_VALUES: ProjectFormValues = {
   title: "",
   slug: "",
   summary: "",
+  subtitle: "",
   problem: "",
   approach: "",
   highlights: [],
