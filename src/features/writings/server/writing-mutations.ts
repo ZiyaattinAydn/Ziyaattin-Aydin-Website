@@ -3,6 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 import { getStudioAuthorization } from "@/lib/auth/studio-authorization";
+import { verifyPublicWriting } from "@/features/writings/server/writing-publication";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import {
   mapWritingRow,
@@ -70,18 +71,19 @@ type WritingInsertPayload = {
   category: string | null;
   tags: string[];
   reading_time: number | null;
-  status: "draft";
+  status: "draft" | "active";
   visibility: CreateWritingInput["visibility"];
-  publish_state: "draft";
+  publish_state: "draft" | "published";
   is_featured: boolean;
   cover_image_url: string | null;
-  image_approval_state: "not_required" | "pending";
+  image_approval_state: "not_required" | "pending" | "approved";
 };
 
 type WritingUpdatePayload = Partial<
   Omit<WritingInsertPayload, "owner_id" | "publish_state" | "status">
 > & {
   publish_state?: WritingPublishState;
+  status?: "draft" | "active";
 };
 
 async function withAuthorizedWritingOperation<T>(
@@ -135,6 +137,7 @@ async function readOwnedWriting(
 function createInsertPayload(
   input: CreateWritingInput,
   ownerId: string,
+  imageApproval?: "approved" | "not_required",
 ): WritingInsertPayload {
   return {
     owner_id: ownerId,
@@ -145,14 +148,12 @@ function createInsertPayload(
     category: input.category.trim() || null,
     tags: input.tags,
     reading_time: input.readingTime,
-    status: "draft",
+    status: imageApproval ? "active" : "draft",
     visibility: input.visibility,
-    publish_state: "draft",
+    publish_state: imageApproval ? "published" : "draft",
     is_featured: input.isFeatured,
     cover_image_url: input.coverImageUrl,
-    image_approval_state: input.coverImageUrl
-      ? "pending"
-      : "not_required",
+    image_approval_state: imageApproval ?? (input.coverImageUrl ? "pending" : "not_required"),
   };
 }
 
@@ -306,9 +307,14 @@ export async function createWritingDraft(
       return input;
     }
 
+    const verification = input.data.visibility === "public"
+      ? await verifyPublicWriting(context.supabase, context.ownerId, input.data)
+      : null;
+    if (verification && !verification.ok) return verification;
     const payload = createInsertPayload(
       input.data,
       context.ownerId,
+      verification?.ok ? verification.data.imageApproval : undefined,
     );
 
     const { data, error } = await context.supabase
@@ -374,6 +380,30 @@ export async function updateWriting(
       policy.data,
       current.data,
     );
+
+    const nextVisibility = policy.data.visibility ?? current.data.visibility;
+    const shouldPublish = policy.data.visibility === "public" ||
+      (current.data.publishState === "published" && nextVisibility === "public");
+
+    if (shouldPublish) {
+      const verification = await verifyPublicWriting(
+        context.supabase, context.ownerId, {
+          title: policy.data.title ?? current.data.title,
+          excerpt: policy.data.excerpt ?? current.data.excerpt,
+          content: policy.data.content ?? current.data.content,
+          coverImageUrl: policy.data.coverImageUrl !== undefined
+            ? policy.data.coverImageUrl : current.data.coverImageUrl,
+        },
+      );
+      if (!verification.ok) return verification;
+      payload.visibility = "public";
+      payload.publish_state = "published";
+      payload.status = "active";
+      payload.image_approval_state = verification.data.imageApproval;
+    } else if (policy.data.visibility === "private" &&
+      current.data.publishState === "published") {
+      payload.publish_state = "unpublished";
+    }
 
     return updateOwnedWritingRow(
       {...context, expectedVersion: current.data.updatedAt},
