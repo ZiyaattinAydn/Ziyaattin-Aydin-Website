@@ -31,7 +31,7 @@ function FieldError({ id, messages }: { id: string; messages?: string[] }) {
 }
 
 export function ProjectForm({
-  mode, initialValues, projectId, publishState, readOnly = false,
+  mode, initialValues, projectId, readOnly = false,
 }: ProjectFormProps) {
   const [dirty, setDirty] = useState(false);
   const serverAction: ProjectFormAction = mode === "create"
