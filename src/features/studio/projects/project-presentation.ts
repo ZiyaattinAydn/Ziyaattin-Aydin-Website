@@ -25,7 +25,7 @@ export const PROJECT_STATUS_LABELS: Record<ProjectStatus, string> = {
 
 export const PROJECT_VISIBILITY_LABELS: Record<ProjectVisibility, string> = {
   private: "Özel",
-  hidden: "Gizli",
+  hidden: "Özel", // Legacy values are kept readable but never offered in the editor.
   public: "Herkese açık",
 };
 
