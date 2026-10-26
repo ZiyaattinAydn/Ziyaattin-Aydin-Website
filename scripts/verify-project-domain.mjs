@@ -280,7 +280,7 @@ const unpublishPlan = transitions.prepareProjectTransition(
 );
 check(unpublishPlan.ok, "Published -> unpublished reddedildi.");
 if (unpublishPlan.ok) {
-  equal(unpublishPlan.data.visibility, "hidden");
+  equal(unpublishPlan.data.visibility, "private");
 }
 
 const archivePlan = transitions.prepareProjectTransition(
