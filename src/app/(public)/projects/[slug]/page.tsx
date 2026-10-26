@@ -57,6 +57,11 @@ export default async function ProjectDetailPage({ params }: Props) {
         <h1 className="mt-5 break-words text-4xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
           {project.title}
         </h1>
+        {project.subtitle && (
+          <p className="mt-3 break-words text-sm font-medium leading-7 text-[var(--muted)] sm:text-base">
+            {project.subtitle}
+          </p>
+        )}
         <p className="mt-6 max-w-3xl break-words text-base leading-8 text-[var(--muted)] sm:text-lg">
           {project.description}
         </p>
