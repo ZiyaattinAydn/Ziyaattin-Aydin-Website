@@ -90,10 +90,20 @@ check(
 );
 check(
   form.includes('name="title"') &&
-    form.includes('name="slug"') &&
-    form.includes('name="summary"'),
-  "Project form must expose the minimum editable fields.",
+    !form.includes('name="slug"') &&
+    form.includes('name="summary"') &&
+    form.includes('name="status"') &&
+    form.includes('name="visibility"') &&
+    form.includes('name="imageUrl"'),
+  "Project form must expose only the essential editable fields.",
 );
+check(
+  actions.includes("projectSlugFromTitle") && actions.includes('"slug_conflict"'),
+  "New project addresses must be generated and collision-safe.",
+);
+for (const oldField of ['name="problem"', 'name="approach"', 'name="highlights"', 'name="nextSteps"', 'name="progress"', 'name="isFeatured"', 'name="githubUrl"', 'name="demoUrl"']) {
+  check(!form.includes(oldField), `Project form must not show legacy field ${oldField}.`);
+}
 check(
   form.includes("publishedVisibilityLocked"),
   "Published visibility must be locked in the UI.",
