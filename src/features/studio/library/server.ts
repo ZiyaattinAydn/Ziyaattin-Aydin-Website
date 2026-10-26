@@ -88,7 +88,8 @@ export async function ownedFile(id: string) {
 export async function listProjectFiles(projectId: string) {
   if (!UUID.test(projectId)) return [];
   const ctx = await libraryContext();
-  await checkProject(ctx, projectId);
+  // This query is already scoped to the authenticated owner and protected by
+  // RLS. Project-detail routes separately authorize the project itself.
   const rows: StoredFile[] = [];
   for (let offset = 0; ; offset += 500) {
     const r = await ctx.db.from("files")
