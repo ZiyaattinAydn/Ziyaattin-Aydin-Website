@@ -18,6 +18,11 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
           {project.title}
         </Link>
       </h3>
+      {project.subtitle && (
+        <p className="mt-2 break-words text-xs font-medium leading-6 tracking-[0.01em] text-[var(--muted)]">
+          {project.subtitle}
+        </p>
+      )}
       <p className="mt-4 flex-1 break-words text-sm leading-7 text-[var(--muted)]">
         {project.description}
       </p>
