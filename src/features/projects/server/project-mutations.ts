@@ -80,9 +80,9 @@ type ProjectInsertPayload = {
   is_featured: boolean;
   github_url: string | null;
   demo_url: string | null;
-  link_approval_state: "not_required" | "pending";
+  link_approval_state: "not_required" | "pending" | "approved";
   image_url: string | null;
-  image_approval_state: "not_required" | "pending";
+  image_approval_state: "not_required" | "pending" | "approved";
 };
 
 type ProjectUpdatePayload = Partial<
