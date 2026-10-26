@@ -20,6 +20,7 @@ export async function listStudioTasks(): Promise<StudioTaskList> {
   try {
     const authorization = await getStudioAuthorization();
     if (!authorization.ok) return { ok: false };
+    const ownerId = authorization.profile.userId;
     const supabase = await createServerSupabaseClient();
     async function fetchRows<T>(table: "tasks" | "projects", columns: string): Promise<T[]> {
       const rows: T[] = [];
@@ -27,7 +28,7 @@ export async function listStudioTasks(): Promise<StudioTaskList> {
         const result = await supabase
           .from(table)
           .select(columns)
-          .eq("owner_id", authorization.profile.userId)
+          .eq("owner_id", ownerId)
           .order("id")
           .range(offset, offset + 499);
         if (result.error) throw new Error("Studio rows unavailable.");
@@ -55,6 +56,7 @@ export async function getStudioTask(id: string) {
   try {
     const authorization = await getStudioAuthorization();
     if (!authorization.ok) return { ok: false as const, reason: "unavailable" };
+    const ownerId = authorization.profile.userId;
     const db = await createServerSupabaseClient();
     // A single task detail should not require downloading the whole task list.
     // Check ownership in both queries, and keep project picker pagination.
@@ -63,7 +65,7 @@ export async function getStudioTask(id: string) {
       for (let offset = 0; ; offset += 500) {
         const response = await db.from("projects")
           .select("id,title,status,publish_state,created_at,updated_at")
-          .eq("owner_id", authorization.profile.userId)
+          .eq("owner_id", ownerId)
           .order("id")
           .range(offset, offset + 499);
         if (response.error) throw new Error("Projects unavailable");
@@ -76,7 +78,7 @@ export async function getStudioTask(id: string) {
       db.from("tasks")
         .select(TASK_COLUMNS)
         .eq("id", id)
-        .eq("owner_id", authorization.profile.userId)
+        .eq("owner_id", ownerId)
         .maybeSingle(),
       fetchProjects(),
     ]);
