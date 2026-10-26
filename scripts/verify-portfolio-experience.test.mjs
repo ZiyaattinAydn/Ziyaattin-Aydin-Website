@@ -111,7 +111,7 @@ function loadShortcut(authorized) {
       esModuleInterop: true,
     },
   }).outputText;
-  const module = { exports: {} };
+  const sandboxModule = { exports: {} };
   const requireStub = (name) => {
     if (name === "next/link") return { __esModule: true, default: ({ children, ...props }) => React.createElement("a", props, children) };
     if (name === "@/lib/auth/studio-authorization") return {
@@ -126,8 +126,8 @@ function loadShortcut(authorized) {
     };
     throw new Error("Unexpected shortcut dependency: " + name);
   };
-  vm.runInThisContext("(function(require,module,exports){" + js + "\n})")(requireStub, module, module.exports);
-  return module.exports.StudioReturnShortcut;
+  vm.runInThisContext("(function(require,module,exports){" + js + "\n})")(requireStub, sandboxModule, sandboxModule.exports);
+  return sandboxModule.exports.StudioReturnShortcut;
 }
 
 test("public Studio shortcut requires full server-side Studio authorization and stays hidden otherwise", async () => {
