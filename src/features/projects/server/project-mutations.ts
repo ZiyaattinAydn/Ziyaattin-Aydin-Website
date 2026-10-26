@@ -39,6 +39,7 @@ const PROJECT_SELECT = [
   "title",
   "slug",
   "summary",
+  "subtitle",
   "problem",
   "approach",
   "highlights",
@@ -69,6 +70,7 @@ type ProjectInsertPayload = {
   title: string;
   slug: string;
   summary: string;
+  subtitle: string;
   problem: string;
   approach: string;
   highlights: string[];
@@ -152,6 +154,7 @@ function createInsertPayload(
     title: input.title,
     slug: input.slug,
     summary: input.summary,
+    subtitle: input.subtitle,
     problem: input.problem,
     approach: input.approach,
     highlights: input.highlights,
@@ -178,6 +181,7 @@ function createUpdatePayload(
   if (input.title !== undefined) payload.title = input.title;
   if (input.slug !== undefined) payload.slug = input.slug;
   if (input.summary !== undefined) payload.summary = input.summary;
+  if (input.subtitle !== undefined) payload.subtitle = input.subtitle;
   if (input.problem !== undefined) payload.problem = input.problem;
   if (input.approach !== undefined) payload.approach = input.approach;
   if (input.highlights !== undefined) payload.highlights = input.highlights;
