@@ -76,8 +76,8 @@ export function validateWritingUpdatePolicy(
   const nextTitle = update.title ?? current.title;
   const nextExcerpt = update.excerpt ?? current.excerpt;
   const nextContent = update.content ?? current.content;
-  const nextVisibility = update.visibility ?? current.visibility;
-  if (current.publishState === "published" && !nextContent.trim()) {
+
+  if ((current.publishState === "published" && update.visibility !== "private") && !nextContent.trim()) {
     return writingFailure("validation_failed", "Yayındaki yazının içeriği boş bırakılamaz.", {content:["İçerik zorunlu."]});
   }
 
@@ -92,7 +92,7 @@ export function validateWritingUpdatePolicy(
   }
 
   if (
-    current.publishState === "published" &&
+    current.publishState === "published" && update.visibility !== "private" &&
     !nextExcerpt.trim()
   ) {
     return writingFailure(
@@ -100,21 +100,6 @@ export function validateWritingUpdatePolicy(
       "Yayınlanan yazı özetsiz bırakılamaz.",
       {
         excerpt: ["Published yazı için özet zorunludur."],
-      },
-    );
-  }
-
-  if (
-    current.publishState === "published" &&
-    nextVisibility !== "public"
-  ) {
-    return writingFailure(
-      "invalid_transition",
-      "Published yazı public görünürlükte kalmalıdır; önce unpublish yapılmalıdır.",
-      {
-        visibility: [
-          "Published durumdayken görünürlük private veya hidden yapılamaz.",
-        ],
       },
     );
   }
