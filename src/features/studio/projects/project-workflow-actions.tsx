@@ -1,18 +1,12 @@
 "use client";
 
 import { useActionState } from "react";
-
 import type { ProjectPublishState } from "@/features/projects/domain";
-import {
-  archiveProjectAction,
-  transitionProjectAction,
-  updateProjectFeaturedAction,
-} from "@/features/studio/projects/actions";
+import { archiveProjectAction } from "@/features/studio/projects/actions";
 import {
   INITIAL_PROJECT_ACTION_STATE,
   type ProjectActionState,
 } from "@/features/studio/projects/action-state";
-import { PROJECT_PUBLISH_STATE_LABELS } from "@/features/studio/projects/project-presentation";
 import { ProjectSubmitButton } from "@/features/studio/projects/project-submit-button";
 
 type BoundProjectAction = (
@@ -20,175 +14,43 @@ type BoundProjectAction = (
   formData: FormData,
 ) => Promise<ProjectActionState>;
 
-function WorkflowMessage({ state }: { state: ProjectActionState }) {
-  if (state.status === "idle" || !state.message) {
-    return null;
-  }
-
-  return (
-    <p
-      role={state.status === "error" ? "alert" : "status"}
-      className={
-        state.status === "error"
-          ? "text-sm text-[#f0c46b]"
-          : "text-sm text-[var(--accent)]"
-      }
-    >
-      {state.message}
-    </p>
-  );
-}
-
-function TransitionForm({
-  projectId,
-  targetState,
-}: {
-  projectId: string;
-  targetState: ProjectPublishState;
-}) {
-  const action: BoundProjectAction = transitionProjectAction.bind(
-    null,
-    projectId,
-  );
-  const [state, formAction] = useActionState(
-    action,
-    INITIAL_PROJECT_ACTION_STATE,
-  );
-
-  return (
-    <form action={formAction} className="space-y-2">
-      <input type="hidden" name="targetState" value={targetState} />
-      <ProjectSubmitButton
-        pendingLabel="Durum güncelleniyor..."
-        className="w-full"
-      >
-        {PROJECT_PUBLISH_STATE_LABELS[targetState]} durumuna geçir
-      </ProjectSubmitButton>
-      <WorkflowMessage state={state} />
-    </form>
-  );
-}
-
-function ArchiveForm({ projectId }: { projectId: string }) {
-  const action: BoundProjectAction = archiveProjectAction.bind(null, projectId);
-  const [state, formAction] = useActionState(
-    action,
-    INITIAL_PROJECT_ACTION_STATE,
-  );
-
-  return (
-    <form
-      action={formAction}
-      className="space-y-4 rounded-2xl border border-[#8a6b2a] bg-[rgba(245,158,11,0.05)] p-5"
-    >
-      <div>
-        <h3 className="font-semibold text-[#f0c46b]">Projeyi arşivle</h3>
-        <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          Proje ve bağlı görevler silinmez. Arşivdeki proje düzenlenemez.
-        </p>
-      </div>
-
-      <label className="flex items-start gap-3 text-sm">
-        <input
-          type="checkbox"
-          required
-          name="archiveConfirmation"
-          value="archive"
-          className="mt-1 h-4 w-4 accent-[#f0c46b]"
-        />
-        <span>Bu projeyi arşivlemek istiyorum.</span>
-      </label>
-
-      <ProjectSubmitButton
-        pendingLabel="Arşivleniyor..."
-        className="w-full border-[#8a6b2a] bg-[rgba(245,158,11,0.08)] text-[#f0c46b] hover:bg-[rgba(245,158,11,0.14)]"
-      >
-        Projeyi arşivle
-      </ProjectSubmitButton>
-
-      <WorkflowMessage state={state} />
-    </form>
-  );
-}
-
-function FeaturedForm({ projectId, isFeatured }: { projectId: string; isFeatured: boolean }) {
-  const action: BoundProjectAction = updateProjectFeaturedAction.bind(null, projectId);
-  const [state, formAction] = useActionState(action, INITIAL_PROJECT_ACTION_STATE);
-  return (
-    <form action={formAction} className="space-y-3 rounded-xl border border-[var(--border)] p-4">
-      <label className="flex items-start gap-3 text-sm">
-        <input name="isFeatured" type="checkbox" defaultChecked={isFeatured}
-          className="mt-1 h-4 w-4 accent-[var(--accent)]"/>
-        <span>
-          <strong className="block">Portföyde öne çıkar</strong>
-          <span className="mt-1 block text-xs text-[var(--muted)]">
-            Yalnız yayınlanmış projelerde öne çıkarma için kullanılır; projeyi tek başına yayınlamaz.
-          </span>
-        </span>
-      </label>
-      <ProjectSubmitButton pendingLabel="Kaydediliyor..." className="w-full">
-        Öne çıkarma tercihini kaydet
-      </ProjectSubmitButton>
-      <WorkflowMessage state={state}/>
-    </form>
-  );
-}
-
-type ProjectWorkflowActionsProps = {
-  projectId: string;
-  publishState: ProjectPublishState;
-  isFeatured: boolean;
-  allowedTransitions: readonly ProjectPublishState[];
-};
-
 export function ProjectWorkflowActions({
   projectId,
   publishState,
-  isFeatured,
-  allowedTransitions,
-}: ProjectWorkflowActionsProps) {
+}: {
+  projectId: string;
+  publishState: ProjectPublishState;
+}) {
+  const action: BoundProjectAction = archiveProjectAction.bind(null, projectId);
+  const [state, formAction] = useActionState(action, INITIAL_PROJECT_ACTION_STATE);
+
   if (publishState === "archived") {
     return (
-      <section className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
-        <h2 className="text-lg font-semibold">Yayın işlemleri</h2>
-        <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-          Bu proje arşivlendi. Kayıt ve ilişkili görevler korundu.
-        </p>
+      <section className="rounded-2xl border border-[var(--border)] p-5 text-sm text-[var(--muted)]">
+        Bu proje arşivlendi. Görevleri ve proje kaydı korundu.
       </section>
     );
   }
 
-  const workflowTransitions = allowedTransitions.filter(
-    (targetState) => targetState !== "archived",
-  );
-
   return (
-    <section className="space-y-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
+    <form action={formAction} className="space-y-4 rounded-2xl border border-[#8a6b2a] bg-[rgba(245,158,11,0.05)] p-5">
       <div>
-        <h2 className="text-lg font-semibold">Yayın işlemleri</h2>
+        <h2 className="text-lg font-semibold text-[#f0c46b]">Projeyi arşivle</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          Projenin yayın durumunu buradan yönetebilirsin.
+          Arşivlenen proje ve bağlı görevler silinmez; proje düzenlenemez.
+          Bu işlem, portföy görünürlüğünden ayrıdır.
         </p>
       </div>
-
-      {workflowTransitions.length > 0 ? (
-        <div className="grid gap-3">
-          {workflowTransitions.map((targetState) => (
-            <TransitionForm
-              key={targetState}
-              projectId={projectId}
-              targetState={targetState}
-            />
-          ))}
-        </div>
-      ) : (
-        <p className="text-sm text-[var(--muted)]">
-          Kullanılabilir normal durum geçişi yok.
-        </p>
-      )}
-
-      <FeaturedForm projectId={projectId} isFeatured={isFeatured} />
-      <ArchiveForm projectId={projectId} />
-    </section>
+      <label className="flex items-start gap-3 text-sm">
+        <input type="checkbox" required name="archiveConfirmation" value="archive"
+          className="mt-1 h-4 w-4 accent-[#f0c46b]"/>
+        <span>Bu projeyi arşivlemek istiyorum.</span>
+      </label>
+      <ProjectSubmitButton pendingLabel="Arşivleniyor..." className="w-full border-[#8a6b2a] bg-[rgba(245,158,11,0.08)] text-[#f0c46b]">
+        Projeyi arşivle
+      </ProjectSubmitButton>
+      {state.message ? <p role={state.status === "error" ? "alert" : "status"}
+        className="text-sm text-[#f0c46b]">{state.message}</p> : null}
+    </form>
   );
 }
