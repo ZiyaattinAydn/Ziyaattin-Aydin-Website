@@ -34,8 +34,8 @@ export default function NewStudioProjectPage() {
         </Link>
         <StudioPageHeader
           eyebrow="Studio / Projeler / Yeni"
-          title="Yeni proje taslağı"
-          description="Proje adını ve temel bilgileri ekle; görevlerini proje oluşturduktan sonra takip et."
+          title="Yeni proje"
+          description="Proje bilgilerini ekle. Herkese açık seçersen kaydettiğinde portföyünde yayınlanır."
           status="Yeni proje"
         />
       </div>
