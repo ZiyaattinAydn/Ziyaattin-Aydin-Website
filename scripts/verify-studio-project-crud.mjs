@@ -132,6 +132,24 @@ check(
     !workflow.includes("approvePublicationMedia"),
   "Archive must remain available but publication stages must be removed.",
 );
+check(
+  form.includes('name="subtitle"') &&
+    form.includes("Kart önizlemesi") &&
+    form.includes("setPreviewSubtitle") &&
+    actions.includes('readText(formData, "subtitle"') &&
+    newPage.includes('subtitle: ""') &&
+    editPage.includes("subtitle: project.subtitle"),
+  "New and existing project editors must preserve and preview the optional subtitle.",
+);
+const publicCard = read("src/components/public/project-card.tsx");
+const publicDetail = read("src/app/(public)/projects/[slug]/page.tsx");
+const publicRepository = read("src/features/public/content/supabase-repository.ts");
+check(
+  publicCard.includes("project.subtitle") &&
+    publicDetail.includes("project.subtitle") &&
+    publicRepository.includes('"subtitle"'),
+  "Public project lists and details must read and display subtitle.",
+);
 const taskDetail = read("src/app/(studio)/studio/tasks/[taskId]/page.tsx");
 check(
   taskDetail.includes("+ Yeni görev ekle") &&
