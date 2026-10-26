@@ -93,6 +93,11 @@ export default async function FilesPage({
             <h2 className="break-words text-lg font-semibold">
               {file.original_name}
             </h2>
+            <p className="text-xs text-[var(--accent)]">
+              {file.project_id
+                ? `Bağlı proje: ${r.projects.find((p) => p.id === file.project_id)?.title ?? "Proje"}`
+                : "Bağımsız dosya"}
+            </p>
             <p className="break-words text-xs leading-6 text-[var(--muted)]">
               {file.mime_type} ·{" "}
               {(Number(file.size_bytes) / 1024 / 1024).toLocaleString("tr-TR", {

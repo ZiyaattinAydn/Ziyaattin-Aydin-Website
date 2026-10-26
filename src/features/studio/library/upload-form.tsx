@@ -16,8 +16,14 @@ export function UploadForm({
   image = false,
   streamlinedPublicImage = false,
   onUploaded,
+  onUploadedFile,
+  projectId = null,
+  onBusyChange,
 }: {
   projects?: LibraryProject[];
+  projectId?: string | null;
+  onUploadedFile?: (id: string, name: string) => void;
+  onBusyChange?: (busy: boolean) => void;
   image?: boolean;
   streamlinedPublicImage?: boolean;
   onUploaded?: (url: string) => void;
@@ -30,6 +36,7 @@ export function UploadForm({
   useUnsavedChanges(busy);
   async function upload(form: FormData) {
     setBusy(true);
+    onBusyChange?.(true);
     setMessage("");
     try {
       const file = ref.current?.files?.[0];
@@ -47,7 +54,7 @@ export function UploadForm({
         name: file.name,
         type,
         size: file.size,
-        projectId: String(form.get("projectId") ?? "") || null,
+        projectId: projectId || String(form.get("projectId") ?? "") || null,
         image,
         publicConsent: image && streamlinedPublicImage ? true : form.get("publicConsent") === "yes",
       });
@@ -70,6 +77,7 @@ export function UploadForm({
       if (!done.ok) throw new Error(done.message);
       setRetry(null);
       if (done.url) onUploaded?.(done.url);
+      onUploadedFile?.(ready.id, file.name);
       setMessage(
         image
           ? "Görsel yüklendi. Kayda bağlamak için formu kaydet."
@@ -81,21 +89,25 @@ export function UploadForm({
       setMessage(e instanceof Error ? e.message : "Yükleme tamamlanamadı.");
     } finally {
       setBusy(false);
+      onBusyChange?.(false);
     }
   }
   async function resume() {
     if (!retry) return;
     setBusy(true);
+    onBusyChange?.(true);
     try {
       const r = await finishUpload(retry);
       setMessage(r.ok ? "Yükleme tamamlandı." : r.message);
       if (r.ok) {
         setRetry(null);
         if (r.url) onUploaded?.(r.url);
+        onUploadedFile?.(retry, ref.current?.files?.[0]?.name ?? "Yüklenen dosya");
         router.refresh();
       }
     } finally {
       setBusy(false);
+      onBusyChange?.(false);
     }
   }
   return (
@@ -116,7 +128,7 @@ export function UploadForm({
             ? "JPEG, PNG, WebP veya AVIF · En fazla 10 MB"
             : "PDF, Word, PowerPoint, metin, Markdown veya görsel · En fazla 25 MB. Dosyalar yalnız sana görünür."}
         </p>
-        {!image && (
+        {!image && !projectId && (
           <label className="block text-sm">
             Proje
             <select
@@ -135,6 +147,7 @@ export function UploadForm({
             </select>
           </label>
         )}
+        {projectId && !image && <p className="text-xs text-[var(--accent)]">Dosya doğrudan bu projeye bağlanacak.</p>}
         {image && streamlinedPublicImage && (
           <p className="text-xs leading-6 text-[var(--muted)]">
             Kapak görseli herkese açık bir bağlantıda saklanır; proje özel olsa bile bağlantıyı bilenler görseli görebilir. Özel belge yükleme.

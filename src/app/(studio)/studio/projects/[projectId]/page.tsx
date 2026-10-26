@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getOwnerProject } from "@/features/projects/server/project-mutations";
 import { listStudioTasks } from "@/features/studio/tasks/task-store";
+import { listProjectFiles } from "@/features/studio/library/server";
 import { taskProgress, displayDate } from "@/features/studio/tasks/task-domain";
 import { TaskCard } from "@/features/studio/tasks/task-card";
 import {
@@ -10,13 +11,17 @@ import {
 } from "@/features/studio/projects/project-presentation";
 export default async function ProjectDetail({
   params,
+  searchParams,
 }: {
   params: Promise<{ projectId: string }>;
+  searchParams?: Promise<{ attachments?: string }>;
 }) {
   const { projectId } = await params;
-  const [result, work] = await Promise.all([
+  const [result, work, files, query] = await Promise.all([
     getOwnerProject(projectId),
     listStudioTasks(),
+    listProjectFiles(projectId).catch(() => null),
+    searchParams ?? Promise.resolve({ attachments: "" }),
   ]);
   if (!result.ok) {
     if (
@@ -42,6 +47,11 @@ export default async function ProjectDetail({
       <Link href="/studio/projects" className="text-sm text-[var(--muted)]">
         ← Projelere dön
       </Link>
+      {query.attachments === "unlinked" && (
+        <p role="alert" className="rounded-xl border border-amber-700 p-4 text-sm text-amber-200">
+          Proje oluşturuldu fakat bir veya daha fazla dosya otomatik bağlanamadı. Dosyalar bölümünden proje bağlantısını kontrol et.
+        </p>
+      )}
       <div className="flex flex-wrap items-center justify-between gap-4">
         <h1 className="min-w-0 break-words text-3xl font-semibold">
           {p.title}
@@ -147,6 +157,32 @@ export default async function ProjectDetail({
           </div>
         </section>
       )}
+      <section className="space-y-4 rounded-2xl border border-[var(--border)] p-5" aria-label="Projeye bağlı dosyalar">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-xl font-semibold">Dokümanlar ve görseller</h2>
+          <Link href={`/studio/projects/${p.id}/edit`} className="text-sm text-[var(--accent)]">Dosya ekle →</Link>
+        </div>
+        {files === null ? (
+          <p role="alert" className="text-sm text-amber-200">Proje dosyaları görüntülenemiyor.</p>
+        ) : files.length === 0 ? (
+          <p className="text-sm text-[var(--muted)]">Bu projeye henüz dosya eklenmedi.</p>
+        ) : (
+          <ul className="grid gap-3 sm:grid-cols-2">
+            {files.map((file) => (
+              <li key={file.id} className="min-w-0 space-y-2 rounded-xl border border-[var(--border)] p-4">
+                <p className="break-all text-sm font-medium">{file.original_name}</p>
+                <p className="text-xs text-[var(--muted)]">{file.storage_bucket === "public-assets" ? "Herkese açık görsel" : "Özel dosya"}</p>
+                {file.upload_status === "uploaded" && (
+                  <a href={`/studio/files/${file.id}/content?download=1`}
+                    className="inline-block text-sm text-[var(--accent)]">İndir ↗</a>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+        <Link href={`/studio/files?project=${encodeURIComponent(p.id)}`}
+          className="inline-block text-sm text-[var(--accent)]">Tüm proje dosyalarını yönet →</Link>
+      </section>
       {!archived && (
         <Link
           href={"/studio/tasks/new?project=" + p.id}

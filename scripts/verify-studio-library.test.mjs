@@ -49,6 +49,56 @@ function form(values = {}) {
     f.set(k, v);
   return f;
 }
+test("project attachment linking validates ownership, completed uploads and prevents cross-project reassignment", async () => {
+  const attachedFileId = "40000000-0000-4000-8000-000000000055";
+  const targetProject = "40000000-0000-4000-8000-000000000088";
+  const calls = [];
+  let response = { data: [{ id: attachedFileId }], error: null };
+  const builder = new Proxy({}, {
+    get(_target, name) {
+      if (name === "then") return (resolve) => resolve(response);
+      return (...args) => { calls.push([name, ...args]); return builder; };
+    },
+  });
+  const linking = load("src/features/projects/server/project-upload-linking.ts", {
+    "@/features/studio/library/server": {
+      libraryContext: async () => ({
+        owner,
+        db: { from: (table) => { calls.push(["from", table]); return builder; } },
+      }),
+    },
+  });
+  const checked = await linking.validateStagedProjectUploads([attachedFileId]);
+  assert.equal(checked.ok, true);
+  assert.deepEqual(checked.ids, [attachedFileId]);
+  assert.ok(calls.some((c) => c[0] === "eq" && c[1] === "owner_id" && c[2] === owner));
+  assert.ok(calls.some((c) => c[0] === "eq" && c[1] === "upload_status" && c[2] === "uploaded"));
+  assert.ok(calls.some((c) => c[0] === "is" && c[1] === "project_id" && c[2] === null));
+  assert.equal((await linking.validateStagedProjectUploads(["forged"])).ok, false);
+  assert.equal((await linking.validateStagedProjectUploads([attachedFileId, attachedFileId])).ok, false);
+  assert.equal((await linking.validateStagedProjectUploads(Array(21).fill(attachedFileId))).ok, false);
+
+  assert.equal(await linking.attachStagedProjectUploads([attachedFileId], targetProject), true);
+  assert.ok(calls.some((c) => c[0] === "update" && c[1].project_id === targetProject));
+  assert.ok(calls.some((c) => c[0] === "is" && c[1] === "project_id" && c[2] === null));
+  response = { data: [], error: null };
+  assert.equal((await linking.validateStagedProjectUploads([attachedFileId])).ok, false);
+  assert.equal(await linking.attachStagedProjectUploads([attachedFileId], targetProject), false);
+});
+test("project form keeps both optional uploaders and forbids saving during upload", () => {
+  const formSource = fs.readFileSync("src/features/studio/projects/project-form.tsx", "utf8");
+  const uploadSource = fs.readFileSync("src/features/studio/library/upload-form.tsx", "utf8");
+  const actionsSource = fs.readFileSync("src/features/studio/projects/actions.ts", "utf8");
+  const detailSource = fs.readFileSync("src/app/(studio)/studio/projects/[projectId]/page.tsx", "utf8");
+  assert.ok(formSource.includes("Proje dokümanları"));
+  assert.ok(formSource.includes("Kapak görseli"));
+  assert.ok(formSource.includes('name="uploadedFileId"'));
+  assert.ok(formSource.includes('disabled={uploadsBusy}'));
+  assert.ok(uploadSource.includes("projectId: projectId ||"));
+  assert.ok(actionsSource.includes("validateStagedProjectUploads"));
+  assert.ok(actionsSource.includes("attachStagedProjectUploads"));
+  assert.ok(detailSource.includes("listProjectFiles"));
+});
 test("notes validate bounds, sanitize tags, and reject forged project IDs", () => {
   const n = d.parseNote(form({ tags: "a, b, a", category: "  Fikir  " }));
   assert.deepEqual(n.tags, ["a", "b"]);
