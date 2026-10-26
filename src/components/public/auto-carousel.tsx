@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode, type TransitionEvent } from "react";
 import styles from "./auto-carousel.module.css";
 
 type CarouselProps = {
@@ -13,14 +13,12 @@ type CarouselProps = {
 /** Infinite, accessible carousel; manual navigation suspends autoplay for 10 seconds. */
 export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible = 2 }: CarouselProps) {
   const count = items.length;
-  const clones = Math.min(3, count);
+  const clones = count < 2 ? 0 : Math.min(3, count);
   const [position, setPosition] = useState(clones);
   const [animated, setAnimated] = useState(true);
   const [motionAllowed, setMotionAllowed] = useState(false);
   const pausedUntil = useRef(0);
   const lastAdvance = useRef(Date.now());
-  const hovered = useRef(false);
-  const focused = useRef(false);
   const locked = useRef(false);
   const touchStart = useRef<number | null>(null);
   const visiblePosition = count ? ((position - clones) % count + count) % count : 0;
@@ -38,8 +36,8 @@ export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible =
     const timer = window.setInterval(() => {
       const now = Date.now();
       if (
-        now < pausedUntil.current || hovered.current || focused.current ||
-        document.hidden || locked.current || now - lastAdvance.current < 6000
+        now < pausedUntil.current || document.hidden || locked.current ||
+        now - lastAdvance.current < 6000
       ) return;
       locked.current = true;
       lastAdvance.current = now;
@@ -52,12 +50,16 @@ export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible =
     if (count < 2 || locked.current) return;
     pausedUntil.current = Date.now() + 10000;
     lastAdvance.current = Date.now();
+    if (!motionAllowed) {
+      setPosition((current) => ((current - clones + delta + count) % count) + clones);
+      return;
+    }
     locked.current = true;
     setAnimated(true);
     setPosition((current) => current + delta);
   }
 
-  function onTransitionEnd(event: React.TransitionEvent<HTMLDivElement>) {
+  function onTransitionEnd(event: TransitionEvent<HTMLDivElement>) {
     if (event.target !== event.currentTarget || event.propertyName !== "transform") return;
     locked.current = false;
     if (position >= clones + count || position < clones) {
@@ -80,12 +82,6 @@ export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible =
   return (
     <section className={styles.carousel} aria-label={label} role="region" aria-roledescription="kaydırmalı galeri"
       style={vars}
-      onMouseEnter={() => { hovered.current = true; }}
-      onMouseLeave={() => { hovered.current = false; }}
-      onFocusCapture={() => { focused.current = true; }}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node)) focused.current = false;
-      }}
     >
       <div className={styles.viewport}
         onTouchStart={(event) => { touchStart.current = event.touches[0]?.clientX ?? null; }}
