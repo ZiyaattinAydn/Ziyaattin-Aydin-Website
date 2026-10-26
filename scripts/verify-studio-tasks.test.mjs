@@ -234,6 +234,39 @@ function actions({
   };
   return { api: load("src/features/studio/tasks/actions.ts", modules), calls };
 }
+test("task editor omits calendar fields without dropping historical records", () => {
+  const source = fs.readFileSync("src/features/studio/tasks/task-form.tsx", "utf8");
+  assert.equal(source.includes('name="startsAt"'), false);
+  assert.equal(source.includes('name="dueAt"'), false);
+  assert.equal(source.includes('name="title"'), true);
+  assert.equal(source.includes('name="status"'), true);
+  assert.equal(source.includes('name="projectId"'), true);
+});
+
+test("updating without date fields preserves recorded dates; creation uses none", async () => {
+  const id = "30000000-0000-4000-8000-000000000001";
+  const originalStarts = "2026-09-15T00:00:00.000Z";
+  const originalDue = "2026-11-15T20:59:59.999Z";
+  const { api, calls } = actions({
+    response: { data: { id, starts_at: originalStarts, due_at: originalDue }, error: null },
+  });
+  const f = form({ version: "2026-10-25T10:00:00Z" });
+  f.delete("startsAt");
+  f.delete("dueAt");
+  await assert.rejects(api.updateTaskAction(id, {}, f), /REDIRECT.*notice=updated/);
+  const update = calls.find((c) => c[0] === "update")[1];
+  assert.equal(update.starts_at, originalStarts);
+  assert.equal(update.due_at, originalDue);
+  assert.ok(calls.some((c) => c[0] === "select" && c[1] === "starts_at,due_at"));
+
+  const created = actions();
+  const newForm = form({ startsAt: "2026-01-01", dueAt: "2026-12-31" });
+  await assert.rejects(created.api.createTaskAction({}, newForm), /REDIRECT.*notice=created/);
+  const inserted = created.calls.find((c) => c[0] === "insert")[1];
+  assert.equal(inserted.starts_at, null);
+  assert.equal(inserted.due_at, null);
+});
+
 test("all task writes fail closed without owner + MFA authorization", async () => {
   const { api, calls } = actions({ authorized: false }),
     id = "30000000-0000-4000-8000-000000000001";
