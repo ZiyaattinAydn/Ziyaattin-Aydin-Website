@@ -120,7 +120,10 @@ function loadShortcut(authorized) {
         return { ok: authorized };
       },
     };
-    if (name === "react/jsx-runtime") return require("react/jsx-runtime");
+    if (name === "react/jsx-runtime") return {
+      jsx: (type, props) => React.createElement(type, props),
+      jsxs: (type, props) => React.createElement(type, props),
+    };
     throw new Error("Unexpected shortcut dependency: " + name);
   };
   vm.runInThisContext("(function(require,module,exports){" + js + "\\n})")(requireStub, module, module.exports);
