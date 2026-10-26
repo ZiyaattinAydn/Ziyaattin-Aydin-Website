@@ -26,9 +26,19 @@ export default async function TaskDetail({
   const { task, projects } = result;
   return (
     <div className="mx-auto max-w-3xl space-y-6">
-      <Link href="/studio/tasks" className="text-sm text-[var(--muted)]">
-        ← Görevlere dön
-      </Link>
+      <nav className="flex flex-wrap items-center justify-between gap-3" aria-label="Görev işlemleri">
+        <Link href="/studio/tasks" className="text-sm text-[var(--muted)]">
+          ← Görevlere dön
+        </Link>
+        <Link
+          href={task.project_id && projects.some((p) =>
+            p.id === task.project_id && p.status !== "archived" && p.publish_state !== "archived"
+          ) ? "/studio/tasks/new?project=" + encodeURIComponent(task.project_id) : "/studio/tasks/new"}
+          className="inline-flex items-center gap-2 rounded-xl border border-[var(--accent-dim)] px-4 py-3 text-sm font-semibold text-[var(--accent)]"
+        >
+          + Yeni görev ekle
+        </Link>
+      </nav>
       <h1 className="break-words text-3xl font-semibold">{task.title}</h1>
       {["created", "updated"].includes(search.notice ?? "") && (
         <p role="status" className="text-[var(--accent)]">
