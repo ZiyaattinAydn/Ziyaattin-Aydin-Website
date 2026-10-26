@@ -126,7 +126,7 @@ function loadShortcut(authorized) {
     };
     throw new Error("Unexpected shortcut dependency: " + name);
   };
-  vm.runInThisContext("(function(require,module,exports){" + js + "\\n})")(requireStub, module, module.exports);
+  vm.runInThisContext("(function(require,module,exports){" + js + "\n})")(requireStub, module, module.exports);
   return module.exports.StudioReturnShortcut;
 }
 
