@@ -1,0 +1,48 @@
+.carousel {
+  --visible: 1;
+  --gap: 1.25rem;
+  min-width: 0;
+}
+.viewport {
+  overflow: hidden;
+  min-width: 0;
+  border-radius: 1rem;
+  touch-action: pan-y;
+}
+.track {
+  display: flex;
+  gap: var(--gap);
+  align-items: stretch;
+  width: 100%;
+  transform: translate3d(calc(-1 * var(--position) * ((100% - (var(--visible) - 1) * var(--gap)) / var(--visible) + var(--gap))), 0, 0);
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(.2,.7,.2,1);
+}
+.slide {
+  display: flex;
+  min-width: 0;
+  flex: 0 0 calc((100% - (var(--visible) - 1) * var(--gap)) / var(--visible));
+}
+.slide > * { width: 100%; }
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+.arrow {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--border);
+  border-radius: .75rem;
+  font-size: 1.2rem;
+  color: var(--accent);
+  background: var(--surface);
+  transition: border-color .2s;
+}
+.arrow:hover { border-color: var(--accent-dim); }
+.arrow:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+@media (min-width: 768px) { .carousel { --visible: var(--tablet-visible); } }
+@media (min-width: 1280px) { .carousel { --visible: var(--desktop-visible); } }
+@media (prefers-reduced-motion: reduce) { .track { transition-duration: 0ms !important; } }
