@@ -64,8 +64,9 @@ check(
   "Studio edit page must use the owner project read boundary.",
 );
 check(
-  editPage.includes("getAllowedProjectTransitions"),
-  "Edit page must derive transitions from the Core contract.",
+  !editPage.includes("getAllowedProjectTransitions") &&
+    !editPage.includes("PublicationReview"),
+  "Project editing must not expose manual review or publish-state controls.",
 );
 check(
   !editPage.includes("canChangeProjectSlug") && !form.includes('name="slug"'),
@@ -109,7 +110,7 @@ for (const restoredField of [
   const formDataKey = restoredField.slice(6, -1);
   check(actions.includes(`"${formDataKey}"`), `Server action must save: ${formDataKey}`);
 }
-for (const removedField of ['name="nextSteps"', 'name="isFeatured"']) {
+for (const removedField of ['name="nextSteps"']) {
   check(!form.includes(removedField), `Only agreed fields should be removed: ${removedField}`);
 }
 const detailPage = read("src/app/(studio)/studio/projects/[projectId]/page.tsx");
@@ -120,8 +121,35 @@ for (const key of ["p.sections.problem", "p.sections.approach", "p.sections.high
 check(card.includes("project.progress"), "Project list must keep manual progress.");
 check(!detailPage.includes("p.sections.nextSteps"), "Next steps must come from tasks.");
 check(
-  form.includes("publishedVisibilityLocked"),
-  "Published visibility must be locked in the UI.",
+  !form.includes("publishedVisibilityLocked") &&
+    form.includes('name="isFeatured"') &&
+    actions.includes('formData.get("isFeatured")'),
+  "Visible project form must allow privacy toggles and save featured preference.",
+);
+check(
+  workflow.includes("archiveProjectAction") &&
+    !workflow.includes("transitionProjectAction") &&
+    !workflow.includes("approvePublicationMedia"),
+  "Archive must remain available but publication stages must be removed.",
+);
+const taskDetail = read("src/app/(studio)/studio/tasks/[taskId]/page.tsx");
+check(
+  taskDetail.includes("+ Yeni görev ekle") &&
+    taskDetail.includes('"/studio/tasks/new?project="') &&
+    taskDetail.includes("encodeURIComponent(task.project_id)"),
+  "Task details must offer a project-prefilled next task shortcut.",
+);
+const projectMutations = read("src/features/projects/server/project-mutations.ts");
+check(
+  projectMutations.includes("verifyPublicProjectAssets") &&
+    projectMutations.includes('payload.publish_state = "published"') &&
+    projectMutations.includes('payload.publish_state = "unpublished"'),
+  "Project publication must happen atomically on public/private save.",
+);
+check(
+  !editPage.includes("PublicationReview") &&
+    !editPage.includes("getAllowedProjectTransitions"),
+  "Project editor must have no multi-step publication controls.",
 );
 check(
   !studioProjectSources.includes('name="owner_id"'),

@@ -6,7 +6,7 @@ import { taskProgress, displayDate } from "@/features/studio/tasks/task-domain";
 import { TaskCard } from "@/features/studio/tasks/task-card";
 import {
   PROJECT_STATUS_LABELS,
-  PROJECT_PUBLISH_STATE_LABELS,
+  PROJECT_VISIBILITY_LABELS,
 } from "@/features/studio/projects/project-presentation";
 export default async function ProjectDetail({
   params,
@@ -62,8 +62,8 @@ export default async function ProjectDetail({
           <dd>{PROJECT_STATUS_LABELS[p.status]}</dd>
         </div>
         <div>
-          <dt className="text-sm text-[var(--muted)]">Yayın</dt>
-          <dd>{PROJECT_PUBLISH_STATE_LABELS[p.publishState]}</dd>
+          <dt className="text-sm text-[var(--muted)]">Görünürlük</dt>
+          <dd>{p.publishState === "archived" ? "Arşiv" : PROJECT_VISIBILITY_LABELS[p.publishState === "published" ? "public" : "private"]}</dd>
         </div>
         <div>
           <dt className="text-sm text-[var(--muted)]">Oluşturulma</dt>

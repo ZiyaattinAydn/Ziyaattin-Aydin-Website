@@ -89,6 +89,7 @@ export function validateProjectUpdatePolicy(
 
   if (
     current.publishState === "published" &&
+    nextVisibility === "public" &&
     !nextSummary.trim()
   ) {
     return projectFailure(
@@ -100,20 +101,6 @@ export function validateProjectUpdatePolicy(
     );
   }
 
-  if (
-    current.publishState === "published" &&
-    nextVisibility !== "public"
-  ) {
-    return projectFailure(
-      "invalid_transition",
-      "Published proje public görünürlükte kalmalıdır; önce unpublish yapılmalıdır.",
-      {
-        visibility: [
-          "Published durumdayken görünürlük private veya hidden yapılamaz.",
-        ],
-      },
-    );
-  }
 
   return projectSuccess(update);
 }

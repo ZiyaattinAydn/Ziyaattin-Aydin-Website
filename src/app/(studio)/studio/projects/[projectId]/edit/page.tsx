@@ -1,20 +1,11 @@
-import { PublicationReview } from "@/features/studio/library/publication-review";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { StudioPageHeader } from "@/components/studio/studio-page-header";
-import { StudioStatusPill } from "@/components/studio/studio-status-pill";
 import { Panel } from "@/components/ui/panel";
 import type { ProjectFormValues } from "@/features/projects/domain";
 import { getOwnerProject } from "@/features/projects/server/project-mutations";
-import {
-  getAllowedProjectTransitions,
-} from "@/features/projects/transitions";
 import { ProjectForm } from "@/features/studio/projects/project-form";
-import {
-  PROJECT_PUBLISH_STATE_LABELS,
-  PROJECT_PUBLISH_STATE_TONES,
-} from "@/features/studio/projects/project-presentation";
 import { ProjectWorkflowActions } from "@/features/studio/projects/project-workflow-actions";
 
 export const dynamic = "force-dynamic";
@@ -90,7 +81,6 @@ export default async function EditStudioProjectPage({
     imageUrl: project.imageUrl,
   };
 
-  const allowedTransitions = getAllowedProjectTransitions(project.publishState);
 
   return (
     <div className="space-y-8">
@@ -105,14 +95,10 @@ export default async function EditStudioProjectPage({
           <StudioPageHeader
             eyebrow="Studio / Proje / Düzenle"
             title={project.title}
-            description="Projenin temel bilgilerini güncelle. Görevler proje detayında yönetilir."
+            description="Görünürlüğü Özel veya Herkese açık olarak seçip kaydet. Herkese açık projeler portföyünde görünür."
             status={project.slug}
           />
-          <StudioStatusPill
-            tone={PROJECT_PUBLISH_STATE_TONES[project.publishState]}
-          >
-            {PROJECT_PUBLISH_STATE_LABELS[project.publishState]}
-          </StudioStatusPill>
+
         </div>
       </div>
 
@@ -132,11 +118,7 @@ export default async function EditStudioProjectPage({
           <ProjectWorkflowActions
             projectId={project.id}
             publishState={project.publishState}
-            isFeatured={project.isFeatured}
-            allowedTransitions={allowedTransitions}
           />
-
-          <PublicationReview kind="projects" id={project.id} version={project.updatedAt} archived={project.publishState === "archived"}/>
         </div>
       </div>
     </div>

@@ -41,6 +41,7 @@ function readProjectInput(formData: FormData) {
     status: readText(formData, "status"),
     visibility: readText(formData, "visibility"),
     progress: Number(readText(formData, "progress")),
+    isFeatured: formData.get("isFeatured") === "on",
     githubUrl: readNullableText(formData, "githubUrl"),
     demoUrl: readNullableText(formData, "demoUrl"),
     imageUrl: readNullableText(formData, "imageUrl"),
@@ -103,7 +104,7 @@ export async function updateProjectAction(
   }
 
   revalidateProjectPaths(result.data.id, result.data.slug);
-  return projectActionSuccess("Proje kaydedildi.");
+  return projectActionSuccess(result.data.publishState === "published" ? "Proje kaydedildi ve portföyde yayınlandı." : "Proje kaydedildi; portföyde görünmüyor.");
 }
 
 export async function updateProjectFeaturedAction(

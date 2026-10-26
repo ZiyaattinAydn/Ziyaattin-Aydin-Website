@@ -31,7 +31,7 @@ function FieldError({ id, messages }: { id: string; messages?: string[] }) {
 }
 
 export function ProjectForm({
-  mode, initialValues, projectId, publishState, readOnly = false,
+  mode, initialValues, projectId, readOnly = false,
 }: ProjectFormProps) {
   const [dirty, setDirty] = useState(false);
   const serverAction: ProjectFormAction = mode === "create"
@@ -47,7 +47,7 @@ export function ProjectForm({
   );
   const [imageValue, setImageValue] = useState(initialValues.imageUrl ?? "");
   useUnsavedChanges(dirty && !pending);
-  const publishedVisibilityLocked = publishState === "published";
+
 
   return (
     <form data-unsaved-editor action={formAction} onChange={() => setDirty(true)} className="space-y-7">
@@ -125,20 +125,17 @@ export function ProjectForm({
           </label>
           <label className={labelClassName}>
             Görünürlük
-            {publishedVisibilityLocked ? (
-              <>
-                <input type="hidden" name="visibility" value="public"/>
-                <div className={`${inputClassName} opacity-70`}>Herkese açık — yayında olduğu için kilitli</div>
-              </>
-            ) : (
-              <select name="visibility"
-                defaultValue={initialValues.visibility === "hidden" ? "private" : initialValues.visibility}
-                className={inputClassName}>
-                {Object.entries(PROJECT_VISIBILITY_LABELS)
-                  .filter(([value]) => value !== "hidden")
-                  .map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-              </select>
-            )}
+            <select name="visibility"
+              defaultValue={initialValues.visibility === "hidden" ? "private" : initialValues.visibility}
+              aria-describedby="visibility-help"
+              className={inputClassName}>
+              {Object.entries(PROJECT_VISIBILITY_LABELS)
+                .filter(([value]) => value !== "hidden")
+                .map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+            </select>
+            <span id="visibility-help" className="mt-2 block text-xs font-normal leading-5 text-[var(--muted)]">
+              Herkese açık seçildiğinde kaydetmek portföyünde yayınlar. Özel seçildiğinde yayından kaldırır.
+            </span>
             <FieldError id="visibility-error" messages={state.fieldErrors.visibility}/>
           </label>
           <label className={labelClassName}>
@@ -149,6 +146,17 @@ export function ProjectForm({
           </label>
         </div>
 
+
+        <label className="flex items-start gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
+          <input type="checkbox" name="isFeatured" defaultChecked={initialValues.isFeatured}
+            className="mt-1 h-4 w-4 accent-[var(--accent)]"/>
+          <span>
+            <span className="block text-sm font-medium">Ana sayfada öne çıkar</span>
+            <span className="mt-1 block text-xs leading-5 text-[var(--muted)]">
+              Yalnızca herkese açık projelerin ana sayfadaki sıralamasını etkiler.
+            </span>
+          </span>
+        </label>
 
         <div className="grid gap-5 lg:grid-cols-2">
           <label className={labelClassName}>
