@@ -1,4 +1,5 @@
-import type { PropsWithChildren } from "react";
+import { Suspense, type PropsWithChildren } from "react";
+import { StudioReturnShortcut } from "@/components/layout/studio-return-shortcut";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
 
@@ -14,6 +15,9 @@ export default function PublicLayout({ children }: PropsWithChildren) {
         {children}
       </main>
       <SiteFooter />
+      <Suspense fallback={null}>
+        <StudioReturnShortcut />
+      </Suspense>
     </div>
   );
 }
