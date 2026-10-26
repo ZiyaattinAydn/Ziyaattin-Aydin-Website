@@ -68,8 +68,8 @@ check(
   "Edit page must derive transitions from the Core contract.",
 );
 check(
-  editPage.includes("canChangeProjectSlug"),
-  "Edit page must enforce Core slug editability.",
+  !editPage.includes("canChangeProjectSlug") && !form.includes('name="slug"'),
+  "The simplified editor must never expose manual slug changes.",
 );
 check(
   workflow.includes('value="archive"') &&
