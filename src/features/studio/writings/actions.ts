@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { writingSlugFromTitle } from "./writing-slug";
 
 import {
   archiveWriting,
@@ -42,7 +43,6 @@ function readReadingTime(formData: FormData): number | null {
 function readWritingInput(formData: FormData) {
   return {
     title: readText(formData, "title"),
-    slug: readText(formData, "slug"),
     excerpt: readText(formData, "excerpt"),
     content: readText(formData, "content"),
     category: readText(formData, "category"),
@@ -68,14 +68,28 @@ export async function createWritingAction(
 ): Promise<WritingActionState> {
   void previousState;
 
-  const result = await createWritingDraft(readWritingInput(formData));
+  const input = readWritingInput(formData);
+  const baseSlug = writingSlugFromTitle(input.title);
 
-  if (!result.ok) {
-    return toWritingActionError(result.error);
+  // The unique database index handles duplicate titles and concurrent creates.
+  for (let suffix = 1; suffix <= 30; suffix += 1) {
+    const slug = suffix === 1 ? baseSlug : `${baseSlug}-${suffix}`;
+    const result = await createWritingDraft({ ...input, slug });
+
+    if (result.ok) {
+      revalidateWritingPaths(result.data.id, result.data.slug);
+      redirect(`/studio/writings/${result.data.id}/edit`);
+    }
+    if (result.error.code !== "slug_conflict") {
+      return toWritingActionError(result.error);
+    }
   }
 
-  revalidateWritingPaths(result.data.id, result.data.slug);
-  redirect(`/studio/writings/${result.data.id}/edit`);
+  return {
+    status: "error",
+    message: "Bu başlık için kullanılabilir bir bağlantı oluşturulamadı.",
+    fieldErrors: { title: ["Başlığı biraz değiştirip tekrar dene."] },
+  };
 }
 
 export async function updateWritingAction(
@@ -92,7 +106,9 @@ export async function updateWritingAction(
   }
 
   revalidateWritingPaths(result.data.id, result.data.slug);
-  return writingActionSuccess("Yazı kaydedildi.");
+  return writingActionSuccess(result.data.publishState === "published"
+    ? "Yazı kaydedildi ve yayınlandı."
+    : "Yazı kaydedildi; yalnız Studio\u0027da görünüyor.");
 }
 
 export async function transitionWritingAction(
