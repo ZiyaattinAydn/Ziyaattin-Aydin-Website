@@ -1,21 +1,11 @@
-import { PublicationReview } from "@/features/studio/library/publication-review";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { StudioPageHeader } from "@/components/studio/studio-page-header";
-import { StudioStatusPill } from "@/components/studio/studio-status-pill";
 import { Panel } from "@/components/ui/panel";
 import type { WritingFormValues } from "@/features/writings/domain";
 import { getOwnerWriting } from "@/features/writings/server/writing-mutations";
-import {
-  canChangeWritingSlug,
-  getAllowedWritingTransitions,
-} from "@/features/writings/transitions";
 import { WritingForm } from "@/features/studio/writings/writing-form";
-import {
-  WRITING_PUBLISH_STATE_LABELS,
-  WRITING_PUBLISH_STATE_TONES,
-} from "@/features/studio/writings/writing-presentation";
 import { WritingWorkflowActions } from "@/features/studio/writings/writing-workflow-actions";
 
 export const dynamic = "force-dynamic";
@@ -86,10 +76,6 @@ export default async function EditStudioWritingPage({
     coverImageUrl: writing.coverImageUrl,
   };
 
-  const allowedTransitions = getAllowedWritingTransitions(
-    writing.publishState,
-  );
-
   return (
     <div className="space-y-8">
       <div className="space-y-4">
@@ -99,19 +85,12 @@ export default async function EditStudioWritingPage({
         >
           ← Yazılara dön
         </Link>
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
-          <StudioPageHeader
-            eyebrow="Studio / Writings / Edit"
-            title={writing.title}
-            description="Yazının içeriğini, görselini ve yayın durumunu yönet."
-            status={writing.slug}
-          />
-          <StudioStatusPill
-            tone={WRITING_PUBLISH_STATE_TONES[writing.publishState]}
-          >
-            {WRITING_PUBLISH_STATE_LABELS[writing.publishState]}
-          </StudioStatusPill>
-        </div>
+        <StudioPageHeader
+          eyebrow="Studio / Yazılar / Düzenle"
+          title={writing.title}
+          description="Başlık, içerik ve görünürlüğü tek yerden yönet. Herkese açık kaydedilen yazılar yayına çıkar."
+          status={writing.slug}
+        />
       </div>
 
       <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
@@ -121,20 +100,12 @@ export default async function EditStudioWritingPage({
             mode="edit"
             writingId={writing.id}
             initialValues={formValues}
-            publishState={writing.publishState}
-            slugEditable={canChangeWritingSlug(writing.publishState)}
             readOnly={writing.publishState === "archived"}
           />
         </Panel>
 
         <div className="space-y-5">
-          <WritingWorkflowActions
-            writingId={writing.id}
-            publishState={writing.publishState}
-            allowedTransitions={allowedTransitions}
-          />
-
-          <PublicationReview kind="writings" id={writing.id} version={writing.updatedAt} archived={writing.publishState === "archived"}/>
+          <WritingWorkflowActions writingId={writing.id} publishState={writing.publishState} />
         </div>
       </div>
     </div>
