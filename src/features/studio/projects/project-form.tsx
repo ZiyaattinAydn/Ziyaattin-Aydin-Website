@@ -78,7 +78,42 @@ export function ProjectForm({
           <FieldError id="summary-error" messages={state.fieldErrors.summary}/>
         </label>
 
-        <div className="grid gap-5 sm:grid-cols-2">
+
+        <div className="grid gap-6 xl:grid-cols-2">
+          <label className={labelClassName}>
+            Problem
+            <textarea name="problem" rows={7} maxLength={12000}
+              defaultValue={initialValues.problem} className={inputClassName}
+              aria-invalid={Boolean(state.fieldErrors.problem?.length)}
+              aria-describedby={state.fieldErrors.problem?.length ? "problem-error" : undefined}
+              placeholder="Bu projeyle hangi sorunu çözüyorsun?"/>
+            <FieldError id="problem-error" messages={state.fieldErrors.problem}/>
+          </label>
+          <label className={labelClassName}>
+            Yaklaşım
+            <textarea name="approach" rows={7} maxLength={12000}
+              defaultValue={initialValues.approach} className={inputClassName}
+              aria-invalid={Boolean(state.fieldErrors.approach?.length)}
+              aria-describedby={state.fieldErrors.approach?.length ? "approach-error" : undefined}
+              placeholder="Nasıl bir çözüm geliştiriyorsun?"/>
+            <FieldError id="approach-error" messages={state.fieldErrors.approach}/>
+          </label>
+        </div>
+
+        <label className={labelClassName}>
+          Öne çıkanlar
+          <textarea name="highlights" rows={5}
+            defaultValue={initialValues.highlights.join("\n")} className={inputClassName}
+            aria-invalid={Boolean(state.fieldErrors.highlights?.length)}
+            aria-describedby="highlights-help"
+            placeholder={"Projede öne çıkan bir özellik\nTamamladığın önemli bir aşama"}/>
+          <p id="highlights-help" className="mt-2 text-xs text-[var(--muted)]">
+            Her satır ayrı bir madde olarak kaydedilir.
+          </p>
+          <FieldError id="highlights-error" messages={state.fieldErrors.highlights}/>
+        </label>
+
+        <div className="grid gap-5 md:grid-cols-3">
           <label className={labelClassName}>
             Çalışma durumu
             <select name="status" defaultValue={initialValues.status} className={inputClassName}>
@@ -105,6 +140,30 @@ export function ProjectForm({
               </select>
             )}
             <FieldError id="visibility-error" messages={state.fieldErrors.visibility}/>
+          </label>
+          <label className={labelClassName}>
+            Kişisel ilerleme tahmini (%)
+            <input name="progress" type="number" min={0} max={100} step={1}
+              defaultValue={initialValues.progress} className={inputClassName}/>
+            <FieldError id="progress-error" messages={state.fieldErrors.progress}/>
+          </label>
+        </div>
+
+
+        <div className="grid gap-5 lg:grid-cols-2">
+          <label className={labelClassName}>
+            GitHub URL
+            <input name="githubUrl" type="url" maxLength={2048}
+              defaultValue={initialValues.githubUrl ?? ""}
+              placeholder="https://github.com/..." className={inputClassName}/>
+            <FieldError id="github-url-error" messages={state.fieldErrors.githubUrl}/>
+          </label>
+          <label className={labelClassName}>
+            Demo URL
+            <input name="demoUrl" type="url" maxLength={2048}
+              defaultValue={initialValues.demoUrl ?? ""}
+              placeholder="https://..." className={inputClassName}/>
+            <FieldError id="demo-url-error" messages={state.fieldErrors.demoUrl}/>
           </label>
         </div>
 
