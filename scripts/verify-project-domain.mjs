@@ -336,6 +336,21 @@ equal(
   "Archived proje güncellemesi kabul edildi.",
 );
 
+check(
+  transitions.validateProjectUpdatePolicy(
+    { ...baseProject, publishState: "published", visibility: "public" },
+    { visibility: "private" },
+  ).ok,
+  "Published projects must be allowed to become private in a single save.",
+);
+check(
+  transitions.validateProjectUpdatePolicy(
+    { ...baseProject, publishState: "published", visibility: "public" },
+    { visibility: "public", summary: "" },
+  ).ok === false,
+  "Public projects must keep a nonempty summary.",
+);
+
 const authorized = guard.getProjectMutationContext({
   ok: true,
   user: { id: "owner-id" },
@@ -405,8 +420,9 @@ equal(
   "Project mutation service hard delete içeriyor.",
 );
 check(
-  serverSource.includes('publish_state: "draft"'),
-  "Create mutation draft state'i server-side zorlamıyor.",
+  serverSource.includes('publish_state: approval ? "published" : "draft"') &&
+    serverSource.includes("verifyPublicProjectAssets"),
+  "Create mutation must publish only after validating public fields and media.",
 );
 check(
   serverSource.includes('.eq("owner_id", context.ownerId)'),
