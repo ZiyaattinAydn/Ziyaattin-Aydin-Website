@@ -42,15 +42,6 @@ export async function SiteFooter() {
             className="hover:text-[var(--foreground)]"
             rel={item.href.startsWith("https:") ? "noopener noreferrer" : undefined}
             target={item.href.startsWith("https:") ? "_blank" : undefined}>{item.label}</a>)}
-          <a
-            href="https://github.com/ZiyaattinAydn/Ziyaattin-Aydin-Website"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-[var(--foreground)]"
-          >
-            Kaynak kodu <span aria-hidden="true">↗</span>
-            <span className="sr-only"> (yeni sekmede)</span>
-          </a>
           <Link href="/about" className="hover:text-[var(--foreground)]">
             Hakkımda
           </Link>

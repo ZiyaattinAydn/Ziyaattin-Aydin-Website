@@ -21,7 +21,6 @@ export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible =
   const lastAdvance = useRef(0);
   const locked = useRef(false);
   const touchStart = useRef<number | null>(null);
-  const visiblePosition = count ? ((position - clones) % count + count) % count : 0;
 
   useEffect(() => {
     const query = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -105,9 +104,6 @@ export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible =
       </div>
       {count > 1 && (
         <div className={styles.controls}>
-          <span className="text-xs text-[var(--muted)]" aria-live="off">
-            {visiblePosition + 1} / {count} · Otomatik geçiş
-          </span>
           <div className="flex gap-2">
             <button type="button" aria-label={label + ": önceki"} onClick={() => move(-1)}
               className={styles.arrow}>←</button>

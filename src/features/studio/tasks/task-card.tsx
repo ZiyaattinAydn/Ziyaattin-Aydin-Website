@@ -16,6 +16,17 @@ export function TaskCard({
   const due = dueState(task);
   return (
     <article className="min-w-0 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5">
+      {task.project_id && projectName && (
+        <Link
+          href={"/studio/projects/" + task.project_id}
+          aria-label={projectName + " projesini aç"}
+          className="mb-4 inline-flex max-w-full items-center gap-2 rounded-lg border border-[var(--accent-dim)] bg-[rgba(18,217,120,0.08)] px-3 py-2 text-sm font-semibold text-[var(--accent)] transition-colors hover:bg-[rgba(18,217,120,0.15)]"
+        >
+          <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-[var(--muted)]">Proje</span>
+          <span className="min-w-0 break-words">{projectName}</span>
+          <span aria-hidden="true" className="shrink-0">↗</span>
+        </Link>
+      )}
       <div className="flex flex-wrap justify-between gap-3">
         <h3 className="min-w-0 flex-1 break-words text-lg font-semibold">
           <Link
@@ -38,15 +49,14 @@ export function TaskCard({
         </p>
       )}
       <div className="mt-4 flex flex-wrap gap-3 text-xs text-[var(--muted)]">
-        {task.project_id ? (
+        {!task.project_id && <span>Bağımsız görev</span>}
+        {task.project_id && !projectName && (
           <Link
             className="underline underline-offset-4"
             href={"/studio/projects/" + task.project_id}
           >
-            {projectName ?? "İlişkili proje"}
+            İlişkili proje
           </Link>
-        ) : (
-          <span>Bağımsız görev</span>
         )}
         {task.due_at && <span>Bitiş: {displayDate(task.due_at)}</span>}
         {due && (
