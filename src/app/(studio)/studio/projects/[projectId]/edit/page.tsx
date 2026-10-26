@@ -8,7 +8,6 @@ import { Panel } from "@/components/ui/panel";
 import type { ProjectFormValues } from "@/features/projects/domain";
 import { getOwnerProject } from "@/features/projects/server/project-mutations";
 import {
-  canChangeProjectSlug,
   getAllowedProjectTransitions,
 } from "@/features/projects/transitions";
 import { ProjectForm } from "@/features/studio/projects/project-form";
@@ -106,7 +105,7 @@ export default async function EditStudioProjectPage({
           <StudioPageHeader
             eyebrow="Studio / Proje / Düzenle"
             title={project.title}
-            description="Projenin bilgilerini, çalışma durumunu ve yayınını yönet."
+            description="Projenin temel bilgilerini güncelle. Görevler proje detayında yönetilir."
             status={project.slug}
           />
           <StudioStatusPill
@@ -125,7 +124,6 @@ export default async function EditStudioProjectPage({
             projectId={project.id}
             initialValues={formValues}
             publishState={project.publishState}
-            slugEditable={canChangeProjectSlug(project.publishState)}
             readOnly={project.publishState === "archived"}
           />
         </Panel>
