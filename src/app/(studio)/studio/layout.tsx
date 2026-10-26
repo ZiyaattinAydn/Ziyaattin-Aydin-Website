@@ -1,7 +1,6 @@
 import type { PropsWithChildren } from "react";
 import { redirect } from "next/navigation";
 
-import { StudioSessionControls } from "@/components/studio/studio-session-controls";
 import { StudioShell } from "@/components/studio/studio-shell";
 import { getStudioAuthorization } from "@/lib/auth/studio-authorization";
 
@@ -44,7 +43,6 @@ export default async function StudioLayout({ children }: PropsWithChildren) {
 
   return (
     <>
-      <StudioSessionControls />
       <StudioShell>{children}</StudioShell>
     </>
   );
