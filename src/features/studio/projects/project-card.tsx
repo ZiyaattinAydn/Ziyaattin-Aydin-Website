@@ -32,7 +32,7 @@ export function ProjectCard({ project }: { project: ProjectEntity }) {
           <StudioStatusPill
             tone={PROJECT_PUBLISH_STATE_TONES[project.publishState]}
           >
-            {PROJECT_PUBLISH_STATE_LABELS[project.publishState]}
+            {project.publishState === "archived" ? "Arşiv" : PROJECT_VISIBILITY_LABELS[project.publishState === "published" ? "public" : "private"]}
           </StudioStatusPill>
         </div>
 
