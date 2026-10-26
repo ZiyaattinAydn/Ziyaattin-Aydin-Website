@@ -30,7 +30,7 @@ export function WritingWorkflowActions({
       <div>
         <h2 className="font-semibold text-[#f0c46b]">Yazıyı arşivle</h2>
         <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-          Arşivlenen yazı silinmez; Studio'da saklanır ve ziyaretçilere görünmez.
+          Arşivlenen yazı silinmez; Studio alanında saklanır ve ziyaretçilere görünmez.
         </p>
       </div>
       <label className="flex items-start gap-3 text-sm">
