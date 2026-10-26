@@ -4,6 +4,7 @@ import { listStudioTasks } from "@/features/studio/tasks/task-store";
 import { dueState, isOpenTask } from "@/features/studio/tasks/task-domain";
 import { TaskCard } from "@/features/studio/tasks/task-card";
 import { TaskForm } from "@/features/studio/tasks/task-form";
+import { selectResumeTasksPerProject } from "@/features/studio/tasks/continue-work";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export default async function StudioPage() {
@@ -19,6 +20,7 @@ export default async function StudioPage() {
     );
   const open = result.tasks.filter(isOpenTask),
     now = new Date();
+  const resume = selectResumeTasksPerProject(open, result.projects);
   const recent = result.projects
     .filter((p) => p.publish_state !== "archived" && p.status !== "archived")
     .map((p) => ({
@@ -79,27 +81,22 @@ export default async function StudioPage() {
       </section>
       <section className="space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <h2 className="text-2xl font-semibold">Kaldığım yerden devam et</h2>
+          <div>
+            <h2 className="text-2xl font-semibold">Kaldığım yerden devam et</h2>
+            <p className="mt-1 text-sm text-[var(--muted)]">Her projeden tek bir sonraki görev. Devam eden işler önce, ardından yapılacaklar ve bekleyenler.</p>
+          </div>
           <Link href="/studio/tasks" className="text-sm text-[var(--accent)]">
             Tüm görevler →
           </Link>
         </div>
         <div className="grid gap-4 xl:grid-cols-2">
-          {open.length ? (
-            open
-              .slice(0, 4)
-              .map((t) => (
-                <TaskCard
-                  key={t.id}
-                  task={t}
-                  projectName={
-                    result.projects.find((p) => p.id === t.project_id)?.title
-                  }
-                />
-              ))
+          {resume.length ? (
+            resume.map(({ project, task }) => (
+              <TaskCard key={project.id} task={task} projectName={project.title} />
+            ))
           ) : (
             <p className="text-sm text-[var(--muted)]">
-              Açık görev yok. Yeni bir görevle başlayabilirsin.
+              Devam edilecek proje görevi yok. Projene bir görev ekleyerek başlayabilirsin.
             </p>
           )}
         </div>
