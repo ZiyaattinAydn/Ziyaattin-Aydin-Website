@@ -32,6 +32,7 @@ function readProjectInput(formData: FormData) {
   return {
     title: readText(formData, "title"),
     summary: readText(formData, "summary"),
+    subtitle: readText(formData, "subtitle"),
     problem: readText(formData, "problem"),
     approach: readText(formData, "approach"),
     highlights: readText(formData, "highlights")
