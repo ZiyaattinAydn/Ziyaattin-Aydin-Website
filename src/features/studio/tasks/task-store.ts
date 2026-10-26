@@ -21,31 +21,27 @@ export async function listStudioTasks(): Promise<StudioTaskList> {
     const authorization = await getStudioAuthorization();
     if (!authorization.ok) return { ok: false };
     const supabase = await createServerSupabaseClient();
-    const tasks: StudioTask[] = [],
-      projects: TaskProject[] = [];
-    // Read stable pages beyond Supabase's default row cap so counters stay accurate.
-    for (let offset = 0; ; offset += 500) {
-      const result = await supabase
-        .from("tasks")
-        .select(TASK_COLUMNS)
-        .eq("owner_id", authorization.profile.userId)
-        .order("id")
-        .range(offset, offset + 499);
-      if (result.error) return { ok: false };
-      tasks.push(...(result.data as unknown as StudioTask[]));
-      if (result.data.length < 500) break;
+    async function fetchRows<T>(table: "tasks" | "projects", columns: string): Promise<T[]> {
+      const rows: T[] = [];
+      for (let offset = 0; ; offset += 500) {
+        const result = await supabase
+          .from(table)
+          .select(columns)
+          .eq("owner_id", authorization.profile.userId)
+          .order("id")
+          .range(offset, offset + 499);
+        if (result.error) throw new Error("Studio rows unavailable.");
+        rows.push(...(result.data as unknown as T[]));
+        if (result.data.length < 500) break;
+      }
+      return rows;
     }
-    for (let offset = 0; ; offset += 500) {
-      const result = await supabase
-        .from("projects")
-        .select("id,title,status,publish_state,created_at,updated_at")
-        .eq("owner_id", authorization.profile.userId)
-        .order("id")
-        .range(offset, offset + 499);
-      if (result.error) return { ok: false };
-      projects.push(...(result.data as TaskProject[]));
-      if (result.data.length < 500) break;
-    }
+    // Tasks and project names do not depend on each other: run both read chains
+    // concurrently, while keeping owner/RLS checks and pagination intact.
+    const [tasks, projects] = await Promise.all([
+      fetchRows<StudioTask>("tasks", TASK_COLUMNS),
+      fetchRows<TaskProject>("projects", "id,title,status,publish_state,created_at,updated_at"),
+    ]);
     tasks.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
     projects.sort((a, b) => b.updated_at.localeCompare(a.updated_at));
     return { ok: true, tasks, projects };
