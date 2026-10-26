@@ -14,10 +14,12 @@ import { useUnsavedChanges } from "./unsaved";
 export function UploadForm({
   projects = [],
   image = false,
+  streamlinedPublicImage = false,
   onUploaded,
 }: {
   projects?: LibraryProject[];
   image?: boolean;
+  streamlinedPublicImage?: boolean;
   onUploaded?: (url: string) => void;
 }) {
   const router = useRouter();
@@ -47,7 +49,7 @@ export function UploadForm({
         size: file.size,
         projectId: String(form.get("projectId") ?? "") || null,
         image,
-        publicConsent: form.get("publicConsent") === "yes",
+        publicConsent: image && streamlinedPublicImage ? true : form.get("publicConsent") === "yes",
       });
       if (!ready.ok) throw new Error(ready.message);
       setRetry(ready.id);
@@ -133,7 +135,12 @@ export function UploadForm({
             </select>
           </label>
         )}
-        {image && (
+        {image && streamlinedPublicImage && (
+          <p className="text-xs leading-6 text-[var(--muted)]">
+            Kapak görseli herkese açık bir bağlantıda saklanır; proje özel olsa bile bağlantıyı bilenler görseli görebilir. Özel belge yükleme.
+          </p>
+        )}
+        {image && !streamlinedPublicImage && (
           <label className="flex items-start gap-3 text-sm">
             <input
               type="checkbox"

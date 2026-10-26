@@ -3,36 +3,18 @@
 import { useActionState, useState } from "react";
 import { UploadForm } from "@/features/studio/library/upload-form";
 import { useUnsavedChanges } from "@/features/studio/library/unsaved";
-
-import type {
-  ProjectFormValues,
-  ProjectPublishState,
-} from "@/features/projects/domain";
-import {
-  createProjectAction,
-  updateProjectAction,
-} from "@/features/studio/projects/actions";
-import {
-  INITIAL_PROJECT_ACTION_STATE,
-  type ProjectActionState,
-} from "@/features/studio/projects/action-state";
-import {
-  PROJECT_STATUS_LABELS,
-  PROJECT_VISIBILITY_LABELS,
-} from "@/features/studio/projects/project-presentation";
+import type { ProjectFormValues, ProjectPublishState } from "@/features/projects/domain";
+import { createProjectAction, updateProjectAction } from "@/features/studio/projects/actions";
+import { INITIAL_PROJECT_ACTION_STATE, type ProjectActionState } from "@/features/studio/projects/action-state";
+import { PROJECT_STATUS_LABELS, PROJECT_VISIBILITY_LABELS } from "@/features/studio/projects/project-presentation";
 import { ProjectSubmitButton } from "@/features/studio/projects/project-submit-button";
 
-type ProjectFormAction = (
-  state: ProjectActionState,
-  formData: FormData,
-) => Promise<ProjectActionState>;
-
+type ProjectFormAction = (state: ProjectActionState, formData: FormData) => Promise<ProjectActionState>;
 type ProjectFormProps = {
   mode: "create" | "edit";
   initialValues: ProjectFormValues;
   projectId?: string;
   publishState?: ProjectPublishState;
-  slugEditable: boolean;
   readOnly?: boolean;
 };
 
@@ -40,390 +22,125 @@ const inputClassName =
   "mt-2 w-full rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--foreground)] outline-none transition placeholder:text-[var(--muted)] focus:border-[var(--accent-dim)] disabled:cursor-not-allowed disabled:opacity-60";
 const labelClassName = "block text-sm font-medium text-[var(--foreground)]";
 
-function FieldError({
-  id,
-  messages,
-}: {
-  id: string;
-  messages: string[] | undefined;
-}) {
-  if (!messages?.length) {
-    return null;
-  }
-
-  return (
+function FieldError({ id, messages }: { id: string; messages?: string[] }) {
+  return messages?.length ? (
     <div id={id} className="mt-2 space-y-1 text-sm text-[#f0c46b]">
-      {messages.map((message) => (
-        <p key={message}>{message}</p>
-      ))}
+      {messages.map((message) => <p key={message}>{message}</p>)}
     </div>
-  );
-}
-
-function ActionMessage({ state }: { state: ProjectActionState }) {
-  if (state.status === "idle" || !state.message) {
-    return null;
-  }
-
-  return (
-    <div
-      role={state.status === "error" ? "alert" : "status"}
-      className={`rounded-xl border px-4 py-3 text-sm ${
-        state.status === "error"
-          ? "border-[#8a6b2a] bg-[rgba(245,158,11,0.08)] text-[#f0c46b]"
-          : "border-[var(--accent-dim)] bg-[rgba(18,217,120,0.08)] text-[var(--accent)]"
-      }`}
-    >
-      {state.message}
-    </div>
-  );
+  ) : null;
 }
 
 export function ProjectForm({
-  mode,
-  initialValues,
-  projectId,
-  publishState,
-  slugEditable,
-  readOnly = false,
+  mode, initialValues, projectId, publishState, readOnly = false,
 }: ProjectFormProps) {
   const [dirty, setDirty] = useState(false);
-  const serverAction: ProjectFormAction =
-    mode === "create"
-      ? createProjectAction
-      : updateProjectAction.bind(null, projectId ?? "");
-
+  const serverAction: ProjectFormAction = mode === "create"
+    ? createProjectAction
+    : updateProjectAction.bind(null, projectId ?? "");
   const [state, formAction, pending] = useActionState(
-    async (previous: ProjectActionState, form: FormData) => { const result = await serverAction(previous, form); if(result.status === "success") setDirty(false); return result; },
+    async (previous: ProjectActionState, form: FormData) => {
+      const result = await serverAction(previous, form);
+      if (result.status === "success") setDirty(false);
+      return result;
+    },
     INITIAL_PROJECT_ACTION_STATE,
   );
-
   const [imageValue, setImageValue] = useState(initialValues.imageUrl ?? "");
   useUnsavedChanges(dirty && !pending);
   const publishedVisibilityLocked = publishState === "published";
 
   return (
-    <form data-unsaved-editor action={formAction} onChange={()=>setDirty(true)} className="space-y-8">
-      <ActionMessage state={state} />
+    <form data-unsaved-editor action={formAction} onChange={() => setDirty(true)} className="space-y-7">
+      {state.status !== "idle" && state.message ? (
+        <p role={state.status === "error" ? "alert" : "status"}
+          className={state.status === "error" ? "text-sm text-[#f0c46b]" : "text-sm text-[var(--accent)]"}>
+          {state.message}
+        </p>
+      ) : null}
       <FieldError id="project-form-error" messages={state.fieldErrors._form} />
 
-      <fieldset disabled={readOnly || pending} className="space-y-8">
-        <div className="grid gap-6 lg:grid-cols-2">
-          <label className={labelClassName}>
-            Başlık
-            <input
-              name="title"
-              required
-              maxLength={140}
-              defaultValue={initialValues.title}
-              aria-invalid={Boolean(state.fieldErrors.title?.length)}
-              aria-describedby={
-                state.fieldErrors.title?.length ? "title-error" : undefined
-              }
-              className={inputClassName}
-            />
-            <FieldError id="title-error" messages={state.fieldErrors.title} />
-          </label>
-
-          <label className={labelClassName}>
-            Slug
-            {slugEditable ? (
-              <input
-                name="slug"
-                required
-                maxLength={120}
-                pattern="[a-z0-9]+(?:-[a-z0-9]+)*"
-                defaultValue={initialValues.slug}
-                aria-invalid={Boolean(state.fieldErrors.slug?.length)}
-                aria-describedby={
-                  state.fieldErrors.slug?.length ? "slug-error" : "slug-help"
-                }
-                className={inputClassName}
-              />
-            ) : (
-              <>
-                <input type="hidden" name="slug" value={initialValues.slug} />
-                <div className={`${inputClassName} opacity-70`}>
-                  {initialValues.slug}
-                </div>
-              </>
-            )}
-            <p
-              id="slug-help"
-              className="mt-2 text-xs leading-5 text-[var(--muted)]"
-            >
-              Küçük harf, rakam ve tire kullan. Yayına alınan projelerin adresi
-              korunur.
-            </p>
-            <FieldError id="slug-error" messages={state.fieldErrors.slug} />
-          </label>
-        </div>
-
+      <fieldset disabled={readOnly || pending} className="space-y-6">
         <label className={labelClassName}>
-          Özet
-          <textarea
-            name="summary"
-            rows={4}
-            maxLength={600}
-            defaultValue={initialValues.summary}
-            aria-invalid={Boolean(state.fieldErrors.summary?.length)}
-            aria-describedby={
-              state.fieldErrors.summary?.length ? "summary-error" : undefined
-            }
-            className={inputClassName}
-          />
-          <FieldError id="summary-error" messages={state.fieldErrors.summary} />
+          Proje adı <span aria-hidden="true">*</span>
+          <input name="title" required maxLength={140} defaultValue={initialValues.title}
+            aria-invalid={Boolean(state.fieldErrors.title?.length)}
+            aria-describedby={state.fieldErrors.title?.length ? "title-error" : undefined}
+            placeholder="Örneğin: Köprüaltı Tattoo" className={inputClassName}/>
+          <FieldError id="title-error" messages={state.fieldErrors.title} />
         </label>
 
-        <div className="grid gap-6 xl:grid-cols-2">
-          <label className={labelClassName}>
-            Problem
-            <textarea
-              name="problem"
-              rows={9}
-              maxLength={12000}
-              defaultValue={initialValues.problem}
-              aria-invalid={Boolean(state.fieldErrors.problem?.length)}
-              aria-describedby={
-                state.fieldErrors.problem?.length ? "problem-error" : undefined
-              }
-              className={inputClassName}
-            />
-            <FieldError
-              id="problem-error"
-              messages={state.fieldErrors.problem}
-            />
-          </label>
+        <label className={labelClassName}>
+          Kısa açıklama
+          <textarea name="summary" rows={4} maxLength={600} defaultValue={initialValues.summary}
+            aria-invalid={Boolean(state.fieldErrors.summary?.length)}
+            aria-describedby={state.fieldErrors.summary?.length ? "summary-error" : undefined}
+            placeholder="Bu proje ne hakkında?" className={inputClassName}/>
+          <FieldError id="summary-error" messages={state.fieldErrors.summary}/>
+        </label>
 
-          <label className={labelClassName}>
-            Yaklaşım
-            <textarea
-              name="approach"
-              rows={9}
-              maxLength={12000}
-              defaultValue={initialValues.approach}
-              aria-invalid={Boolean(state.fieldErrors.approach?.length)}
-              aria-describedby={
-                state.fieldErrors.approach?.length
-                  ? "approach-error"
-                  : undefined
-              }
-              className={inputClassName}
-            />
-            <FieldError
-              id="approach-error"
-              messages={state.fieldErrors.approach}
-            />
-          </label>
-        </div>
-
-        <div className="grid gap-6 xl:grid-cols-2">
-          <label className={labelClassName}>
-            Öne çıkanlar
-            <textarea
-              name="highlights"
-              rows={7}
-              defaultValue={initialValues.highlights.join("\n")}
-              aria-invalid={Boolean(state.fieldErrors.highlights?.length)}
-              aria-describedby="highlights-help"
-              className={inputClassName}
-            />
-            <p
-              id="highlights-help"
-              className="mt-2 text-xs text-[var(--muted)]"
-            >
-              Her satır ayrı bir madde olarak kaydedilir.
-            </p>
-            <FieldError
-              id="highlights-error"
-              messages={state.fieldErrors.highlights}
-            />
-          </label>
-
-          <label className={labelClassName}>
-            Sonraki adımlar
-            <textarea
-              name="nextSteps"
-              rows={7}
-              defaultValue={initialValues.nextSteps.join("\n")}
-              aria-invalid={Boolean(state.fieldErrors.nextSteps?.length)}
-              aria-describedby="next-steps-help"
-              className={inputClassName}
-            />
-            <p
-              id="next-steps-help"
-              className="mt-2 text-xs text-[var(--muted)]"
-            >
-              Her satır ayrı bir madde olarak kaydedilir.
-            </p>
-            <FieldError
-              id="next-steps-error"
-              messages={state.fieldErrors.nextSteps}
-            />
-          </label>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2">
           <label className={labelClassName}>
             Çalışma durumu
-            <select
-              name="status"
-              defaultValue={initialValues.status}
-              className={inputClassName}
-            >
+            <select name="status" defaultValue={initialValues.status} className={inputClassName}>
               {Object.entries(PROJECT_STATUS_LABELS)
                 .filter(([value]) => value !== "archived" || readOnly)
-                .map(([value, label]) => (
-                  <option key={value} value={value}>
-                    {label}
-                  </option>
-                ))}
+                .map(([value, label]) => <option key={value} value={value}>{label}</option>)}
             </select>
-            <FieldError id="status-error" messages={state.fieldErrors.status} />
+            <FieldError id="status-error" messages={state.fieldErrors.status}/>
           </label>
-
           <label className={labelClassName}>
             Görünürlük
             {publishedVisibilityLocked ? (
               <>
-                <input type="hidden" name="visibility" value="public" />
-                <div className={`${inputClassName} opacity-70`}>
-                  Herkese açık — published durumda kilitli
-                </div>
+                <input type="hidden" name="visibility" value="public"/>
+                <div className={`${inputClassName} opacity-70`}>Herkese açık — yayında olduğu için kilitli</div>
               </>
             ) : (
-              <select
-                name="visibility"
-                defaultValue={initialValues.visibility}
-                className={inputClassName}
-              >
-                {Object.entries(PROJECT_VISIBILITY_LABELS).map(
-                  ([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ),
-                )}
+              <select name="visibility"
+                defaultValue={initialValues.visibility === "hidden" ? "private" : initialValues.visibility}
+                className={inputClassName}>
+                {Object.entries(PROJECT_VISIBILITY_LABELS)
+                  .filter(([value]) => value !== "hidden")
+                  .map(([value, label]) => <option key={value} value={value}>{label}</option>)}
               </select>
             )}
-            <FieldError
-              id="visibility-error"
-              messages={state.fieldErrors.visibility}
-            />
-          </label>
-
-          <label className={labelClassName}>
-            Kişisel ilerleme tahmini (%)
-            <input
-              name="progress"
-              type="number"
-              min={0}
-              max={100}
-              step={1}
-              defaultValue={initialValues.progress}
-              className={inputClassName}
-            />
-            <FieldError
-              id="progress-error"
-              messages={state.fieldErrors.progress}
-            />
+            <FieldError id="visibility-error" messages={state.fieldErrors.visibility}/>
           </label>
         </div>
 
-        <label className="flex items-start gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] p-4">
-          <input
-            name="isFeatured"
-            type="checkbox"
-            defaultChecked={initialValues.isFeatured}
-            className="mt-1 h-4 w-4 accent-[var(--accent)]"
-          />
-          <span>
-            <span className="block text-sm font-medium">Öne çıkan proje</span>
-            <span className="mt-1 block text-xs leading-5 text-[var(--muted)]">
-              Bu bayrak tek başına projeyi yayınlamaz.
-            </span>
-          </span>
-        </label>
-
-        <div className="space-y-5 rounded-2xl border border-[var(--border)] bg-[rgba(255,255,255,0.015)] p-5">
-          <div>
-            <h2 className="text-lg font-semibold">Bağlantılar ve görsel</h2>
-            <p className="mt-2 text-sm leading-6 text-[var(--muted)]">
-              Yeni veya değişen bağlantı ve görseller yayınlanmadan önce
-              inceleme gerektirir.
-            </p>
-          </div>
-
-          <div className="grid gap-5 lg:grid-cols-2">
-            <label className={labelClassName}>
-              GitHub URL
-              <input
-                name="githubUrl"
-                type="url"
-                maxLength={2048}
-                defaultValue={initialValues.githubUrl ?? ""}
-                placeholder="https://github.com/..."
-                className={inputClassName}
-              />
-              <FieldError
-                id="github-url-error"
-                messages={state.fieldErrors.githubUrl}
-              />
-            </label>
-
-            <label className={labelClassName}>
-              Demo URL
-              <input
-                name="demoUrl"
-                type="url"
-                maxLength={2048}
-                defaultValue={initialValues.demoUrl ?? ""}
-                placeholder="https://..."
-                className={inputClassName}
-              />
-              <FieldError
-                id="demo-url-error"
-                messages={state.fieldErrors.demoUrl}
-              />
-            </label>
-          </div>
-
-          {!readOnly && <UploadForm image onUploaded={url=>{setImageValue(url);setDirty(true);}}/>}
-          <label className={labelClassName}>
-            Görsel adresi
-            <input
-              name="imageUrl"
-              type="url"
-              maxLength={2048}
-              value={imageValue} onChange={e=>setImageValue(e.target.value)}
-              placeholder="https://..."
-              className={inputClassName}
-            />
-            <FieldError
-              id="image-url-error"
-              messages={state.fieldErrors.imageUrl}
-            />
-          </label>
+        <div className="space-y-3 rounded-2xl border border-[var(--border)] bg-[rgba(255,255,255,0.015)] p-5">
+          <h2 className="text-lg font-semibold">Kapak görseli <span className="text-sm font-normal text-[var(--muted)]">(isteğe bağlı)</span></h2>
+          {!readOnly ? (
+            <UploadForm image streamlinedPublicImage onUploaded={(url) => {
+              setImageValue(url);
+              setDirty(true);
+            }}/>
+          ) : null}
+          <input type="hidden" name="imageUrl" value={imageValue}/>
+          {imageValue ? (
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-sm text-[var(--muted)]">Kapak görseli seçildi.</p>
+              {!readOnly ? <button type="button" onClick={() => {
+                setImageValue("");
+                setDirty(true);
+              }} className="text-sm text-[#f0c46b] hover:underline">Kapak görselini projeden kaldır</button> : null}
+            </div>
+          ) : null}
+          <FieldError id="image-url-error" messages={state.fieldErrors.imageUrl}/>
         </div>
       </fieldset>
 
       {!readOnly ? (
         <div className="flex flex-wrap items-center gap-3">
-          <ProjectSubmitButton
-            pendingLabel={
-              mode === "create" ? "Oluşturuluyor..." : "Kaydediliyor..."
-            }
-          >
-            {mode === "create" ? "Taslak oluştur" : "Değişiklikleri kaydet"}
+          <ProjectSubmitButton pendingLabel={mode === "create" ? "Oluşturuluyor..." : "Kaydediliyor..."}>
+            {mode === "create" ? "Projeyi oluştur" : "Değişiklikleri kaydet"}
           </ProjectSubmitButton>
           <p className="text-xs leading-5 text-[var(--muted)]">
-            Değişikliklerini kaydettikten sonra önizlemeyi kontrol et.
+            Projenin adresi otomatik oluşturulur. Görevleri proje detayından ekleyebilirsin.
           </p>
         </div>
       ) : (
-        <p className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">
-          Arşivlenmiş proje yalnız okunabilir.
-        </p>
+        <p className="rounded-xl border border-[var(--border)] bg-[var(--surface-strong)] px-4 py-3 text-sm text-[var(--muted)]">Arşivlenmiş proje yalnız okunabilir.</p>
       )}
     </form>
   );

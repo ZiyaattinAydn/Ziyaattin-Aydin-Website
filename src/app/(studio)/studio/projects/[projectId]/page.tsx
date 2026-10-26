@@ -107,43 +107,6 @@ export default async function ProjectDetail({
           </>
         )}
       </section>
-      {[
-        { title: "Problem", body: p.sections.problem },
-        { title: "Yaklaşım", body: p.sections.approach },
-      ]
-        .filter((s) => s.body)
-        .map((s) => (
-          <section key={s.title}>
-            <h2 className="text-xl font-semibold">{s.title}</h2>
-            <p className="mt-3 whitespace-pre-wrap break-words text-[var(--muted)]">
-              {s.body}
-            </p>
-          </section>
-        ))}
-      {p.sections.highlights.length > 0 && (
-        <section>
-          <h2 className="text-xl font-semibold">Öne çıkanlar</h2>
-          <ul className="mt-3 list-inside list-disc space-y-2 text-[var(--muted)]">
-            {p.sections.highlights.map((s, i) => (
-              <li key={i}>{s}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-      <section>
-        <h2 className="text-xl font-semibold">Sıradaki adımlar</h2>
-        {p.sections.nextSteps.length ? (
-          <ul className="mt-3 list-inside list-disc space-y-2 text-[var(--muted)]">
-            {p.sections.nextSteps.map((s, i) => (
-              <li key={i}>{s}</li>
-            ))}
-          </ul>
-        ) : (
-          <p className="mt-3 text-sm text-[var(--muted)]">
-            Henüz adım eklenmedi.
-          </p>
-        )}
-      </section>
       {(p.githubUrl || p.demoUrl) && (
         <section>
           <h2 className="text-xl font-semibold">Bağlantılar</h2>

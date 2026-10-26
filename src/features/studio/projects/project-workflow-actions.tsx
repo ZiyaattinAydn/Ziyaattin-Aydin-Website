@@ -6,6 +6,7 @@ import type { ProjectPublishState } from "@/features/projects/domain";
 import {
   archiveProjectAction,
   transitionProjectAction,
+  updateProjectFeaturedAction,
 } from "@/features/studio/projects/actions";
 import {
   INITIAL_PROJECT_ACTION_STATE,
@@ -110,15 +111,40 @@ function ArchiveForm({ projectId }: { projectId: string }) {
   );
 }
 
+function FeaturedForm({ projectId, isFeatured }: { projectId: string; isFeatured: boolean }) {
+  const action: BoundProjectAction = updateProjectFeaturedAction.bind(null, projectId);
+  const [state, formAction] = useActionState(action, INITIAL_PROJECT_ACTION_STATE);
+  return (
+    <form action={formAction} className="space-y-3 rounded-xl border border-[var(--border)] p-4">
+      <label className="flex items-start gap-3 text-sm">
+        <input name="isFeatured" type="checkbox" defaultChecked={isFeatured}
+          className="mt-1 h-4 w-4 accent-[var(--accent)]"/>
+        <span>
+          <strong className="block">Portföyde öne çıkar</strong>
+          <span className="mt-1 block text-xs text-[var(--muted)]">
+            Yalnız yayınlanmış projelerde öne çıkarma için kullanılır; projeyi tek başına yayınlamaz.
+          </span>
+        </span>
+      </label>
+      <ProjectSubmitButton pendingLabel="Kaydediliyor..." className="w-full">
+        Öne çıkarma tercihini kaydet
+      </ProjectSubmitButton>
+      <WorkflowMessage state={state}/>
+    </form>
+  );
+}
+
 type ProjectWorkflowActionsProps = {
   projectId: string;
   publishState: ProjectPublishState;
+  isFeatured: boolean;
   allowedTransitions: readonly ProjectPublishState[];
 };
 
 export function ProjectWorkflowActions({
   projectId,
   publishState,
+  isFeatured,
   allowedTransitions,
 }: ProjectWorkflowActionsProps) {
   if (publishState === "archived") {
@@ -161,6 +187,7 @@ export function ProjectWorkflowActions({
         </p>
       )}
 
+      <FeaturedForm projectId={projectId} isFeatured={isFeatured} />
       <ArchiveForm projectId={projectId} />
     </section>
   );

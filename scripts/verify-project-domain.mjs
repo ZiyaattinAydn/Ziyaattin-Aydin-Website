@@ -99,6 +99,7 @@ const validation = loadTypeScriptModule(
 const transitions = loadTypeScriptModule(
   "src/features/projects/transitions.ts",
 );
+const slugs = loadTypeScriptModule("src/features/studio/projects/project-slug.ts");
 const guard = loadTypeScriptModule(
   "src/features/projects/mutation-guard.ts",
 );
@@ -122,6 +123,11 @@ function deepEqual(actual, expected, message) {
   assertions += 1;
   assert.deepEqual(actual, expected, message);
 }
+
+equal(slugs.projectSlugFromTitle("Köprüaltı Tattoo"), "koprualti-tattoo");
+equal(slugs.projectSlugFromTitle("İş & Şehir: Örnek"), "is-sehir-ornek");
+equal(slugs.projectSlugFromTitle("🎨"), "proje");
+check(slugs.projectSlugFromTitle("a".repeat(200)).length <= 108, "Slug too long");
 
 const validDraft = validation.validateCreateProjectInput({
   title: "  İlk Gerçek Proje  ",
@@ -280,7 +286,7 @@ const unpublishPlan = transitions.prepareProjectTransition(
 );
 check(unpublishPlan.ok, "Published -> unpublished reddedildi.");
 if (unpublishPlan.ok) {
-  equal(unpublishPlan.data.visibility, "hidden");
+  equal(unpublishPlan.data.visibility, "private");
 }
 
 const archivePlan = transitions.prepareProjectTransition(
