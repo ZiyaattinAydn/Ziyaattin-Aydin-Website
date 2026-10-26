@@ -3,7 +3,7 @@ import { getStudioAuthorization } from "@/lib/auth/studio-authorization";
 
 /**
  * Only a currently authorized owner/admin with active MFA sees this quick return.
- * Never derive authorization from localStorage, an unauthenticated cookie marker,
+ * Never derive authorization from browser storage or unauthenticated cookie markers,
  * or a client-side boolean.
  */
 export async function StudioReturnShortcut() {
