@@ -29,10 +29,9 @@ export default function NewStudioWritingPage() {
           ← Yazılara dön
         </Link>
         <StudioPageHeader
-          eyebrow="Studio / Writings / New"
-          title="Yeni yazı taslağı"
-          description="Form yalnız düzenlenebilir yazı alanlarını gönderir. Owner kimliği, draft state ve approval alanları server-side yönetilir."
-          status="Private default"
+          eyebrow="Studio / Yazılar / Yeni"
+          title="Yeni yazı"
+          description="Yazını oluştur, istersen kapak görseli ekle. Özel kaydedebilir veya herkese açık yayınlayabilirsin."
         />
       </div>
 
@@ -40,7 +39,6 @@ export default function NewStudioWritingPage() {
         <WritingForm
           mode="create"
           initialValues={INITIAL_WRITING_VALUES}
-          slugEditable
         />
       </Panel>
     </div>
