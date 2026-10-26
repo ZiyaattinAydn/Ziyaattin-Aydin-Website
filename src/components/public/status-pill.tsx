@@ -2,6 +2,7 @@ import type { ProjectStatus } from "@/features/public/content/model";
 
 const statusText: Record<ProjectStatus, string> = {
   "Devam Ediyor": "text-[var(--accent)]",
+  "Duraklatıldı": "text-amber-200",
   Tamamlandı: "text-emerald-200",
   Planlandı: "text-[var(--muted)]",
 };
