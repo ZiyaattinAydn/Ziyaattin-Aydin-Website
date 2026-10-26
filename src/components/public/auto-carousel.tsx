@@ -18,7 +18,7 @@ export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible =
   const [animated, setAnimated] = useState(true);
   const [motionAllowed, setMotionAllowed] = useState(false);
   const pausedUntil = useRef(0);
-  const lastAdvance = useRef(Date.now());
+  const lastAdvance = useRef(0);
   const locked = useRef(false);
   const touchStart = useRef<number | null>(null);
   const visiblePosition = count ? ((position - clones) % count + count) % count : 0;
@@ -33,6 +33,7 @@ export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible =
 
   useEffect(() => {
     if (count < 2 || !motionAllowed) return;
+    lastAdvance.current = Date.now();
     const timer = window.setInterval(() => {
       const now = Date.now();
       if (
@@ -95,8 +96,8 @@ export function AutoCarousel({ items, label, desktopVisible = 3, tabletVisible =
           style={{ transitionDuration: animated && motionAllowed ? "550ms" : "0ms" }}>
           {loopedItems.map((item, index) => (
             <div key={index} className={styles.slide}
-              aria-hidden={count > 1 && (index < clones || index >= count + clones) ? true : undefined}
-              inert={count > 1 && (index < clones || index >= count + clones) ? true : undefined}>
+              aria-hidden={count > 1 && (index < clones || index >= count + clones) && (index < position || index >= position + 3) ? true : undefined}
+              inert={count > 1 && (index < clones || index >= count + clones) && (index < position || index >= position + 3) ? true : undefined}>
               {item}
             </div>
           ))}
