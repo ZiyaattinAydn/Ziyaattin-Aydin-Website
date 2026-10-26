@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { projectSlugFromTitle } from "./project-slug";
 
 import {
   archiveProject,
@@ -25,33 +26,14 @@ function readNullableText(formData: FormData, name: string): string | null {
   return value.length > 0 ? value : null;
 }
 
-function readList(formData: FormData, name: string): string[] {
-  return readText(formData, name)
-    .split(/\r?\n/)
-    .map((item) => item.trim())
-    .filter(Boolean);
-}
-
-function readProgress(formData: FormData): number {
-  const value = readText(formData, "progress");
-  return Number(value);
-}
-
+// Only the fields shown in the streamlined form are editable here.
+// Omitted legacy/portfolio fields are preserved on updates.
 function readProjectInput(formData: FormData) {
   return {
     title: readText(formData, "title"),
-    slug: readText(formData, "slug"),
     summary: readText(formData, "summary"),
-    problem: readText(formData, "problem"),
-    approach: readText(formData, "approach"),
-    highlights: readList(formData, "highlights"),
-    nextSteps: readList(formData, "nextSteps"),
     status: readText(formData, "status"),
     visibility: readText(formData, "visibility"),
-    progress: readProgress(formData),
-    isFeatured: formData.get("isFeatured") === "on",
-    githubUrl: readNullableText(formData, "githubUrl"),
-    demoUrl: readNullableText(formData, "demoUrl"),
     imageUrl: readNullableText(formData, "imageUrl"),
   };
 }
@@ -72,14 +54,30 @@ export async function createProjectAction(
 ): Promise<ProjectActionState> {
   void previousState;
 
-  const result = await createProjectDraft(readProjectInput(formData));
+  const input = readProjectInput(formData);
+  const baseSlug = projectSlugFromTitle(input.title);
 
-  if (!result.ok) {
-    return toProjectActionError(result.error);
+  // Rely on the database unique index; retry with a numeric suffix if another
+  // project already owns the generated address (also safe under concurrency).
+  for (let suffix = 1; suffix <= 30; suffix += 1) {
+    const slug = suffix === 1 ? baseSlug : `${baseSlug}-${suffix}`;
+    const result = await createProjectDraft({ ...input, slug });
+
+    if (result.ok) {
+      revalidateProjectPaths(result.data.id, result.data.slug);
+      redirect(`/studio/projects/${result.data.id}/edit`);
+    }
+
+    if (result.error.code !== "slug_conflict") {
+      return toProjectActionError(result.error);
+    }
   }
 
-  revalidateProjectPaths(result.data.id, result.data.slug);
-  redirect(`/studio/projects/${result.data.id}/edit`);
+  return {
+    status: "error",
+    message: "Bu proje adı için kullanılabilir bir adres oluşturulamadı.",
+    fieldErrors: { title: ["Başlığı biraz daha farklı yazmayı dene."] },
+  };
 }
 
 export async function updateProjectAction(
