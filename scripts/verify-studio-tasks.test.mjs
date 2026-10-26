@@ -422,6 +422,7 @@ test("authorization requires both current AAL2 and an enrolled verified factor",
     };
     const api = load("src/lib/auth/studio-authorization.ts", {
       "server-only": {},
+      "react": { cache: (fn) => fn },
       "@/lib/supabase/environment": { isSupabaseConfigured: () => true },
       "@/lib/supabase/server": {
         createServerSupabaseClient: async () => client,
