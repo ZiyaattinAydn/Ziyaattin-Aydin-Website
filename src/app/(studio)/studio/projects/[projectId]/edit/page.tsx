@@ -68,6 +68,7 @@ export default async function EditStudioProjectPage({
     title: project.title,
     slug: project.slug,
     summary: project.summary,
+    subtitle: project.subtitle,
     problem: project.sections.problem,
     approach: project.sections.approach,
     highlights: project.sections.highlights,
