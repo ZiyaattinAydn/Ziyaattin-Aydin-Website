@@ -1,4 +1,5 @@
 import Image from "next/image";
+import heroStyles from "./home-hero.module.css";
 import Link from "next/link";
 import { ProjectCard } from "@/components/public/project-card";
 import { WritingCard } from "@/components/public/writing-card";
@@ -30,7 +31,7 @@ export default async function HomePage() {
   ]);
   return (
     <div className="space-y-14 lg:space-y-20">
-      <section className="relative isolate min-w-0 overflow-hidden rounded-3xl border border-[var(--border)] bg-[linear-gradient(115deg,rgba(4,8,10,.98),rgba(4,8,10,.9)_52%,rgba(0,190,100,.08))] px-4 py-8 min-[380px]:px-6 sm:px-10 sm:py-10 lg:grid lg:min-h-[550px] lg:grid-cols-[1.15fr_.85fr] lg:items-center lg:px-12">
+      <section className="relative isolate min-w-0 overflow-hidden rounded-3xl border border-[var(--border)] bg-[linear-gradient(115deg,rgba(4,8,10,.98),rgba(4,8,10,.9)_52%,rgba(0,190,100,.08))] px-4 pb-4 pt-8 min-[380px]:px-6 sm:px-8 sm:pt-10 md:grid md:min-h-[460px] md:grid-cols-[minmax(0,1fr)_minmax(0,0.82fr)] md:items-center md:gap-4 md:py-10 lg:min-h-[550px] lg:gap-8 lg:px-12">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(18,217,120,.1),transparent_28rem)]"
@@ -39,7 +40,7 @@ export default async function HomePage() {
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
             Kişisel web sitem
           </p>
-          <h1 className="mt-5 text-[clamp(2.15rem,9vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.04em] sm:mt-6 sm:text-6xl xl:text-7xl">
+          <h1 className="mt-5 text-[clamp(2.15rem,9vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.04em] sm:mt-6 sm:text-5xl md:text-[clamp(2.45rem,5.5vw,3.6rem)] xl:text-7xl">
             Ziyaattin
             <br />
             Aydın<span className="text-[var(--accent)]">.</span>
@@ -68,18 +69,18 @@ export default async function HomePage() {
             </Link>
           </div>
         </div>
-        <div className="relative mx-auto mt-8 aspect-[6/5] w-full max-w-[380px] overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface-strong)] sm:aspect-auto sm:h-96 sm:max-w-md lg:mt-0 lg:h-[460px] lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent">
+        <div className="relative mx-auto mt-5 h-[clamp(220px,51vw,330px)] w-full max-w-[390px] md:mt-0 md:h-[clamp(310px,36vw,420px)] md:max-w-none lg:h-[460px]">
           <div
             aria-hidden="true"
-            className="absolute inset-0 rounded-[1.5rem] bg-[linear-gradient(180deg,rgba(18,217,120,.08),rgba(3,7,10,.22))] lg:inset-x-4 lg:bottom-0 lg:top-8 lg:rounded-[2rem] lg:border lg:border-[var(--border)]"
+            className="pointer-events-none absolute inset-x-[12%] bottom-[8%] top-[15%] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(18,217,120,.13),transparent_70%)] blur-2xl"
           />
           <Image
             src="/images/portraits/home-hero.png"
             alt="Ziyaattin Aydın’ın stilize portresi"
             fill
             priority
-            sizes="(max-width: 640px) calc(100vw - 4rem), (max-width: 1024px) 448px, 38vw"
-            className="object-cover object-[center_26%] sm:object-contain sm:object-bottom"
+            sizes="(max-width: 767px) min(390px, calc(100vw - 4rem)), (max-width: 1023px) 40vw, 38vw"
+            className={heroStyles.portraitImage}
           />
         </div>
       </section>
