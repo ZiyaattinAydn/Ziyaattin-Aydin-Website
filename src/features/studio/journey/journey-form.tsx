@@ -35,22 +35,13 @@ export function JourneyForm({ item }: { item?: JourneyRow }) {
       )}
       {item && <input type="hidden" name="version" value={item.updated_at}/>}
       <fieldset disabled={pending || published || archived} className="space-y-5">
-        <div className="grid gap-4 md:grid-cols-2">
-          <label className="block text-sm font-medium">Başlık
-            <input name="title" required maxLength={160} defaultValue={values.title} className={taskInputClass + " mt-2"}/>
-          </label>
-          <label className="block text-sm font-medium">Adres (slug)
-            {item?.published_at ? (
-              <>
-                <input name="slug" type="hidden" value={values.slug}/>
-                <p className="mt-2 rounded-xl border border-[var(--border)] p-3 text-sm">{values.slug} (önceden yayınlandı, değiştirilemez)</p>
-              </>
-            ) : (
-              <input name="slug" required pattern="[a-z0-9]+(-[a-z0-9]+)*" maxLength={120}
-                defaultValue={values.slug} className={taskInputClass + " mt-2"} placeholder="ilk-stajim"/>
-            )}
-          </label>
-        </div>
+        <label className="block text-sm font-medium">Başlık
+          <input name="title" required maxLength={160} defaultValue={values.title}
+            className={taskInputClass + " mt-2"} />
+          <span className="mt-2 block text-xs font-normal text-[var(--muted)]">
+            Bağlantı yeni kayıtlarda başlıktan otomatik oluşturulur. Mevcut kayıtların adresi korunur.
+          </span>
+        </label>
         <div className="grid gap-4 md:grid-cols-3">
           <label className="block text-sm font-medium">Dönem
             <input name="period_label" maxLength={100} defaultValue={values.period_label ?? ""}
