@@ -8,19 +8,26 @@ export async function SiteFooter() {
       ...siteConfig.contactLinks,
       ...siteConfig.socialLinks,
     ] as SiteExternalLink[]
-  ).filter((item) => item.status === "verified" && item.href);
+  ).filter((item) => item.status === "verified" && item.href && item.label !== "E-posta");
   const publishedLinks = [
-    profile?.email ? { label: "E-posta", href: "mailto:" + profile.email } : null,
     profile?.githubUrl ? { label: "GitHub", href: profile.githubUrl } : null,
     profile?.linkedinUrl ? { label: "LinkedIn", href: profile.linkedinUrl } : null,
   ].filter((item): item is { label: string; href: string } => Boolean(item));
   return (
     <footer className="mt-8 border-t border-[var(--border)] bg-[var(--background)] py-8 sm:py-10">
       <div className="mx-auto flex max-w-[var(--container-max)] flex-col justify-between gap-6 px-4 sm:px-6 md:flex-row md:items-center lg:px-8">
-        <div>
+        <div className="min-w-0">
           <Link href="/" className="text-base font-semibold tracking-tight">
             Ziyaattin Aydın<span className="text-[var(--accent)]">.</span>
           </Link>
+          {profile?.email && (
+            <a
+              href={"mailto:" + profile.email}
+              className="mt-2 block w-fit max-w-full break-all text-sm text-[var(--muted-strong)] transition hover:text-[var(--accent)]"
+            >
+              {profile.email}
+            </a>
+          )}
           <p className="mt-2 text-xs text-[var(--muted)]">
             © {new Date().getFullYear()} · Kişisel web sitesi
           </p>
