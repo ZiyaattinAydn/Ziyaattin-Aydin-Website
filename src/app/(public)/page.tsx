@@ -50,10 +50,10 @@ export default async function HomePage() {
           <p className="mt-4 max-w-lg text-sm leading-7 text-[var(--muted)] sm:text-base sm:leading-8">
             Projelerim, yazılarım ve öğrenme notlarım için kişisel alanım.
           </p>
-          <div className="mt-7 flex flex-wrap gap-3 sm:mt-8">
+          <div className="mt-7 flex flex-col gap-3 min-[380px]:flex-row min-[380px]:flex-wrap sm:mt-8">
             <Link
               href="/projects"
-              className="inline-flex min-w-0 flex-1 items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-semibold text-[var(--accent-contrast)] transition hover:brightness-110 min-[380px]:flex-none sm:px-5"
+              className="inline-flex w-full min-w-0 flex-1 items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-semibold text-[var(--accent-contrast)] transition hover:brightness-110 min-[380px]:w-auto min-[380px]:flex-none sm:px-5"
             >
               Projeleri keşfet{" "}
               <span aria-hidden="true" className="ml-3">
@@ -62,7 +62,7 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/about"
-              className="inline-flex min-w-0 flex-1 items-center justify-center rounded-xl border border-[var(--border-strong)] px-4 py-3 text-sm font-semibold transition hover:border-[var(--accent-dim)] min-[380px]:flex-none sm:px-5"
+              className="inline-flex w-full min-w-0 flex-1 items-center justify-center rounded-xl border border-[var(--border-strong)] px-4 py-3 text-sm font-semibold transition hover:border-[var(--accent-dim)] min-[380px]:w-auto min-[380px]:flex-none sm:px-5"
             >
               Hakkımda
             </Link>
