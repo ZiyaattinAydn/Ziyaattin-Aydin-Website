@@ -52,14 +52,23 @@ test("project uploader hides its redundant project selector but library uploader
   assert.ok(upload.includes("Proje kaydedildiğinde dosya otomatik"));
 });
 
-test("homepage uses full project and writing carousels, and about panels share the component", () => {
+test("home carousels remain, while about shows fixed responsive cards", () => {
   const home = readFileSync("src/app/(public)/page.tsx","utf8");
   const about = readFileSync("src/app/(public)/about/page.tsx","utf8");
   const carousel = readFileSync("src/components/public/auto-carousel.tsx","utf8");
   assert.ok(home.includes('<AutoCarousel label="Projeler"'));
   assert.ok(home.includes('<AutoCarousel label="Yazılar"'));
   assert.ok(!home.includes("projects.value.slice(0, 3)"));
-  assert.ok(about.includes('<AutoCarousel label="Hakkımda alanları"'));
+  assert.ok(!about.includes("<AutoCarousel"), "about is no longer a carousel");
+  assert.ok(about.includes('aria-label="Kişisel sistemim ve site rehberi"'));
+  assert.ok(about.includes("md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]"));
+  assert.ok(about.includes('<div className="grid min-w-0 gap-4">'));
+  assert.ok(about.includes('Kişisel Sistemim'));
+  assert.ok(about.includes('Sitede neler var?'));
+  assert.ok(about.includes('Bu siteyi oluşturan araçlar'));
+  assert.ok(about.includes('href: "/projects"'));
+  assert.ok(about.includes('href: "/writings"'));
+  assert.ok(about.includes('href: "/journey"'));
   assert.ok(carousel.includes("Date.now() + 10000"));
   assert.ok(carousel.includes("prefers-reduced-motion"));
   assert.ok(carousel.includes("onTouchEnd"));
@@ -148,4 +157,19 @@ test("public Studio shortcut requires full server-side Studio authorization and 
   const html = renderToStaticMarkup(await component());
   assert.ok(html.includes('href="/studio"'));
   assert.ok(html.includes("Studio’ya dön"));
+});
+
+test("footer exposes approved profile email as mailto under the owner, without duplicate email nav", () => {
+  const footer = readFileSync("src/components/layout/site-footer.tsx", "utf8");
+  const reader = readFileSync("src/features/public/content/published-profile.ts", "utf8");
+  assert.ok(footer.includes("readPublishedSiteProfile()"));
+  assert.ok(footer.includes("profile?.email &&"));
+  assert.ok(footer.includes('href={"mailto:" + profile.email}'));
+  assert.ok(footer.includes("{profile.email}"));
+  assert.ok(footer.indexOf("Ziyaattin Aydın<span") < footer.indexOf('href={"mailto:" + profile.email}'));
+  assert.ok(footer.indexOf('href={"mailto:" + profile.email}') < footer.indexOf('aria-label="Alt navigasyon"'));
+  assert.ok(!footer.includes('profile?.email ? { label: "E-posta"'));
+  assert.ok(footer.includes('item.label !== "E-posta"'));
+  assert.ok(reader.includes('.eq("status", "published")'));
+  assert.ok(footer.includes('href={siteConfig.adminEntry.href}'));
 });
