@@ -21,14 +21,21 @@ export type JourneyRow = JourneyInput & {
   created_at: string;
   updated_at: string;
 };
-export function parseJourney(form: FormData): JourneyInput {
+/** Create a URL-safe segment for new records; existing records keep their original slug. */
+export function journeySlugFromTitle(title: string): string {
+  return title.trim().toLocaleLowerCase("tr-TR").replace(/ı/g, "i")
+    .normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")
+    .slice(0, 105).replace(/-+$/g, "") || "yolculuk";
+}
+export function parseJourney(form: FormData, existingSlug?: string): JourneyInput {
   const text = (key: string) => {
     const value = form.get(key);
     if (typeof value !== "string") throw new Error("Form alanları geçersiz.");
     return value.trim();
   };
   const title = text("title");
-  const slug = text("slug");
+  const slug = existingSlug ?? journeySlugFromTitle(title);
   const period = text("period_label");
   const summary = text("summary");
   const content = text("content");
