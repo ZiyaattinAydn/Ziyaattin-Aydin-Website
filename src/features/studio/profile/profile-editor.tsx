@@ -1,7 +1,7 @@
 "use client";
 import { useActionState, useState } from "react";
 import { saveSiteProfile, changeSiteProfileStatus } from "./actions";
-import { initialProfileState, type ProfileState, type SiteProfile } from "./domain";
+import { initialProfileState, type ProfileState, type SiteProfile, type ProfileFields } from "./domain";
 import { useUnsavedChanges } from "@/features/studio/library/unsaved";
 import { taskInputClass as input } from "@/features/studio/tasks/task-styles";
 
@@ -28,6 +28,18 @@ function PublishControl({ profile }: { profile: SiteProfile }) {
 }
 export function ProfileEditor({ profile }: { profile: SiteProfile | null }) {
   const [dirty, setDirty] = useState(false);
+  // Controlled values survive a rejected server action and its React form reset.
+  const [fields, setFields] = useState({
+    headline: profile?.headline ?? "",
+    description: profile?.description ?? "",
+    email: profile?.email ?? "",
+    github_url: profile?.github_url ?? "",
+    linkedin_url: profile?.linkedin_url ?? "",
+  });
+  const setField = (key: keyof ProfileFields, value: string) => {
+    setFields((current) => ({ ...current, [key]: value }));
+    setDirty(true);
+  };
   const [state, action, pending] = useActionState(
     async (previous: ProfileState, form: FormData) => {
       const result = await saveSiteProfile(previous, form);
@@ -48,25 +60,25 @@ export function ProfileEditor({ profile }: { profile: SiteProfile | null }) {
       {profile && <input type="hidden" name="version" value={profile.updated_at}/>}
       <fieldset className="space-y-5" disabled={pending || published}>
         <label className="block text-sm font-medium">Kısa tanıtım başlığı
-          <input name="headline" maxLength={200} defaultValue={profile?.headline ?? ""}
+          <input name="headline" maxLength={200} value={fields.headline} onChange={(event) => setField("headline", event.target.value)}
             className={input + " mt-2"} placeholder="Kendimi nasıl tanıtıyorum?"/>
         </label>
         <label className="block text-sm font-medium">Biyografi
           <textarea name="description" rows={10} maxLength={3000}
-            defaultValue={profile?.description ?? ""} className={input + " mt-2"}/>
+            value={fields.description} onChange={(event) => setField("description", event.target.value)} className={input + " mt-2"}/>
         </label>
         <div className="grid gap-4 sm:grid-cols-2">
           <label className="block text-sm font-medium">İletişim e-postası (isteğe bağlı)
             <input name="email" type="email" maxLength={254}
-              defaultValue={profile?.email ?? ""} className={input + " mt-2"}/>
+              value={fields.email} onChange={(event) => setField("email", event.target.value)} className={input + " mt-2"}/>
           </label>
           <label className="block text-sm font-medium">GitHub profil adresi
-            <input name="github_url" type="url" maxLength={500}
-              defaultValue={profile?.github_url ?? ""} placeholder="https://github.com/kullanici" className={input + " mt-2"}/>
+            <input name="github_url" type="text" inputMode="url" maxLength={500}
+              value={fields.github_url} onChange={(event) => setField("github_url", event.target.value)} placeholder="https://github.com/kullanici" className={input + " mt-2"}/>
           </label>
           <label className="block text-sm font-medium">LinkedIn profil adresi
-            <input name="linkedin_url" type="url" maxLength={500}
-              defaultValue={profile?.linkedin_url ?? ""} placeholder="https://www.linkedin.com/in/kullanici" className={input + " mt-2"}/>
+            <input name="linkedin_url" type="text" inputMode="url" maxLength={500}
+              value={fields.linkedin_url} onChange={(event) => setField("linkedin_url", event.target.value)} placeholder="linkedin.com/in/kullanici" className={input + " mt-2"}/>
           </label>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-4">
