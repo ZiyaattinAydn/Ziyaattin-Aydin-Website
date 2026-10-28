@@ -1,0 +1,24 @@
+/* Blend the photographic rectangle into the hero instead of stacking a second card.
+   The mask is supported by current Chromium, Firefox and Safari. */
+.portraitImage {
+  object-fit: contain;
+  object-position: center bottom;
+  -webkit-mask-image: radial-gradient(
+    ellipse 69% 77% at 50% 52%,
+    #000 44%,
+    rgba(0, 0, 0, 0.9) 66%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 69% 77% at 50% 52%,
+    #000 44%,
+    rgba(0, 0, 0, 0.9) 66%,
+    transparent 100%
+  );
+}
+
+@media (max-width: 767px) {
+  .portraitImage {
+    object-position: center center;
+  }
+}
