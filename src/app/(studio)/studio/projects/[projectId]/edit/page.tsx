@@ -103,6 +103,7 @@ export default async function EditStudioProjectPage({
         </div>
       </div>
 
+      <div className="flex justify-end"><Link href="/studio/projects/new" className="inline-flex rounded-xl border border-[var(--accent-dim)] bg-[var(--accent-soft)] px-4 py-2.5 text-sm font-semibold text-[var(--accent)]">+ Yeni proje ekle</Link></div>
       <div className="grid gap-6 2xl:grid-cols-[minmax(0,1fr)_360px]">
         <Panel className="p-5 sm:p-7">
           <ProjectForm

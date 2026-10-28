@@ -112,3 +112,23 @@ test("form fields remain mapped through create/update action and edit hydration"
   assert.ok(edit.includes("content: writing.content"));
   assert.ok(actions.includes('content: readText(formData, "content")'));
 });
+
+test("public article TOC uses Markdown headings and matching content anchors", () => {
+  const page = read("src/app/(public)/writings/[slug]/page.tsx");
+  const markdown = read("src/features/writings/markdown-content.tsx");
+  assert.ok(page.includes("markdownHeadings(section.paragraphs.join("));
+  assert.ok(page.includes("toc.map("));
+  assert.ok(page.includes("toc.length > 0"));
+  assert.ok(page.includes("headingPrefix={section.id}"));
+  assert.ok(markdown.includes('headingPrefix + "-heading-" + headingIndex++'));
+  assert.ok(markdown.includes('prefix + "-heading-" + index++'));
+  assert.ok(markdown.includes("id={id}"));
+});
+test("Studio writing and project edits provide quick links to create another", () => {
+  const writing = read("src/app/(studio)/studio/writings/[writingId]/edit/page.tsx");
+  const project = read("src/app/(studio)/studio/projects/[projectId]/edit/page.tsx");
+  assert.ok(writing.includes('href="/studio/writings/new"'));
+  assert.ok(writing.includes("Yeni yazı ekle"));
+  assert.ok(project.includes('href="/studio/projects/new"'));
+  assert.ok(project.includes("Yeni proje ekle"));
+});

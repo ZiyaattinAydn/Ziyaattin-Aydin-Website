@@ -15,10 +15,21 @@ function inline(source: string): ReactNode[] {
   });
 }
 
-export function MarkdownContent({ content }: { content: string }) {
+export function markdownHeadings(content: string, prefix = "content") {
+  let index = 0;
+  let code = false;
+  return content.split(/\r?\n/).flatMap((line) => {
+    if (line.trimStart().startsWith("```")) { code = !code; return []; }
+    if (code) return [];
+    const match = /^(#{1,6})\s+(.+)$/.exec(line);
+    return match ? [{ id: prefix + "-heading-" + index++, title: match[2].replace(/[\x60*_]/g, "").trim() }] : [];
+  });
+}
+export function MarkdownContent({ content, headingPrefix = "content" }: { content: string; headingPrefix?: string }) {
   const lines = content.replace(/\r\n?/g, "\n").split("\n");
   const nodes: ReactNode[] = [];
   let i = 0;
+  let headingIndex = 0;
   while (i < lines.length) {
     const line = lines[i];
     if (!line.trim()) { i++; continue; }
@@ -40,9 +51,10 @@ export function MarkdownContent({ content }: { content: string }) {
       const title = inline(h[2]);
       const cls = "break-words font-semibold tracking-tight";
       const level = h[1].length;
-      nodes.push(level === 1 ? <h2 key={nodes.length} className={cls}>{title}</h2>
-        : level === 2 ? <h3 key={nodes.length} className={cls+" text-xl"}>{title}</h3>
-        : <h4 key={nodes.length} className={cls+" text-lg"}>{title}</h4>);
+      const id = headingPrefix + "-heading-" + headingIndex++;
+      nodes.push(level === 1 ? <h2 id={id} key={nodes.length} className={cls+" scroll-mt-24"}>{title}</h2>
+        : level === 2 ? <h3 id={id} key={nodes.length} className={cls+" scroll-mt-24 text-xl"}>{title}</h3>
+        : <h4 id={id} key={nodes.length} className={cls+" scroll-mt-24 text-lg"}>{title}</h4>);
       i++; continue;
     }
     if (/^\s*>\s?/.test(line)) {
