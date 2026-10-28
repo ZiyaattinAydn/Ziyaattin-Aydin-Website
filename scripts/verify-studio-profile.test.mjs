@@ -48,3 +48,27 @@ test("Public URL sanitizer drops unknown hosts and secrets", () => {
   assert.equal(safeProfileLink("https://www.linkedin.com/in/example", "linkedin"), "https://www.linkedin.com/in/example");
   assert.equal(safeProfileLink("javascript:alert(1)", "github"), null);
 });
+
+test("Copied profile links without https are normalized, not rejected", () => {
+  const p = parseProfile(make({
+    linkedin_url: "www.linkedin.com/in/ziyaattin-aydin",
+    github_url: "github.com/ZiyaattinAydn",
+  }));
+  assert.equal(p.linkedin_url, "https://www.linkedin.com/in/ziyaattin-aydin");
+  assert.equal(p.github_url, "https://github.com/ZiyaattinAydn");
+  assert.equal(safeProfileLink("linkedin.com/in/example", "linkedin"), "https://linkedin.com/in/example");
+});
+test("The URL normalizer still rejects insecure or hostile locations", () => {
+  assert.equal(safeProfileLink("http://linkedin.com/in/example", "linkedin"), null);
+  assert.equal(safeProfileLink("linkedin.com.evil.test/in/example", "linkedin"), null);
+  assert.equal(safeProfileLink("https://linkedin.com/in/example?redirect=bad", "linkedin"), null);
+  assert.equal(safeProfileLink("https://other.example/in/example", "linkedin"), null);
+});
+test("Profile form fields are controlled to survive a rejected server action", () => {
+  const form = fs.readFileSync("src/features/studio/profile/profile-editor.tsx", "utf8");
+  for (const name of ["headline", "description", "email", "github_url", "linkedin_url"]) {
+    assert.ok(form.includes(`value={fields.${name}}`), name + " controlled value");
+    assert.ok(form.includes(`setField("${name}", event.target.value)`), name + " update");
+  }
+  assert.ok(!form.includes("defaultValue={profile?."), "profile fields must not reset on validation error");
+});
