@@ -14,12 +14,22 @@ export async function createJourney(_previous: JourneyState, form: FormData): Pr
   try {
     const data = parseJourney(form);
     const { db, owner } = await journeyContext();
-    const result = await db.from("journey_items").insert({
-      ...data, owner_id: owner, status: "active",
-      publish_state: "draft", visibility: "private",
-    }).select("id").single();
-    if (result.error || !result.data) throw new Error();
-    id = result.data.id;
+    // The database unique index rejects duplicate addresses; retry with a suffix.
+    let createdId: string | null = null;
+    for (let suffix = 1; suffix <= 30; suffix += 1) {
+      const slug = suffix === 1 ? data.slug : `${data.slug}-${suffix}`;
+      const result = await db.from("journey_items").insert({
+        ...data, slug, owner_id: owner, status: "active",
+        publish_state: "draft", visibility: "private",
+      }).select("id").single();
+      if (!result.error && result.data) {
+        createdId = result.data.id;
+        break;
+      }
+      if (result.error?.code !== "23505") break;
+    }
+    if (!createdId) throw new Error();
+    id = createdId;
   } catch { return failure("Taslak oluşturulamadı. Alanları, bağlantını ve benzersiz adresi kontrol et."); }
   refreshJourney();
   redirect("/studio/journey/" + id);
@@ -27,7 +37,6 @@ export async function createJourney(_previous: JourneyState, form: FormData): Pr
 export async function updateJourney(id: string, _previous: JourneyState, form: FormData): Promise<JourneyState> {
   if (!JOURNEY_ID.test(id)) return failure("Kayıt bulunamadı.");
   try {
-    const input = parseJourney(form);
     const { db, owner } = await journeyContext();
     const { data: current, error: readError } = await db.from("journey_items")
       .select("slug,status,publish_state,published_at")
@@ -35,8 +44,8 @@ export async function updateJourney(id: string, _previous: JourneyState, form: F
     if (readError || !current || current.status === "archived") return failure("Bu kayıt düzenlenemiyor.");
     if (current.publish_state === "published")
       return failure("Yayındaki kaydı değiştirmek için önce yayından kaldır.");
-    if (current.published_at && current.slug !== input.slug)
-      return failure("Daha önce yayınlanan kaydın adresi korunmalı.");
+    // Preserve every existing URL, even for drafts and unpublished records.
+    const input = parseJourney(form, current.slug);
     const { data, error } = await db.from("journey_items").update(input)
       .eq("id", id).eq("owner_id", owner).eq("status", "active")
       .eq("updated_at", String(form.get("version") ?? ""))

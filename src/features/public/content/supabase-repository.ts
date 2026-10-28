@@ -431,6 +431,7 @@ function mapJourneyRow(row: JourneyRow): JourneyItem | null {
   }
 
   return {
+    slug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(row.slug) ? row.slug : undefined,
     marker:
       row.period_label?.trim() ||
       row.occurred_on ||

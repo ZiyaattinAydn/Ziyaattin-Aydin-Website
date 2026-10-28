@@ -123,6 +123,7 @@ export type WritingSummary = {
 };
 
 export type JourneyItem = {
+  slug?: string;
   marker: string;
   title: string;
   detail: string;

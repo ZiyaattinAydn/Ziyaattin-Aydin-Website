@@ -33,8 +33,9 @@ export default async function JourneyPage() {
         >
           {result.data.map((item, index) => (
             <div
-              key={index}
-              className="relative border-l border-[var(--border)] pl-6 before:absolute before:-left-1 before:top-7 before:h-2 before:w-2 before:rounded-full before:bg-[var(--accent)]"
+              key={item.slug ?? index}
+              id={item.slug ?? `journey-${index + 1}`}
+              className="scroll-mt-24 relative border-l border-[var(--border)] pl-6 before:absolute before:-left-1 before:top-7 before:h-2 before:w-2 before:rounded-full before:bg-[var(--accent)]"
             >
               <TimelineCard item={item} />
             </div>
