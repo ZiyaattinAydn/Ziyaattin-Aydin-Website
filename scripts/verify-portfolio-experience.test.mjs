@@ -52,7 +52,7 @@ test("project uploader hides its redundant project selector but library uploader
   assert.ok(upload.includes("Proje kaydedildiğinde dosya otomatik"));
 });
 
-test("home carousels remain, while about shows fixed responsive cards", () => {
+test("home project, writing, journey carousels remain, while about shows fixed responsive cards", () => {
   const home = readFileSync("src/app/(public)/page.tsx","utf8");
   const about = readFileSync("src/app/(public)/about/page.tsx","utf8");
   const carousel = readFileSync("src/components/public/auto-carousel.tsx","utf8");
@@ -172,4 +172,21 @@ test("footer exposes approved profile email as mailto under the owner, without d
   assert.ok(footer.includes('item.label !== "E-posta"'));
   assert.ok(reader.includes('.eq("status", "published")'));
   assert.ok(footer.includes('href={siteConfig.adminEntry.href}'));
+});
+
+test("homepage journey previews use published repository data and deep link to the public timeline", () => {
+  const home = readFileSync("src/app/(public)/page.tsx", "utf8");
+  const journey = readFileSync("src/app/(public)/journey/page.tsx", "utf8");
+  const preview = readFileSync("src/components/public/journey-preview-card.tsx", "utf8");
+  const repository = readFileSync("src/features/public/content/supabase-repository.ts", "utf8");
+  assert.ok(home.includes("repository.listJourneyItems()"));
+  assert.ok(home.includes('journey.status === "rejected"'));
+  assert.ok(home.includes("journey.value.map("));
+  assert.ok(home.includes("<JourneyPreviewCard"));
+  assert.ok(preview.includes('item.slug ? `/journey#${item.slug}` : "/journey"'));
+  assert.ok(preview.includes("{item.detail}"));
+  assert.ok(!preview.includes("{item.lesson}"));
+  assert.ok(journey.includes('id={item.slug ?? `journey-${index + 1}`}'));
+  assert.ok(repository.includes('filters: PUBLIC_ACCESS_FILTERS'));
+  assert.ok(repository.includes('slug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(row.slug)'));
 });
