@@ -58,6 +58,7 @@ test("home project, writing, journey carousels remain, while about shows fixed r
   const carousel = readFileSync("src/components/public/auto-carousel.tsx","utf8");
   assert.ok(home.includes('<AutoCarousel label="Projeler"'));
   assert.ok(home.includes('<AutoCarousel label="Yazılar"'));
+  assert.ok(home.includes('<AutoCarousel label="Yolculuğum"'));
   assert.ok(!home.includes("projects.value.slice(0, 3)"));
   assert.ok(!about.includes("<AutoCarousel"), "about is no longer a carousel");
   assert.ok(about.includes('aria-label="Kişisel sistemim ve site rehberi"'));
