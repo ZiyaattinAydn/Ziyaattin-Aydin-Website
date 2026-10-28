@@ -191,3 +191,29 @@ test("homepage journey previews use published repository data and deep link to t
   assert.ok(repository.includes('filters: PUBLIC_ACCESS_FILTERS'));
   assert.ok(repository.includes('slug: /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(row.slug)'));
 });
+
+test("public homepage hero and content cards fit narrow mobile viewports", () => {
+  const home = readFileSync("src/app/(public)/page.tsx", "utf8");
+  const projects = readFileSync("src/components/public/project-card.tsx", "utf8");
+  const writings = readFileSync("src/components/public/writing-card.tsx", "utf8");
+  const journey = readFileSync("src/components/public/journey-preview-card.tsx", "utf8");
+  const section = readFileSync("src/components/public/public-section.tsx", "utf8");
+  const carouselCSS = readFileSync("src/components/public/auto-carousel.module.css", "utf8");
+  assert.ok(home.includes("aspect-[6/5]"), "mobile hero photo uses a controlled ratio");
+  assert.ok(home.includes("overflow-hidden rounded-[1.5rem]"), "hero photo is clipped into its frame");
+  assert.ok(home.includes("object-cover object-[center_26%] sm:object-contain"), "mobile photo fills rather than floats inside frame");
+  assert.ok(home.includes("min-[380px]:flex-none"), "CTA buttons can share or expand on small widths");
+  assert.ok(projects.includes("p-4 sm:p-6"));
+  assert.ok(writings.includes("p-4 sm:p-6"));
+  assert.ok(journey.includes("p-4 sm:p-7"));
+  assert.ok(section.includes('min-w-0 space-y-4 sm:space-y-5'));
+  assert.ok(carouselCSS.includes("--gap: 0.75rem"));
+  assert.ok(carouselCSS.includes("@media (min-width: 640px)"));
+});
+test("authenticated mobile visitors can return to Studio without a floating content overlay", () => {
+  const source = readFileSync("src/components/layout/studio-return-shortcut.tsx", "utf8");
+  assert.ok(source.includes('className="flex justify-end px-4 pb-5 md:contents"'));
+  assert.ok(source.includes("md:fixed md:bottom-6 md:right-6"), "floating shortcut is desktop/tablet only");
+  assert.ok(!source.includes("fixed bottom-5 right-4"), "mobile fixed overlay removed");
+  assert.ok(source.includes("getStudioAuthorization()"), "authorization is still required");
+});
