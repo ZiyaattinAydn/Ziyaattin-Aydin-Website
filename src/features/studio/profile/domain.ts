@@ -16,7 +16,13 @@ export type ProfileFields = Pick<SiteProfile,
 export function safeProfileLink(value: string | null, kind: "github" | "linkedin"): string | null {
   if (!value) return null;
   try {
-    const url = new URL(value);
+    const trimmed = value.trim();
+    // Accept copied profile URLs without an explicit scheme, but never upgrade
+    // arbitrary or insecure external links.
+    const prefixed = /^(?:www\.)?(?:github\.com|linkedin\.com)\//i.test(trimmed)
+      ? `https://${trimmed}`
+      : trimmed;
+    const url = new URL(prefixed);
     const host = url.hostname.toLowerCase().replace(/^www\./, "");
     if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash ||
         (kind === "github" && host !== "github.com") ||
@@ -42,9 +48,10 @@ export function parseProfile(form: FormData): ProfileFields {
   if (github && (!safeProfileLink(github, "github") || github.length > 500))
     throw new Error("GitHub bağlantısı https://github.com/kullanici biçiminde olmalı.");
   if (linkedin && (!safeProfileLink(linkedin, "linkedin") || linkedin.length > 500))
-    throw new Error("LinkedIn bağlantısı https://www.linkedin.com/in/kullanici biçiminde olmalı.");
+    throw new Error("LinkedIn profil adresi linkedin.com/in/kullanici biçiminde olmalı.");
   return {
     headline, description, email: email || null,
-    github_url: github || null, linkedin_url: linkedin || null,
+    github_url: github ? safeProfileLink(github, "github") : null,
+    linkedin_url: linkedin ? safeProfileLink(linkedin, "linkedin") : null,
   };
 }
