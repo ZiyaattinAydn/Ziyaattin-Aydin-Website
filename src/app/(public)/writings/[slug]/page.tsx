@@ -1,4 +1,4 @@
-import { MarkdownContent } from "@/features/writings/markdown-content";
+import { MarkdownContent, markdownHeadings } from "@/features/writings/markdown-content";
 import { ContentImage } from "@/components/public/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -48,6 +48,10 @@ export default async function WritingDetailPage({ params }: Props) {
     );
   const writing = result.data;
   if (!writing) notFound();
+  const toc = writing.sections.flatMap((section) => {
+    const headings = markdownHeadings(section.paragraphs.join("\n\n"), section.id);
+    return headings.length ? headings : section.id !== "content" ? [{ id: section.id, title: section.title }] : [];
+  });
   return (
     <article className="mx-auto max-w-5xl space-y-8">
       <Link
@@ -72,15 +76,15 @@ export default async function WritingDetailPage({ params }: Props) {
         </p>
       </header>
       {writing.coverImage && <div className="mb-5"><ContentImage src={writing.coverImage.src} alt={writing.coverImage.alt}/></div>}
-      <div className="grid gap-8 lg:grid-cols-[200px_minmax(0,1fr)]">
-        <aside>
+      <div className={toc.length ? "grid gap-8 lg:grid-cols-[220px_minmax(0,1fr)]" : "grid gap-8"}>
+        {toc.length > 0 && <aside>
           <nav
             aria-label="İçindekiler"
             className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 lg:sticky lg:top-24"
           >
             <h2 className="font-semibold">İçindekiler</h2>
             <ol className="mt-4 space-y-3 text-sm leading-6 text-[var(--muted)]">
-              {writing.sections.map((section) => (
+              {toc.map((section) => (
                 <li key={section.id}>
                   <a
                     href={"#" + encodeURIComponent(section.id)}
@@ -92,7 +96,7 @@ export default async function WritingDetailPage({ params }: Props) {
               ))}
             </ol>
           </nav>
-        </aside>
+        </aside>}
         <div className="prose-dark min-w-0 space-y-10 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:p-8">
           {writing.sections.map((section) => (
             <section
@@ -101,7 +105,7 @@ export default async function WritingDetailPage({ params }: Props) {
               className="scroll-mt-24 space-y-4"
             >
               {section.id !== "content" && <h2 className="break-words">{section.title}</h2>}
-              <MarkdownContent content={section.paragraphs.join("\n\n")}/>
+              <MarkdownContent content={section.paragraphs.join("\n\n")} headingPrefix={section.id}/>
               {section.quote && <blockquote>{section.quote}</blockquote>}
               {section.code && (
                 <pre>
