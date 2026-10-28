@@ -1,3 +1,4 @@
+import { MarkdownContent } from "@/features/writings/markdown-content";
 import { ContentImage } from "@/components/public/content-image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -99,12 +100,8 @@ export default async function WritingDetailPage({ params }: Props) {
               id={section.id}
               className="scroll-mt-24 space-y-4"
             >
-              <h2 className="break-words">{section.title}</h2>
-              {section.paragraphs.map((paragraph, index) => (
-                <p className="whitespace-pre-wrap break-words" key={index}>
-                  {paragraph}
-                </p>
-              ))}
+              {section.id !== "content" && <h2 className="break-words">{section.title}</h2>}
+              <MarkdownContent content={section.paragraphs.join("\n\n")}/>
               {section.quote && <blockquote>{section.quote}</blockquote>}
               {section.code && (
                 <pre>
