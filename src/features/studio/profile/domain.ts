@@ -24,11 +24,14 @@ export function safeProfileLink(value: string | null, kind: "github" | "linkedin
       : trimmed;
     const url = new URL(prefixed);
     const host = url.hostname.toLowerCase().replace(/^www\./, "");
+    // The URL API percent-encodes non-ASCII profile names (e.g. Turkish dotless ı).
+    // Decode only the pathname for validation; never relax host/protocol checks.
+    const path = decodeURIComponent(url.pathname);
     if (url.protocol !== "https:" || url.username || url.password || url.search || url.hash ||
         (kind === "github" && host !== "github.com") ||
         (kind === "linkedin" && host !== "linkedin.com") ||
         (kind === "github" && !/^\/[A-Za-z0-9-]+\/?$/.test(url.pathname)) ||
-        (kind === "linkedin" && !/^\/in\/[A-Za-z0-9-]+\/?$/.test(url.pathname)))
+        (kind === "linkedin" && !/^\/in\/[\p{L}\p{N}-]+\/?$/u.test(path)))
       return null;
     return url.href;
   } catch { return null; }
