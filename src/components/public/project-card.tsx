@@ -23,7 +23,7 @@ export function ProjectCard({ project }: { project: ProjectSummary }) {
           {project.subtitle}
         </p>
       )}
-      <p className="mt-3 line-clamp-5 flex-1 break-words text-sm leading-7 text-[var(--muted)] sm:mt-4 sm:line-clamp-none>
+      <p className="mt-3 line-clamp-5 flex-1 break-words text-sm leading-7 text-[var(--muted)] sm:mt-4 sm:line-clamp-none">
         {project.description}
       </p>
       {project.technologies.length > 0 && (
