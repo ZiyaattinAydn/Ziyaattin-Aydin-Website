@@ -16,12 +16,14 @@ export async function StudioReturnShortcut() {
   }
 
   return (
+    <div className="flex justify-end px-4 pb-5 md:contents">
     <Link
       href="/studio"
       aria-label="Yönetici Studio alanına dön"
-      className="fixed bottom-5 right-4 z-40 inline-flex items-center gap-2 rounded-xl border border-[var(--accent-dim)] bg-[var(--surface-strong)] px-4 py-3 text-sm font-semibold text-[var(--accent)] shadow-xl backdrop-blur transition-colors hover:border-[var(--accent)] hover:bg-[var(--surface-elevated)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] sm:bottom-6 sm:right-6"
+      className="relative z-10 inline-flex items-center gap-2 rounded-xl border border-[var(--accent-dim)] bg-[var(--surface-strong)] px-4 py-3 text-sm font-semibold text-[var(--accent)] shadow-xl backdrop-blur transition-colors hover:border-[var(--accent)] hover:bg-[var(--surface-elevated)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] md:fixed md:bottom-6 md:right-6 md:z-40"
     >
       <span aria-hidden="true">↩</span> Studio’ya dön
     </Link>
+    </div>
   );
 }

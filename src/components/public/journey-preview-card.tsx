@@ -6,14 +6,14 @@ import type { JourneyItem } from "@/features/public/content/model";
 export function JourneyPreviewCard({ item }: { item: JourneyItem }) {
   const href = item.slug ? `/journey#${item.slug}` : "/journey";
   return (
-    <Panel className="flex h-full min-w-0 flex-col p-6 sm:p-7">
+    <Panel className="flex h-full min-w-0 flex-col p-4 sm:p-7">
       <p className="font-mono text-xs uppercase tracking-[0.14em] text-[var(--accent)]">
         {item.marker}
       </p>
-      <h3 className="mt-4 break-words text-xl font-semibold leading-snug tracking-tight">
+      <h3 className="mt-3 break-words text-xl font-semibold leading-snug tracking-tight">
         {item.title}
       </h3>
-      <p className="mt-4 line-clamp-4 break-words text-sm leading-7 text-[var(--muted)]">
+      <p className="mt-3 line-clamp-4 break-words text-sm leading-7 text-[var(--muted)]">
         {item.detail}
       </p>
       <div className="mt-auto border-t border-[var(--border)] pt-5">

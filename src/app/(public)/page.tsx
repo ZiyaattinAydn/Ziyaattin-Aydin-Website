@@ -30,30 +30,30 @@ export default async function HomePage() {
   ]);
   return (
     <div className="space-y-14 lg:space-y-20">
-      <section className="relative isolate overflow-hidden rounded-3xl border border-[var(--border)] bg-[linear-gradient(115deg,rgba(4,8,10,.98),rgba(4,8,10,.9)_52%,rgba(0,190,100,.08))] px-6 py-10 sm:px-10 lg:grid lg:min-h-[550px] lg:grid-cols-[1.15fr_.85fr] lg:items-center lg:px-12">
+      <section className="relative isolate min-w-0 overflow-hidden rounded-3xl border border-[var(--border)] bg-[linear-gradient(115deg,rgba(4,8,10,.98),rgba(4,8,10,.9)_52%,rgba(0,190,100,.08))] px-4 py-8 min-[380px]:px-6 sm:px-10 sm:py-10 lg:grid lg:min-h-[550px] lg:grid-cols-[1.15fr_.85fr] lg:items-center lg:px-12">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_15%,rgba(18,217,120,.1),transparent_28rem)]"
         />
-        <div className="relative z-10 max-w-2xl">
+        <div className="relative z-10 min-w-0 max-w-2xl">
           <p className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--accent)]">
             Kişisel web sitem
           </p>
-          <h1 className="mt-6 text-4xl font-semibold leading-[1.08] tracking-[-0.04em] sm:text-6xl xl:text-7xl">
+          <h1 className="mt-5 text-[clamp(2.15rem,9vw,3.25rem)] font-semibold leading-[1.08] tracking-[-0.04em] sm:mt-6 sm:text-6xl xl:text-7xl">
             Ziyaattin
             <br />
             Aydın<span className="text-[var(--accent)]">.</span>
           </h1>
-          <p className="mt-6 text-xl font-medium leading-snug sm:text-2xl">
+          <p className="mt-5 text-lg font-medium leading-snug sm:mt-6 sm:text-2xl">
             Fikirlerden projelere.
           </p>
-          <p className="mt-4 max-w-lg text-base leading-8 text-[var(--muted)]">
+          <p className="mt-4 max-w-lg text-sm leading-7 text-[var(--muted)] sm:text-base sm:leading-8">
             Projelerim, yazılarım ve öğrenme notlarım için kişisel alanım.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
+          <div className="mt-7 flex flex-col gap-3 min-[380px]:flex-row min-[380px]:flex-wrap sm:mt-8">
             <Link
               href="/projects"
-              className="inline-flex items-center justify-center rounded-xl bg-[var(--accent)] px-5 py-3 text-sm font-semibold text-[var(--accent-contrast)] transition hover:brightness-110"
+              className="inline-flex w-full min-w-0 flex-1 items-center justify-center rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-semibold text-[var(--accent-contrast)] transition hover:brightness-110 min-[380px]:w-auto min-[380px]:flex-none sm:px-5"
             >
               Projeleri keşfet{" "}
               <span aria-hidden="true" className="ml-3">
@@ -62,24 +62,24 @@ export default async function HomePage() {
             </Link>
             <Link
               href="/about"
-              className="inline-flex items-center justify-center rounded-xl border border-[var(--border-strong)] px-5 py-3 text-sm font-semibold transition hover:border-[var(--accent-dim)]"
+              className="inline-flex w-full min-w-0 flex-1 items-center justify-center rounded-xl border border-[var(--border-strong)] px-4 py-3 text-sm font-semibold transition hover:border-[var(--accent-dim)] min-[380px]:w-auto min-[380px]:flex-none sm:px-5"
             >
               Hakkımda
             </Link>
           </div>
         </div>
-        <div className="relative mx-auto mt-8 h-72 w-full max-w-md sm:h-96 lg:mt-0 lg:h-[460px]">
+        <div className="relative mx-auto mt-8 aspect-[6/5] w-full max-w-[380px] overflow-hidden rounded-[1.5rem] border border-[var(--border)] bg-[var(--surface-strong)] sm:aspect-auto sm:h-96 sm:max-w-md lg:mt-0 lg:h-[460px] lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent">
           <div
             aria-hidden="true"
-            className="absolute inset-x-4 bottom-0 top-8 rounded-[2rem] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(18,217,120,.08),rgba(3,7,10,.22))]"
+            className="absolute inset-0 rounded-[1.5rem] bg-[linear-gradient(180deg,rgba(18,217,120,.08),rgba(3,7,10,.22))] lg:inset-x-4 lg:bottom-0 lg:top-8 lg:rounded-[2rem] lg:border lg:border-[var(--border)]"
           />
           <Image
             src="/images/portraits/home-hero.png"
             alt="Ziyaattin Aydın’ın stilize portresi"
             fill
             priority
-            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 448px, 38vw"
-            className="object-contain object-bottom"
+            sizes="(max-width: 640px) calc(100vw - 4rem), (max-width: 1024px) 448px, 38vw"
+            className="object-cover object-[center_26%] sm:object-contain sm:object-bottom"
           />
         </div>
       </section>
