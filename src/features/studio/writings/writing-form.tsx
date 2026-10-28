@@ -6,6 +6,8 @@ import { useUnsavedChanges } from "@/features/studio/library/unsaved";
 import type { WritingFormValues } from "@/features/writings/domain";
 import { createWritingAction, updateWritingAction } from "@/features/studio/writings/actions";
 import { INITIAL_WRITING_ACTION_STATE, type WritingActionState } from "@/features/studio/writings/action-state";
+import { MarkdownEditor } from "./markdown-editor";
+import { MarkdownContent } from "@/features/writings/markdown-content";
 import { WritingSubmitButton } from "@/features/studio/writings/writing-submit-button";
 
 type WritingFormAction = (state: WritingActionState, formData: FormData) => Promise<WritingActionState>;
@@ -78,34 +80,25 @@ export function WritingForm({ mode, initialValues, writingId, readOnly = false }
           <FieldError id="excerpt-error" messages={state.fieldErrors.excerpt}/>
         </label>
 
-        <label className={label}>
-          Yazı içeriği <span className="text-xs font-normal text-[var(--muted)]">(yayınlamak için gerekli)</span>
-          <textarea name="content" rows={20} maxLength={100000}
-            defaultValue={initialValues.content}
-            onChange={(event) => setPreviewContent(event.target.value)}
-            aria-invalid={Boolean(state.fieldErrors.content?.length)}
-            aria-describedby="writing-content-help"
-            className={input + " min-h-96 resize-y font-sans leading-7"}
-            placeholder="Yazını buraya yapıştır veya yazmaya başla. Paragraflar arasında boş satır bırakabilirsin."/>
-          <span id="writing-content-help" className="mt-2 block text-xs font-normal text-[var(--muted)]">
-            Paragraflar arasında boş satır bırak. İçerik düz metin olarak gösterilir; özel biçimlendirme kodu gerekmez.
-            {" "}{previewContent.length.toLocaleString("tr-TR")} karakter · yaklaşık {estimatedMinutes} dk okuma
-          </span>
+        <section className="space-y-3" aria-label="Yazı içeriği">
+          <div>
+            <h2 className="text-sm font-semibold">Yazı içeriği <span className="text-xs font-normal text-[var(--muted)]">(yayınlamak için gerekli)</span></h2>
+            <p className="mt-2 text-xs leading-6 text-[var(--muted)]">
+              Başlıklar, kalın ve italik yazılar, alıntılar ve listeler ekleyebilirsin. Önizlemede biçimlendirmeleri görebilirsin.
+            </p>
+          </div>
+          <MarkdownEditor value={previewContent} onChange={(next) => { setPreviewContent(next); setDirty(true); }} disabled={readOnly || pending}/>
+          <p className="text-xs text-[var(--muted)]">Yaklaşık {estimatedMinutes} dakika okuma</p>
           <FieldError id="content-error" messages={state.fieldErrors.content}/>
-        </label>
+        </section>
 
-        <section aria-label="Yazı önizlemesi" className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-6">
-          <h2 className="text-sm font-semibold text-[var(--accent)]">Yazı önizlemesi</h2>
-          <h3 className="mt-4 break-words text-2xl font-semibold tracking-tight">
-            {previewTitle.trim() || "Yazının başlığı"}
-          </h3>
-          <p className="mt-3 whitespace-pre-wrap break-words text-sm leading-7 text-[var(--muted)]">
-            {previewExcerpt.trim() || "Kısa açıklama burada görünecek."}
-          </p>
-          <p className="mt-5 line-clamp-5 whitespace-pre-wrap break-words border-t border-[var(--border)] pt-4 text-sm leading-7 text-[var(--muted-strong)]">
-            {previewContent.trim() || "Yazının başlangıcı burada görünecek."}
-          </p>
-          <p className="mt-3 text-xs text-[var(--muted)]">Bu, hızlı metin önizlemesidir; yayın sonrası sayfa düzeni farklı olabilir.</p>
+        <section aria-label="Yazı önizlemesi" className="rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-5 sm:p-8">
+          <p className="text-sm font-semibold text-[var(--accent)]">Makale önizlemesi</p>
+          <h3 className="mt-5 break-words text-3xl font-semibold tracking-tight">{previewTitle.trim() || "Yazının başlığı"}</h3>
+          <p className="my-5 break-words text-sm leading-7 text-[var(--muted)]">{previewExcerpt.trim() || "Kısa açıklama burada görünecek."}</p>
+          <div className="border-t border-[var(--border)] pt-5">
+            <MarkdownContent content={previewContent}/>
+          </div>
         </section>
 
         <div className="grid gap-5 md:grid-cols-3">
@@ -173,7 +166,7 @@ export function WritingForm({ mode, initialValues, writingId, readOnly = false }
           <input type="hidden" name="coverImageUrl" value={coverImageUrl}/>
           {coverImageUrl && (
             <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[var(--border)] p-3">
-              <p className="text-xs text-[var(--accent)]">✓ Kapak görseli seçildi.</p>
+              <div className="flex items-center gap-3"><img src={coverImageUrl} alt="Kapak önizlemesi" className="h-20 w-28 rounded-lg object-cover"/><p className="text-xs text-[var(--accent)]">Kapak görseli seçildi.</p></div>
               {!readOnly && (
                 <button type="button" onClick={() => { setCoverImageUrl(""); setDirty(true); }}
                   className="rounded-lg border border-[var(--border)] px-3 py-2 text-xs text-[var(--muted)]">

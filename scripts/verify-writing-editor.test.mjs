@@ -35,7 +35,8 @@ test("existing writing validation still rejects missing critical data and checks
 test("form no longer exposes manual slug, URL or redundant public-image checkbox", () => {
   const form = read("src/features/studio/writings/writing-form.tsx");
   assert.ok(form.includes('name="title"'));
-  assert.ok(form.includes('name="content"'));
+  assert.ok(form.includes("<MarkdownEditor"));
+  assert.ok(read("src/features/studio/writings/markdown-editor.tsx").includes('name="content"'));
   assert.ok(form.includes('name="excerpt"'));
   assert.ok(form.includes('name="visibility"'));
   assert.ok(!form.includes('name="slug"'));
@@ -45,7 +46,7 @@ test("form no longer exposes manual slug, URL or redundant public-image checkbox
   assert.ok(form.includes("onBusyChange={setUploading}"));
   assert.ok(form.includes("disabled={uploading}"));
   assert.ok(!form.includes('name="publicConsent"'));
-  assert.ok(form.includes("Yazı önizlemesi"));
+  assert.ok(form.includes("Makale önizlemesi"));
   assert.ok(form.includes('value="private"') && form.includes('value="public"'));
   assert.ok(!form.includes('value="hidden"'));
 });
@@ -87,4 +88,27 @@ test("archive is preserved; manual review and publish workflow no longer display
   assert.ok(!workflow.includes("TransitionForm"));
   assert.ok(list.includes('title="Yazılarım"'));
   assert.ok(!list.includes("Sprint 08 CRUD"));
+});
+
+test("Markdown renderer escapes user content rather than injecting HTML", () => {
+  const renderer = read("src/features/writings/markdown-content.tsx");
+  const editor = read("src/features/studio/writings/markdown-editor.tsx");
+  for (const token of ["<blockquote", "<ul", "<ol", "<hr", "<strong", "<em"]) assert.ok(renderer.includes(token));
+  assert.ok(!renderer.includes("dangerouslySetInnerHTML"));
+  assert.ok(!renderer.includes("innerHTML"));
+  assert.ok(!renderer.includes("href="));
+  assert.ok(editor.includes('name="content"'));
+  assert.ok(editor.includes('value={value}'));
+});
+test("form fields remain mapped through create/update action and edit hydration", () => {
+  const actions = read("src/features/studio/writings/actions.ts");
+  const form = read("src/features/studio/writings/writing-form.tsx");
+  const edit = read("src/app/(studio)/studio/writings/[writingId]/edit/page.tsx");
+  for (const field of ["title","excerpt","category","visibility","readingTime","tags","isFeatured","coverImageUrl"]) {
+    assert.ok(actions.includes('"' + field + '"'), field + " action");
+    assert.ok(form.includes('name="' + field + '"'), field + " form");
+    assert.ok(edit.includes(field + ": writing."), field + " edit");
+  }
+  assert.ok(edit.includes("content: writing.content"));
+  assert.ok(actions.includes('content: readText(formData, "content")'));
 });

@@ -1,3 +1,4 @@
+import { MarkdownContent } from "@/features/writings/markdown-content";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getOwnerProject } from "@/features/projects/server/project-mutations";
@@ -112,12 +113,8 @@ export async function PublicationPreview({
         <div className="prose-dark min-w-0 space-y-8">
           {sections?.map((s) => (
             <section key={s.id} className="space-y-4">
-              <h2 className="break-words">{s.title}</h2>
-              {s.paragraphs.map((p, i) => (
-                <p key={i} className="whitespace-pre-wrap break-words">
-                  {p}
-                </p>
-              ))}
+              {s.id !== "content" && <h2 className="break-words">{s.title}</h2>}
+              <MarkdownContent content={s.paragraphs.join("\n\n")}/>
               {s.quote && <blockquote>{s.quote}</blockquote>}
               {s.code && (
                 <pre>
