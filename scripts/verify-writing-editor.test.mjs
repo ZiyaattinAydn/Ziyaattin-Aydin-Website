@@ -132,3 +132,10 @@ test("Studio writing and project edits provide quick links to create another", (
   assert.ok(project.includes('href="/studio/projects/new"'));
   assert.ok(project.includes("Yeni proje ekle"));
 });
+
+test("writing status labels retain natural width beside card heading", () => {
+  const card = read("src/features/studio/writings/writing-card.tsx");
+  assert.ok(card.includes("flex flex-wrap items-start justify-between gap-4"));
+  assert.ok(card.includes("shrink-0 self-start"));
+  assert.ok(card.includes("<StudioStatusPill"));
+});

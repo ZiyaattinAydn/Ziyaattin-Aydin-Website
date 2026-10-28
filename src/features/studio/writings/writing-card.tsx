@@ -14,20 +14,22 @@ export function WritingCard({ writing }: { writing: WritingEntity }) {
   return (
     <Panel className="p-5">
       <article className="space-y-5">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-          <div>
-            <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <p className="break-all font-mono text-xs uppercase tracking-[0.16em] text-[var(--muted)]">
               {writing.slug}
             </p>
             <h2 className="mt-2 text-xl font-semibold tracking-[-0.02em]">
               {writing.title}
             </h2>
           </div>
+          <div className="shrink-0 self-start">
           <StudioStatusPill
             tone={WRITING_PUBLISH_STATE_TONES[writing.publishState]}
           >
             {WRITING_PUBLISH_STATE_LABELS[writing.publishState]}
           </StudioStatusPill>
+          </div>
         </div>
 
         <p className="text-sm leading-7 text-[var(--muted)]">
