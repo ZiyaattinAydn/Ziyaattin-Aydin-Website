@@ -72,3 +72,22 @@ test("Profile form fields are controlled to survive a rejected server action", (
   }
   assert.ok(!form.includes("defaultValue={profile?."), "profile fields must not reset on validation error");
 });
+
+test("The real Turkish LinkedIn profile slug is accepted and stored canonically", () => {
+  const actual = "https://www.linkedin.com/in/ziyaattin-aydın-9b285a293";
+  const expected = "https://www.linkedin.com/in/ziyaattin-ayd%C4%B1n-9b285a293";
+  assert.equal(safeProfileLink(actual, "linkedin"), expected);
+  assert.equal(safeProfileLink(expected, "linkedin"), expected);
+  assert.equal(parseProfile(make({linkedin_url: actual})).linkedin_url, expected);
+  assert.equal(safeProfileLink("linkedin.com/in/ziyaattin-aydın-9b285a293", "linkedin"), "https://linkedin.com/in/ziyaattin-ayd%C4%B1n-9b285a293");
+});
+test("Unicode LinkedIn support does not allow other paths or encoded separators", () => {
+  for (const value of [
+    "https://www.linkedin.com/in/ziyaattin-aydın-9b285a293/extra",
+    "https://www.linkedin.com/in/ziyaattin%2Faydin",
+    "https://www.linkedin.com/in/ziyaattin%3Ffoo",
+    "https://www.linkedin.com/in/ziyaattin-aydın-9b285a293?redirect=evil",
+    "https://evil.example/in/ziyaattin-aydın-9b285a293",
+    "http://www.linkedin.com/in/ziyaattin-aydın-9b285a293",
+  ]) assert.equal(safeProfileLink(value, "linkedin"), null, value);
+});
