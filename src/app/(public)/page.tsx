@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ProjectCard } from "@/components/public/project-card";
 import { WritingCard } from "@/components/public/writing-card";
+import { JourneyPreviewCard } from "@/components/public/journey-preview-card";
 import { PublicSection } from "@/components/public/public-section";
 import { AutoCarousel } from "@/components/public/auto-carousel";
 import {
@@ -22,9 +23,10 @@ export const metadata = {
 };
 export default async function HomePage() {
   const repository = getPublicContentRepository();
-  const [projects, writings] = await Promise.allSettled([
+  const [projects, writings, journey] = await Promise.allSettled([
     repository.listProjects(),
     repository.listWritings(),
+    repository.listJourneyItems(),
   ]);
   return (
     <div className="space-y-14 lg:space-y-20">
@@ -125,25 +127,29 @@ export default async function HomePage() {
           />
         )}
       </PublicSection>
-      <section className="flex flex-col justify-between gap-5 rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-6 sm:flex-row sm:items-center sm:p-8">
-        <div>
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-[var(--accent)]">
-            Yolculuğum
-          </p>
-          <h2 className="mt-3 text-2xl font-semibold tracking-tight">
-            Süreç de sonucun bir parçası.
-          </h2>
-          <p className="mt-3 text-sm leading-7 text-[var(--muted)]">
-            Öğrenme ve üretme sürecinden paylaşacağım notlar için ayrı bir alan.
-          </p>
-        </div>
-        <Link
-          href="/journey"
-          className="shrink-0 text-sm font-semibold text-[var(--accent)]"
-        >
-          Yolculuğuma göz at <span aria-hidden="true">→</span>
-        </Link>
-      </section>
+      <PublicSection
+        eyebrow="Yolculuğum"
+        title="Süreç de sonucun bir parçası."
+        description="İlk pinpon oyunumdan bugüne öğrenirken ve üretirken biriktirdiklerim."
+        href="/journey"
+        linkLabel="Tüm yolculuğum"
+      >
+        {journey.status === "rejected" ? (
+          <PublicUnavailable href="/journey" />
+        ) : journey.value.length ? (
+          <AutoCarousel label="Yolculuğum" items={journey.value.map((item, index) => (
+            <JourneyPreviewCard key={item.slug ?? index} item={item} />
+          ))} />
+        ) : (
+          <PublicEmptyState
+            headingLevel={3}
+            title="Yolculuğum yakında burada"
+            description="Öğrenirken ve üretirken biriktirdiğim dönüm noktalarını burada bulabileceksin."
+            href="/journey"
+            linkLabel="Yolculuğum"
+          />
+        )}
+      </PublicSection>
     </div>
   );
 }
