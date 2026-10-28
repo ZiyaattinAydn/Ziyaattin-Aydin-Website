@@ -17,7 +17,7 @@ export function WritingCard({ writing }: { writing: WritingSummary }) {
           {writing.title}
         </Link>
       </h3>
-      <p className="mt-3 line-clamp-5 flex-1 break-words text-sm leading-7 text-[var(--muted)] sm:mt-4 sm:line-clamp-none>
+      <p className="mt-3 line-clamp-5 flex-1 break-words text-sm leading-7 text-[var(--muted)] sm:mt-4 sm:line-clamp-none">
         {writing.excerpt}
       </p>
       <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--border)] pt-5 text-xs text-[var(--muted)]">
